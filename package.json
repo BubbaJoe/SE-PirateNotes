@@ -1,0 +1,35 @@
+{
+  "name": "piratenotes",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Joe, Dakota, Ozayr, Evan, Will, Sam",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-nodejs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-session": "*",
+    "morgan": "*",
+    "mysql": "*",
+    "passport": "*",
+    "socket.io": "*"
+  },
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-nodemon": "*",
+    "nodemon": "*"
+  },
+  "engines": {
+    "node": "8.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bubbajoe/SE-PirateNotes.git"
+  }
+}
