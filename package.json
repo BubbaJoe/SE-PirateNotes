@@ -23,7 +23,7 @@
   "devDependencies": {
     "gulp": "*",
     "gulp-nodemon": "*",
-    "nodemon": "*"
+    "nodemon": "^1.12.1"
   },
   "engines": {
     "node": "8.6.0"

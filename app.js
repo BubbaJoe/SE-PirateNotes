@@ -42,5 +42,5 @@ var db = mysql.createConnection({
 	password: "123456"
 });
 
-require('./app/routes.js')(app, io, passport);
 require('./app/database.js')(db,fs);
+require('./app/routes.js')(app, io, passport);
