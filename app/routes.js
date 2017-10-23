@@ -29,7 +29,7 @@ module.exports = function(app, io, db, passport) {
         login(email,password,function(result) {
             if(result != undefined) {
                 req.login(result[0].id,function(err) {
-                    console.log(err.code);
+                    if(err)console.log(err);
                     res.redirect('/');
                 });
             } else {
@@ -49,7 +49,7 @@ module.exports = function(app, io, db, passport) {
         // validate here
 
         register(firstname,lastname,email,password,type,function(result) {
-            if(result.id != undefined) {
+            if(result != undefined) {
                 req.login(result.id,
                 function(err) {
                     res.redirect('/');

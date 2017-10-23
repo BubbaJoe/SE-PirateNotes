@@ -4,76 +4,60 @@ var bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
     db.on('error',function(err) {
-        console.log(err.code);
+        console.log(err);
         db = require('mysql')
             .createConnection(require('../dbinfo.json'));
         require('./database')(db);
     })
 
     runFileQuery = function (fileName) {
-        db.connect(function(err) {
-            console.log(err);
             fs.readFile('../sql/'+fileName,
             'utf8',
             function(err,data) {
-                console.log(err);
+                if(err)console.log(err);
                 db.query(data, function(err,result) {
                     return result;
                 });
             });
-        });
     }
 
     runQuery = function (query) {
-        db.connect(function(err) {
-            console.log(err.code);
             db.query(query, function(err, result) {
+                if(err)console.log(err);
                 return result;
             });
-        });
     }
 
     runQuery = function (query,values) {
-        db.connect(function(err) {
-            console.log(err.code);
             db.query(query,values,function(err, result) {
+                if(err)console.log(err);
                 return result;
             });
-        });
     }
 
     getUserByID = function(id,cb) {
-        db.connect(function(err) {
-            console.log(err.code);
             db.query('select * from user where id = ?',[id],function(err,result) {
-                console.log(err.code);
+                if(err)console.log(err);
                 cb(result[0]);
             });
-        });
     }
 
     register = function (firstname,lastname,email,password,type,cb) {
-        db.connect(function(err) {
-            console.log(err.code);
             var id = uuid();
             db.query('insert into user(id,firstname,lastname,email,password,desc_text,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {
-                console.log(err.code);
-                cb(err,result);
+                if(err)console.log(err);
+                cb(result);
             });
-        });
     }
 
     login = function (email,password,cb) {
-        db.connect(function(err) {
-            console.log(err.code);
             db.query('select id from user where email = ?',
             [email],//bcrypt.hashSync(password, null, null)
             function(err, result) {
-                console.log(err.code);
+                if(err)console.log(err);
                 cb(result);
             });
-        });
     }
 }
