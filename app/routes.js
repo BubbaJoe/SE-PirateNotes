@@ -39,7 +39,6 @@ module.exports = function(app, io, db, passport) {
         lastname = req.fields.last_name,
         email = req.fields.email,
         password = req.fields.password,
-        passwordc = req.fields.password-confirm
         type = 'general';
         
         // validate here

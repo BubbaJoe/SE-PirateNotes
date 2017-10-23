@@ -15,7 +15,7 @@ var app			= express();
 app.use(express.static('public'));
 app.use(express.static('src/views'));
 app.use(form());
-app.use(morgan('dev'));
+//app.use(morgan('dev'));
 
 // SESSION
 app.use(session({
