@@ -12,16 +12,16 @@
     "body-parser": "*",
     "connect-flash": "*",
     "cookie-parser": "*",
-    "express": "*",
-    "express-formidable": "^1.0.0",
+    "express": "^4.16.2",
+    "express-formidable": "*",
     "express-handlebars": "*",
     "express-session": "*",
     "morgan": "*",
-    "uuid-lib": "*",
     "mysql": "*",
     "passport": "*",
     "passport-local": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "uuid": "*"
   },
   "devDependencies": {
     "browser-sync": "*",

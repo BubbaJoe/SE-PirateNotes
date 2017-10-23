@@ -1,12 +1,19 @@
 var fs 			= require('fs');
-var uuid		= require('uuid-lib');
+var uuid		= require('uuid/v4');
 var bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
 
+    db.on('error',function(err) {
+        console.log(err.code);
+        db = require('mysql')
+            .createConnection(require('../dbinfo.json'));
+        require('./database')(db);
+    })
+
     runFileQuery = function (fileName) {
         db.connect(function(err) {
-            fs.readFile('./sql/'+fileName,
+            fs.readFile('../sql/'+fileName,
             'utf8',
             function(err,data) {
                 db.query(data, function(err,result) {
@@ -42,7 +49,7 @@ module.exports = function(db) {
 
     register = function (firstname,lastname,email,password,type,cb) {
         db.connect(function(err) {
-            var id = uuid.raw();
+            var id = uuid();
             db.query('insert into user(id,firstname,lastname,email,password,desc_text,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {

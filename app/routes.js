@@ -1,7 +1,7 @@
 // app/routes.js
 module.exports = function(app, io, db, passport) {
     require('./database.js')(db);
-
+    runFileQuery('create_schema.sql');
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('home', {
@@ -53,12 +53,14 @@ module.exports = function(app, io, db, passport) {
                 res.redirect('/');
             }
         });
-
     });
 
     app.get('/infolog',function(req,res) {
         console.log(req.user);
-        console.log(db);
+        if(req.isAuthenticated())
+            data = JSON.stringify(req.user);
+        else data = "You are not authenticated"
+        res.send(req.user);
     });
     
     app.get('/logout', function(req, res) {
@@ -72,7 +74,7 @@ module.exports = function(app, io, db, passport) {
     
     passport.deserializeUser((id, done) => {
         getUserByID(id,function(result) {
-            console.log('query ds!');
+            //console.log('query ds!');
             done(null, result);
         });
     });
