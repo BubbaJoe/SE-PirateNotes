@@ -1,7 +1,7 @@
 {
-    "host"     : "piratenotes.c28rtg0hkzyp.us-east-1.rds.amazonaws.com",
-    "user"     : "b996d2f4deeac9",
-    "password" : "ca9df7d3",
+    "host"     : " bubbajoedb.c28rtg0hkzyp.us-east-1.rds.amazonaws.com",
+    "user"     : "bubbajoe",
+    "password" : "qwerty123",
     "database" : "piratenotes",
     "waitForConnection" : "true"
 }
