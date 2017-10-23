@@ -3,7 +3,6 @@ var uuid		= require('uuid/v4');
 var bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
-
     db.on('error',function(err) {
         console.log(err.code);
         db = require('mysql')
@@ -63,7 +62,7 @@ module.exports = function(db) {
             db.query('select id from user where email = ?',
             [email],//bcrypt.hashSync(password, null, null)
             function(err, result) {
-                cb(result[0]);
+                cb(result);
             });
         });
     }

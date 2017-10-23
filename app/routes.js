@@ -1,7 +1,7 @@
 // app/routes.js
 module.exports = function(app, io, db, passport) {
     require('./database.js')(db);
-    runFileQuery('create_schema.sql');
+    
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('home', {
@@ -22,8 +22,8 @@ module.exports = function(app, io, db, passport) {
         var email = req.fields.email,
         password = req.fields.password;
         login(email,password,function(result) {
-            if(result.id != undefined) {
-                req.login(result.id,function(err) {
+            if(result != undefined) {
+                req.login(result[0].id,function(err) {
                     res.redirect('/');
                 });
             } else {
