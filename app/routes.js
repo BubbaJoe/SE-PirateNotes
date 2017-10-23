@@ -22,9 +22,8 @@ module.exports = function(app, io, db, passport) {
         var email = req.fields.email,
         password = req.fields.password;
         login(email,password,function(result) {
-            if(result.id) {
+            if(result.id != undefined) {
                 req.login(result.id,function(err) {
-                    if(err) throw err;
                     res.redirect('/');
                 });
             } else {
@@ -44,7 +43,7 @@ module.exports = function(app, io, db, passport) {
         // validate here
 
         register(firstname,lastname,email,password,type,function(result) {
-            if(result.id) {
+            if(result.id != undefined) {
                 req.login(result.id,
                 function(err) {
                     res.redirect('/');
