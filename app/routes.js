@@ -47,12 +47,11 @@ module.exports = function(app, io, db, passport) {
             if(result.id) {
                 req.login(result.id,
                 function(err) {
-                    if(err) throw err;
                     res.redirect('/');
                 });
             } else {
                 req.flash('alert alert-danger','<b>Sorry!</b> Incorrect login information.');
-                req.redirect('/');
+                res.redirect('/');
             }
         });
 

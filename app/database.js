@@ -6,11 +6,9 @@ module.exports = function(db) {
 
     runFileQuery = function (fileName) {
         db.connect(function(err) {
-            if(err) throw err;
             fs.readFile('./sql/'+fileName,
             'utf8',
             function(err,data) {
-                if(err) throw err;
                 db.query(data, function(err,result) {
                     return result;
                 });
@@ -20,9 +18,7 @@ module.exports = function(db) {
 
     runQuery = function (query) {
         db.connect(function(err) {
-            if(err) throw err;
             db.query(query, function(err, result) {
-                if(err) throw err;
                 return result;
             });
         });
@@ -30,9 +26,7 @@ module.exports = function(db) {
 
     runQuery = function (query,values) {
         db.connect(function(err) {
-            if(err) throw err;
             db.query(query,values,function(err, result) {
-                if(err) throw err;
                 return result;
             });
         });
@@ -41,7 +35,6 @@ module.exports = function(db) {
     getUserByID = function(id,cb) {
         db.connect(function(err) {
             db.query('select * from user where id = ?',[id],function(err,result) {
-                if(err) throw err;
                 cb(result[0]);
             });
         });
@@ -63,7 +56,6 @@ module.exports = function(db) {
             db.query('select id from user where email = ?',
             [email],//bcrypt.hashSync(password, null, null)
             function(err, result) {
-                if(err) throw err;
                 cb(result[0]);
             });
         });
