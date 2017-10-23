@@ -26,6 +26,7 @@ module.exports = function(db) {
 
     runQuery = function (query) {
         db.connect(function(err) {
+            console.log(err.code);
             db.query(query, function(err, result) {
                 return result;
             });
@@ -34,6 +35,7 @@ module.exports = function(db) {
 
     runQuery = function (query,values) {
         db.connect(function(err) {
+            console.log(err.code);
             db.query(query,values,function(err, result) {
                 return result;
             });
@@ -42,7 +44,9 @@ module.exports = function(db) {
 
     getUserByID = function(id,cb) {
         db.connect(function(err) {
+            console.log(err.code);
             db.query('select * from user where id = ?',[id],function(err,result) {
+                console.log(err.code);
                 cb(result[0]);
             });
         });
@@ -50,10 +54,12 @@ module.exports = function(db) {
 
     register = function (firstname,lastname,email,password,type,cb) {
         db.connect(function(err) {
+            console.log(err.code);
             var id = uuid();
             db.query('insert into user(id,firstname,lastname,email,password,desc_text,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {
+                console.log(err.code);
                 cb(err,result);
             });
         });
@@ -61,9 +67,11 @@ module.exports = function(db) {
 
     login = function (email,password,cb) {
         db.connect(function(err) {
+            console.log(err.code);
             db.query('select id from user where email = ?',
             [email],//bcrypt.hashSync(password, null, null)
             function(err, result) {
+                console.log(err.code);
                 cb(result);
             });
         });

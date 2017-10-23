@@ -29,6 +29,7 @@ module.exports = function(app, io, db, passport) {
         login(email,password,function(result) {
             if(result != undefined) {
                 req.login(result[0].id,function(err) {
+                    console.log(err.code);
                     res.redirect('/');
                 });
             } else {
@@ -39,10 +40,10 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.post('/register', function(req,res) {
-        var firstname = req.fields.first_name,
-        lastname = req.fields.last_name,
-        email = req.fields.email,
-        password = req.fields.password,
+        var firstname = req.fields.first_name || '',
+        lastname = req.fields.last_name || '',
+        email = req.fields.email || '',
+        password = req.fields.password || '',
         type = 'general';
         
         // validate here
@@ -79,7 +80,6 @@ module.exports = function(app, io, db, passport) {
     
     passport.deserializeUser((id, done) => {
         getUserByID(id,function(result) {
-            //console.log('query ds!');
             done(null, result);
         });
     });
