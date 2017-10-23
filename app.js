@@ -45,7 +45,7 @@ var io = require('socket.io').listen(app.listen(port,"0.0.0.0",function (err) {
 }));
 
 // DB
-var db = mysql.createConnection(require('./localdbinfo.json'));
+var db = mysql.createConnection(require('./dbinfo.json'));
 
 require('./app/handlebars.js')(exphbs);
 require('./app/routes.js')(app, io, db, passport);

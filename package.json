@@ -17,6 +17,7 @@
     "express-handlebars": "*",
     "express-session": "*",
     "morgan": "*",
+    "uuid-lib": "*",
     "mysql": "*",
     "passport": "*",
     "passport-local": "*",
@@ -26,12 +27,12 @@
     "browser-sync": "*",
     "browser-sync-webpack-plugin": "*",
     "gulp": "*",
-    "uuid-lib": "*",
     "gulp-nodemon": "*",
     "nodemon": "*"
   },
   "engines": {
-    "node": "8.6.0"
+    "node": "8.6.0",
+    "npm": "5.3.0"
   },
   "repository": {
     "type": "git",
