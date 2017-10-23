@@ -16,7 +16,7 @@ footer {
 /*
  * Off Canvas
  * --------------------------------------------------
- */
+ *
 @media screen and (max-width: 767px) {
   .row-offcanvas {
     position: relative;
@@ -24,7 +24,7 @@ footer {
          -o-transition: all .25s ease-out;
             transition: all .25s ease-out;
   }
-
+*/
   .row-offcanvas-right {
     right: 0;
   }

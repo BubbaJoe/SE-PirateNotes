@@ -1,46 +1,51 @@
-var express		 = require('express');
-var app			 = express();
-var passport 	 = require('passport');
-var flash    	 = require('connect-flash');
-var morgan       = require('morgan');
-var bodyParser   = require('body-parser');
-var session      = require('express-session');
-var exphbs		 = require('express-handlebars')
-var mysql		 = require('mysql');
-var fs 			 = require('fs');
+var express		= require('express');
+var passport 	= require('passport');
+var flash    	= require('connect-flash');
+var morgan      = require('morgan');
+var form		= require('express-formidable');
+var session     = require('express-session');
+var exphbs		= require('express-handlebars')
+var mysql		= require('mysql');
 
-var port     	 = process.env.PORT || 8080;
+var port     	= process.env.PORT || 8080;
 
-require('./app/passport')(passport);
+var app			= express();
 
+// GENERAL
 app.use(express.static('public'));
 app.use(express.static('src/views'));
+app.use(form());
 app.use(morgan('dev'));
+
+// SESSION
 app.use(session({
-	secret:'jndpq2bdair',
-	resave:true,
-	saveUninitialized:true
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true,
+	cookie: { maxAge: 3600000/2 } // (3600000 = 1 hour)
 }));
 
+// PASSPORT
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash()); 
 
+// FLASH
+app.use(flash());
+
+// HANDLEBARS
 app.set('views', './src/views');
-app.engine('handlebars',exphbs());
-app.set('view engine','handlebars')
+app.engine('hbs',exphbs({}));
+app.set('view engine','hbs')
 
+// SOCKET.IO
 var io = require('socket.io').listen(app.listen(port,"0.0.0.0",function (err) {
 	if(err)
 		console.log(err);
 	app.port = port;
 }));
 
-var db = mysql.createConnection({
-	host: "localhost",
-	user: "root",
-	password: "123456"
-});
+// DB
+var db = mysql.createConnection(require('./localdbinfo.json'));
 
-require('./app/database.js')(db,fs);
-require('./app/routes.js')(app, io, passport);
+require('./app/handlebars.js')(exphbs);
+require('./app/routes.js')(app, io, db, passport);

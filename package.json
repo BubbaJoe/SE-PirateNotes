@@ -13,17 +13,22 @@
     "connect-flash": "*",
     "cookie-parser": "*",
     "express": "*",
+    "express-formidable": "^1.0.0",
     "express-handlebars": "*",
     "express-session": "*",
     "morgan": "*",
     "mysql": "*",
     "passport": "*",
+    "passport-local": "*",
     "socket.io": "*"
   },
   "devDependencies": {
+    "browser-sync": "*",
+    "browser-sync-webpack-plugin": "*",
     "gulp": "*",
+    "uuid-lib": "*",
     "gulp-nodemon": "*",
-    "nodemon": "^1.12.1"
+    "nodemon": "*"
   },
   "engines": {
     "node": "8.6.0"
