@@ -1,6 +1,11 @@
 // app/routes.js
 module.exports = function(app, io, db, passport) {
     require('./database.js')(db);
+
+    app.get('/createdb', function(req, res) {
+        runFileQuery('create_schema.sql');
+        res.send('creating...');
+    });
     
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {

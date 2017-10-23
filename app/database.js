@@ -12,9 +12,11 @@ module.exports = function(db) {
 
     runFileQuery = function (fileName) {
         db.connect(function(err) {
+            console.log(err);
             fs.readFile('../sql/'+fileName,
             'utf8',
             function(err,data) {
+                console.log(err);
                 db.query(data, function(err,result) {
                     return result;
                 });
