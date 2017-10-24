@@ -4,6 +4,7 @@ var flash    	= require('connect-flash');
 var morgan      = require('morgan');
 var form		= require('express-formidable');
 var session     = require('express-session');
+var sqlsession	= require('express-mysql-session')(session);
 var exphbs		= require('express-handlebars')
 var mysql		= require('mysql');
 
@@ -15,15 +16,7 @@ var app			= express();
 app.use(express.static('public'));
 app.use(express.static('src/views'));
 app.use(form());
-//app.use(morgan('dev'));
-
-// SESSION
-app.use(session({
-	secret: 'secret',
-	resave: true,
-	saveUninitialized: true,
-	cookie: { maxAge: 3600000/2 } // (3600000 = 1 hour)
-}));
+app.use(morgan('dev'));
 
 // PASSPORT
 app.use(passport.initialize());
@@ -45,7 +38,19 @@ var io = require('socket.io').listen(app.listen(port,"0.0.0.0",function (err) {
 }));
 
 // DB
-var db = mysql.createConnection(require('./dbinfo.json'));
+const options = require('./dbinfo.json');
+var db = mysql.createConnection(options);
+var sessionStore = new sqlsession(options);
+
+app.use(session({
+   key: 'session_cookie_name',
+   secret: 'session_cookie_secret',
+   store: sessionStore,
+   resave: false,
+   saveUninitialized: false,
+   cookie: { maxAge: 3600000/2 }
+}));
+
 
 require('./app/handlebars.js')(exphbs);
 require('./app/routes.js')(app, io, db, passport);
