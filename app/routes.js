@@ -66,6 +66,7 @@ module.exports = function(app, io, db, passport) {
         if(req.isAuthenticated())
             data = JSON.stringify(req.user);
         else data = "You are not authenticated"
+        res.set('Content-Type', 'text/json');
         res.send(req.user);
     });
     

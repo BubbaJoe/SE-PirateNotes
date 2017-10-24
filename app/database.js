@@ -38,6 +38,7 @@ module.exports = function(db) {
     getUserByID = function(id,cb) {
             db.query('select * from user where id = ?',[id],function(err,result) {
                 if(err)console.log(err);
+                if(result)console.log(result[0]);
                 cb(result[0]);
             });
     }
@@ -48,6 +49,7 @@ module.exports = function(db) {
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {
                 if(err)console.log(err);
+                if(result)console.log(result[0]);
                 cb(result);
             });
     }
@@ -57,6 +59,7 @@ module.exports = function(db) {
             [email],//bcrypt.hashSync(password, null, null)
             function(err, result) {
                 if(err)console.log(err);
+                if(result)console.log(result[0]);
                 cb(result);
             });
     }
