@@ -2,5 +2,7 @@
     "host"     : "bubbajoedb.c28rtg0hkzyp.us-east-1.rds.amazonaws.com",
     "user"     : "bubbajoe",
     "password" : "qwerty123",
-    "database" : "piratenotes"
+    "database" : "piratenotes",
+    "timeout" : "60000",
+    "waitForConnection" : "true"
 }
