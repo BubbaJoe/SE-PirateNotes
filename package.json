@@ -16,6 +16,7 @@
     "express-formidable": "*",
     "express-handlebars": "*",
     "express-session": "*",
+    "express-mysql-session":"*",
     "morgan": "*",
     "mysql": "*",
     "passport": "*",
