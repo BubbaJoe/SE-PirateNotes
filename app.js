@@ -8,8 +8,8 @@ var sqlsession	= require('express-mysql-session')(session);
 var exphbs		= require('express-handlebars')
 var mysql		= require('mysql');
 
+//
 var port     	= process.env.PORT || 8080;
-
 var app			= express();
 
 // GENERAL
@@ -32,12 +32,11 @@ app.set('view engine','hbs')
 
 // SOCKET.IO
 var io = require('socket.io').listen(app.listen(port,"0.0.0.0",function (err) {
-	if(err)
-		console.log(err);
+	if(err) console.log(err);
 	app.port = port;
 }));
 
-// DB
+// DB AND SESSION
 const options = require('./dbinfo.json');
 var db = mysql.createConnection(options);
 var sessionStore = new sqlsession(options);

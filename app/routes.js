@@ -1,25 +1,36 @@
 // app/routes.js
 module.exports = function(app, io, db, passport) {
-    require('./database.js')(db);
 
-    app.get('/createdb', function(req, res) {
-        runFileQuery('create_schema.sql');
-        res.send('creating...');
-    });
+    require('./database.js')(db);
     
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('home', {
                 user: req.user,
-                courses: {},
-                myPosts: {},
-                savedPosts: {},
-                interests: {},
-                notifications: {},
-                posts: {}
+                courses: {
+
+                },
+                myPosts: {
+
+                },
+                savedPosts: {
+
+                },
+                interests: {
+
+                },
+                notifications: {
+
+                },
+                posts: {
+
+                }
             });
         }else{
-            res.render('auth',{});
+            // use flash to display error messages
+            res.render('auth',{
+
+            });
         }
     });
     
@@ -47,7 +58,7 @@ module.exports = function(app, io, db, passport) {
         type = 'general';
         
         // validate here
-
+        if(!(firstname == "" || lastname == "" || email == "" || password == "" ||))
         register(firstname,lastname,email,password,type,function(result) {
             if(result != undefined) {
                 req.login(result.id,
@@ -55,10 +66,13 @@ module.exports = function(app, io, db, passport) {
                     res.redirect('/');
                 });
             } else {
-                req.flash('alert alert-danger','<b>Sorry!</b> Incorrect login information.');
+                req.flash('alert alert-danger','Incorrect login information.');
                 res.redirect('/');
             }
-        });
+        }); else {
+            req.flash('alert alert-danger','Missing information');
+            res.redirect('/');
+        }
     });
 
     app.get('/infolog',function(req,res) {
