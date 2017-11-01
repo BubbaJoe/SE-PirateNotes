@@ -3,33 +3,47 @@ module.exports = function(app, io, db, passport) {
 
     require('./database.js')(db);
     
+    // Add page for the Deparment (will show all the courses for that department and how many followers)
+    // Course (will show all the post from that course form users)
+    // Another persons page will show their most recent posts
+    // Your own page will show the most recent post from your followed courses
+    
+    app.get('/profile', function (req,res) {
+        res.render('profile');
+    });
+
+    app.get('/profile/:uid', function (req,res) {
+        uid = req.params.uid;
+        getProfilePictureByID(id,function(result) {
+            if(result) {
+                var buf = 
+                res.send(buf);
+            } else {
+                res.send('404');
+        }
+        });
+    });
+    
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('home', {
-                user: req.user,
-                courses: {
-
-                },
-                myPosts: {
-
-                },
-                savedPosts: {
-
-                },
-                interests: {
-
-                },
-                notifications: {
-
-                },
-                posts: {
-
-                }
+                user: req.user
+                // courses: {
+                // },
+                // myPosts: {
+                // },
+                // savedPosts: {
+                // },
+                // interests: {
+                // },
+                // notifications: {
+                // },
+                // posts: {
+                // }
             });
         }else{
             // use flash to display error messages
             res.render('auth',{
-
             });
         }
     });
@@ -39,12 +53,14 @@ module.exports = function(app, io, db, passport) {
         password = req.fields.password;
         login(email,password,function(result) {
             if(result != undefined) {
-                req.login(result[0].id,function(err) {
+                id = result.id;
+                req.login(id, function(err) {
                     if(err)console.log(err);
                     res.redirect('/');
                 });
             } else {
-                req.flash('alert alert-danger','<b>Sorry!</b> Incorrect login information.');
+                req.flash('alert alert-danger',
+                    '<b>Sorry!</b> Incorrect login information.');
                 res.redirect('/');
             }
         });
@@ -56,32 +72,33 @@ module.exports = function(app, io, db, passport) {
         email = req.fields.email || '',
         password = req.fields.password || '',
         type = 'general';
-        
+
         // validate here
-        if(!(firstname == "" || lastname == "" || email == "" || password == "" ||))
-        register(firstname,lastname,email,password,type,function(result) {
-            if(result != undefined) {
-                req.login(result.id,
-                function(err) {
+        if(firstname != "" && lastname != "" && email != "" && password != "")
+            register(firstname,lastname,email,password,type,function(id) {
+                if(id != undefined) {
+                    createProfileData(id);
+                    req.login(id,
+                    function(err) {
+                        if(err) console.log(err);
+                        res.redirect('/');
+                    });
+                } else {
+                    req.flash('alert alert-danger','Incorrect login information.');
                     res.redirect('/');
-                });
-            } else {
-                req.flash('alert alert-danger','Incorrect login information.');
+                }
+            }); else {
+                req.flash('alert alert-danger','Missing information');
                 res.redirect('/');
             }
-        }); else {
-            req.flash('alert alert-danger','Missing information');
-            res.redirect('/');
-        }
     });
 
     app.get('/infolog',function(req,res) {
-        console.log(req.user);
         if(req.isAuthenticated())
             data = JSON.stringify(req.user);
         else data = "You are not authenticated"
-        res.set('Content-Type', 'text/json');
-        res.send(req.user);
+        res.set('Content-Type', 'application/json');
+        res.send(req.user || 'Not logged in');
     });
     
     app.get('/logout', function(req, res) {

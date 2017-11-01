@@ -41,7 +41,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
     <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
     </button>
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:150px;right:0;">
+    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
       <!-- NOTIFICATIONS -->
       <a href="#" class="w3-bar-item w3-button">Account</a>
       <a href="#" class="w3-bar-item w3-button">Setting</a>
@@ -53,54 +53,30 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Notes</a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
+  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
+  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
   <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
 </div>
 
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
-    <div class="w3-col m3">
+    <div class="w3-col m9" style="margin-left:25px; width:91%;">
       <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
-         <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
-         <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-         <a href='profile/{{user.id}}'>Image link</a>
+         <h4 class="w3-center">Department: {{user.firstname}} {{user.lastname}}</h4>
+         <p class="w3-center"><img src="/profile/{{user.id}}" class="w3-circle" style="height:106px;width:106px"></p>
          <hr>
          <p class="w3-center">{{user.desc_text}}</p>
-         <!-- If the account is theirs -->
          <div>
             <button class="w3-button w3-right w3-theme-l1" style="margin-bottom:10px">edit</button>
          </div>
         </div>
       </div>
       <br>
-      
-      <!-- Profile Lists -->
-      <div class="w3-card-2 w3-round">
-        <div class="w3-white">
-          <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-book fa-fw w3-margin-right"></i>&nbsp; My Courses</button>
-          <div id="Demo1" class="w3-hide w3-container">
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
-          </div>
-          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-pencil-square-o fa-fw w3-margin-right"></i>&nbsp; My Notes</button>
-          <div id="Demo2" class="w3-hide w3-container">
-            <p>Some other text..</p>
-          </div>
-          <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-bookmark fa-fw w3-margin-right"></i>&nbsp; Saved Notes</button>
-          <div id="Demo3" class="w3-hide w3-container">
-         <div class="w3-row-padding">
-             <p><i class="fa fa-exclamation-circle"></i>&nbsp; You don't have any saved notes!</p>
-         </div>
-          </div>
-        </div>      
-      </div>
-      <br>
-      
+    </div>
+    <div class="w3-col m3" style="margin-left:20px">      
       <!-- Interests --> 
       <div class="w3-card-2 w3-round w3-white w3-hide-small">
         <div class="w3-container">
@@ -152,33 +128,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     </div>
     
     <!-- Middle Column -->
-    <div class="w3-col m7">
-    
-      <div class="w3-row-padding">
-        <div class="w3-col m12">
-          <div class="w3-card-2 w3-round w3-white">
-            <div class="w3-container w3-padding">
-              <form action="">
-                <h6 class="w3-opacity"> Post to 
-                  <select style="" name="courses">
-                    <option value="">CSCI 2400</option>
-                    <option value="">MATH 2227</option>
-                    <option value="">CSCI 1100</option>
-                    <option value="">ENGL 1200</option>
-                  </select></h6>
-                <input style="resize:none;min-width=100%;" placeholder="Type here..." class="w3-border w3-padding"></input>
-                <br>
-                <input type="file" name="attachments" style="opacity:0;position:absolute;z-index:-1;"
-                class="w3-button w3-theme" multiple><i class="fa fa-paperclip"></i> &nbsp;Attachment</input>
-                <div style="height:0px;overflow:hidden;float:right;">
-                  <input type="file" id="fileInput" name="fileInput" />
-                </div>
-                 <button type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="w3-col m6">
       <!-- IMAGE POST -->
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
         <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
@@ -226,7 +176,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     </div>
     
     <!-- Right Column -->
-    <div class="w3-col m2">
+    <div class="w3-col m2" style="float:left">
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
           <p>Upcoming Events:</p>
