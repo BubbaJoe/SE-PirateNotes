@@ -1,3 +1,6 @@
+//database.js
+
+
 var fs 			= require('fs');
 var uuid		= require('uuid/v1');
 var bcrypt		= require('bcrypt-nodejs');
