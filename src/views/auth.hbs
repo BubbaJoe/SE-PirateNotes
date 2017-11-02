@@ -79,6 +79,12 @@
 				</center>
 			</div>
 		</form>
+		{{#if warningFlash}}
+			<div class="alert alert-danger">{{messages}}</div>
+		{{/if}}
+		{{#if dangerFlash}}
+			<div class="alert alert-danger">{{messages}}</div>
+		{{/if}}
 	</div>
 	<div id="register" class="col s12">
 		<form class="col s12"  method="post" action="/register">

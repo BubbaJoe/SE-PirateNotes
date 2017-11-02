@@ -47,7 +47,7 @@ module.exports = function(db) {
     }
 
     getProfilePictureByID = function(id,cb) {
-        db.query('select * from profile_data where id = ?', 
+        db.query('select profile_image, profile_image_size from user where id = ?', 
         [id],function(err,result) {
             if(err)console.log(err);
             console.log(result);
@@ -55,10 +55,9 @@ module.exports = function(db) {
         });
     }
 
-    uploadProfilePictureByID = function(id,filename,filedata,filetype,cb) {
-        db.query('update into profile_data (profile_image_name, profile_image_data, '+
-        ' profile_image_size, profile_image_type) values (?,?,?,?) where id = ?', 
-        [filename,filedata,filedata.length,filetype,id],function(err,result) {
+    uploadProfilePictureByID = function(id,filedata,cb) {
+        db.query('update user set profile_image = ?, profile_image_size = ?, where id = ?', 
+        [filedata,filedata.length,id],function(err,result) {
             if(err)console.log(err);
             cb(result);
         });
@@ -92,8 +91,6 @@ module.exports = function(db) {
     }
 
     login = function (email,password,cb) {
-    db.connect(function(err){
-        if(err)console.log(err.code,err);
         db.query('select id from user where email = ?',
         [email],//,bcrypt.hashSync(password, null, null)
         function(err, result) {
@@ -101,6 +98,5 @@ module.exports = function(db) {
             //if(result)console.log(result[0]);
             cb(result[0]);
         });
-    });
     }
 }

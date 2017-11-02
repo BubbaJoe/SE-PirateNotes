@@ -14,11 +14,18 @@ var app			= express();
 // GENERAL
 app.use(express.static('public'));
 app.use(express.static('src/views'));
-app.use(form());
+app.use(form({
+    encoding:'utf-8',
+    multiples:true
+}));
 app.use(morgan('dev'));
 
 // FLASH
 app.use(flash());
+app.use(function (req, res, next) {
+    res.locals.messages = require('express-messages')(req, res);
+    next();
+  });
 
 // HANDLEBARS
 app.set('views', './src/views');

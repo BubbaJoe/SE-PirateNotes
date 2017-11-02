@@ -14,12 +14,13 @@ module.exports = function(app, io, db, passport) {
 
     app.get('/profile/:uid', function (req,res) {
         uid = req.params.uid;
-        getProfilePictureByID(id,function(result) {
+        getProfilePictureByID(uid,function(result) {
             if(result) {
+                console.log(result);
                 var buf = 
                 res.send(buf);
             } else {
-                res.send('404');
+                res.status(404).end();
         }
         });
     });
@@ -91,6 +92,16 @@ module.exports = function(app, io, db, passport) {
                 req.flash('alert alert-danger','Missing information');
                 res.redirect('/');
             }
+    });
+
+    app.post('/post', function(req, res) {
+        
+        console.log(req.fields);
+        console.log(req.files);
+
+        
+        // Create a post with the data provided
+        res.redirect("/");
     });
 
     app.get('/infolog',function(req,res) {
