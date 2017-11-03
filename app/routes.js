@@ -1,5 +1,6 @@
 // app/routes.js
 module.exports = function(app, io, db, passport) {
+    var fs = require('fs');
 
     require('./database.js')(db);
     
@@ -95,13 +96,27 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.post('/post', function(req, res) {
-        
-        console.log(req.fields);
-        console.log(req.files);
+        console.log(req.user);
+        var fileArr = req.files.fileAttachments,
+        numFiles = fileArr.length;
+        if(numFiles > 0) {
+            for(var i = 0; i < numFiles; i++) {
+                console.log(fileArr[i].name);
+            }
 
-        
-        // Create a post with the data provided
-        res.redirect("/");
+            //course name, post text, file-arr, user-id
+            createPost(req.user.id,req.fields.course,req.fields.post-text,fileArr,function(){
+
+                res.redirect("/");
+            });
+
+            for(var i = 0; i < numFiles; i++) {
+                fs.unlink(fileArr[i].path,function(err) {
+                    if(err)console.log(err);
+                    else console.log("File deleted!");
+                });
+            }
+        }
     });
 
     app.get('/infolog',function(req,res) {

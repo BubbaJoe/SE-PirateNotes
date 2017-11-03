@@ -16,6 +16,7 @@ app.use(express.static('public'));
 app.use(express.static('src/views'));
 app.use(form({
     encoding:'utf-8',
+    uploadDir: './temp_uploads',
     multiples:true
 }));
 app.use(morgan('dev'));

@@ -161,7 +161,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
               <form method="post" enctype="multipart/form-data" action="/post">
                 <h6 class="w3-opacity"> Post to 
                   <select style="width:130px" class="w3-button" name="course">
-                    <option value="">CSCI 2400</option>
+                    <option value="hi">CSCI 2400</option>
                     <option value="">MATH 2227</option>
                     <option value="">CSCI 1100</option>
                     <option value="">ENGL 1200</option>
@@ -169,7 +169,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
                 <input name="post-text" style="width:100%;margin-top:10px;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
                 <br><p style=";margin-bottom:0px" id="fileList"></p><br>
                 <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
-                <button type="submit" name="post" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
+                <button type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
               </form>
 
               <button onclick="postAttachment()" class="w3-button w3-theme w3-left"><i class="fa fa-paperclip"></i> &nbsp;Attachment</button>

@@ -48,7 +48,7 @@ create table user (
 create table notification (
     id varchar(32) not null,
     user_id varchar(32) not null,
-    n_time date,
+    n_time datetime,
     message text not null,
     primary key()
 );
@@ -59,6 +59,7 @@ create table post (
     user_id varchar(32) not null,
     course_id varchar(32) not null,
     post_text text not null,
+    post_date datetime,
     post_status enum('pending','denied','allowed') not null,
     primary key(id),
     foreign key(user_id) references user(id),

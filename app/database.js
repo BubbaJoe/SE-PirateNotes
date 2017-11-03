@@ -1,6 +1,4 @@
 //database.js
-
-
 var fs 			= require('fs');
 var uuid		= require('uuid/v1');
 var bcrypt		= require('bcrypt-nodejs');
@@ -12,7 +10,13 @@ module.exports = function(db) {
         db = require('mysql')
             .createConnection(require('../dbinfo.json'));
         require('./database')(db);
-    })
+    });
+
+    createUuid = function() {
+        var id = uuid();
+        while(id.includes('-'))id = id.replace('-','');
+        return id;
+    }
 
     runFileQuery = function (fileName) {
             fs.readFile('../sql/'+fileName,
@@ -76,10 +80,37 @@ module.exports = function(db) {
         return bool;
     }
 
+    createPost = function(user_id,course_id,post_text,fileArr,cb) {
+        var post_id = createUuid();
+        // creates the post
+        db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
+        [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'],function(err,results){
+            for(var i = 0; i < fileArr.length; i++) {
+                // create a multiple files for each post
+                fs.readFile(fileArr[i].path,function(err,data) {
+                    db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
+                        [createUuid(),post_id,fileArr[i].name,fileArr[i].size,fileArr[i].type,data], 
+                        function(err,results) {
+                            if(err) console.log(err);
+                            else console.log(results);
+                        });
+                });
+            }
+        });
+    }
+
+    getPendingPosts = function(user_id,cb) {
+        // if the user is admin or normal
+
+        // get the information
+    }
+
+    a = function() {
+
+    }
+
     register = function (firstname,lastname,email,password,type,cb) {
-            var id = uuid();
-            while(id.includes('-'))id = id.replace('-','');
-            console.log(id);
+            var id = createUuid();
             db.query('insert into user(id,firstname,lastname,email,password,desc_text,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {
@@ -94,9 +125,8 @@ module.exports = function(db) {
         db.query('select id from user where email = ?',
         [email],//,bcrypt.hashSync(password, null, null)
         function(err, result) {
-            if(err)console.log(err);
-            //if(result)console.log(result[0]);
-            cb(result[0]);
+            if(err)console.log(err); 
+            else cb(result[0]);
         });
     }
 }
