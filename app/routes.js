@@ -13,7 +13,12 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.get('/search', function (req,res) {
-        res.render("search");
+        if(req.query.q != undefined) {
+            data = req.query.q.split(" ");
+            console.log(data)
+            res.render("search");
+        } else res.render("search-blank");
+        
     });
 
     app.get('/profile/:uid', function (req,res) {

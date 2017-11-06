@@ -89,11 +89,13 @@ hr{ border: 1px thin;}
 
 <div class="w3-container w3-content " style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
-
-    <div class="w3-col m9" style="margin-left:25px; width:91%;">
+    <div class="w3-col m9" style="height:500px;margin-left:25px; width:91%;">
       <!-- Profile -->
+      <p style="margin-top:150px;"align="center">
+        Search Courses and Departments
+      </p>
       <div class="w3-card-2 w3-round w3-white">
-        <div class="w3-container">
+        <div class="w3-container" >
             <form id="search-form" class="search" method="get" action="/search">
                 <input name="q" style="margin-top:15px;margin-bottom:15px;" id="searchbox" type="text" class="w3-input" placeholder="Search here..." required>
             </form>   
@@ -102,111 +104,6 @@ hr{ border: 1px thin;}
       <br>
     </div>
 
-    <div class="w3-col m3" style="margin-left:20px">      
-      <!-- Interests --> 
-      <div class="w3-card-2 w3-round w3-white w3-hide-small">
-        <div class="w3-container">
-          <p>Result Data</p>
-          <p>
-            <!-- INTERESTS -->
-            <span class="w3-tag w3-small w3-theme-d5">3700</span>
-            <span class="w3-tag w3-small w3-theme-l5">cscis</span>
-          </p>
-          <input type="checkbox" checked>Courses<br>
-          <input type="checkbox" checked>Departments
-          <button class="w3-button"></button>
-        </div>
-      </div>
-      <br>
-      
-      <!-- Alert Box -->
-      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
-      </div>
-    
-    <!-- End Left Column -->
-    </div>
-    
-    <!-- Middle Column -->
-    <div class="w3-col m6">
-
-    <div>
-        <p align="center" class="w3-opacity">Results</p>
-    </div>
-
-      <div class="w3-container w3-theme-d2 w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
-        <span class="w3-right w3-opacity">Department</span>
-        <h4 style="margin-bottom:0px">Computer Science</h4><br>
-        <hr class="w3-theme-d4" style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <span class="w3-right w3-opacity">Course</span>
-        <h4 style="margin-bottom:0px">CSCI 3030</h4><br>
-        <h5 align="center">Software Engineering I</h5>
-        <hr style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <span class="w3-right w3-opacity">Course</span>
-        <h4 style="margin-bottom:0px">CSCI 4710</h4><br>
-        <h5 align="center">Web Applications</h5>
-        <hr style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-      
-    <!-- End Middle Column -->
-    </div>
-    
-    <!-- Right Column -->
-    <div class="w3-col m2" style="float:left">
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Upcoming Events:</p>
-          <img src="#" alt="Forest" style="width:100%;">
-          <p><strong>Holiday</strong></p>
-          <p>Friday 15:00</p>
-          <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-        </div>
-      </div>
-      <br>
-      
-      <!-- MOD NOTIFICATION -->
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Friend Request</p>
-          <img src="#" alt="Avatar" style="width:50%"><br>
-          <span>Jane Doe</span>
-          <div class="w3-row w3-opacity">
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
-            </div>
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br>
-      
-      <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
-        <p>ADS</p>
-      </div>
-      <br>
-      
-      <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
-        <p><i class="fa fa-bug w3-xxlarge"></i></p>
-      </div>
       
     <!-- End Right Column -->
     </div>
