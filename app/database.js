@@ -12,44 +12,23 @@ module.exports = function(db) {
         require('./database')(db);
     });
 
+    // Create uuid 
     createUuid = function() {
         var id = uuid();
         while(id.includes('-'))id = id.replace('-','');
         return id;
     }
 
-    runFileQuery = function (fileName) {
-            fs.readFile('../sql/'+fileName,
-            'utf8', function(err,data) {
-                if(err)console.log(err);
-                db.query(data, function(err,result) {
-                    return result;
-                });
-            });
-    }
-
-    runQuery = function (query) {
-            db.query(query, function(err, result) {
-                if(err)console.log(err);
-                return result;
-            });
-    }
-
-    runQuery = function (query,values) {
-            db.query(query,values,function(err, result) {
-                if(err)console.log(err);
-                return result;
-            });
-    }
-
+    // Get all user data
     getUserByID = function (id,cb) {
-            db.query('select * from user where id = ?', 
-            [id], function(err,result) {
-                if(err)console.log(err);
-                cb(result[0]);
-            });
+        db.query('select * from user where id = ?', 
+        [id], function(err,result) {
+            if(err)console.log(err);
+            cb(result[0]);
+        });
     }
 
+    // Get user profile image
     getProfilePictureByID = function(id,cb) {
         db.query('select profile_image, profile_image_size from user where id = ?', 
         [id],function(err,result) {
@@ -59,6 +38,7 @@ module.exports = function(db) {
         });
     }
 
+    // 
     uploadProfilePictureByID = function(id,filedata,cb) {
         db.query('update user set profile_image = ?, profile_image_size = ?, where id = ?', 
         [filedata,filedata.length,id],function(err,result) {
@@ -67,19 +47,7 @@ module.exports = function(db) {
         });
     }
 
-    createProfileData = function(id) {
-        var bool = true;
-        db.query('insert into profile_data (id, description) values (?,?)',
-        [id,''],
-        function(err,result){
-            if(err) {
-                console.log(err);
-                bool = false;
-            }
-        }); 
-        return bool;
-    }
-
+    // Create post
     createPost = function(user_id,course_id,post_text,fileArr,cb) {
         var post_id = createUuid();
         // creates the post
@@ -99,27 +67,67 @@ module.exports = function(db) {
         });
     }
 
-    getPendingPosts = function(user_id,cb) {
-        // if the user is admin or normal
-
-        // get the information
-    }
-
-    a = function() {
+    // check if user is admin
+    checkIfAdmin = function(user_id,cb) {
 
     }
 
+    // check if user is admin or mod
+    checkIfAdminOrMod = function(user_id,cb) {
+
+    }
+
+    // get the courses that the user is following
+    getUserCourses = function(user_id,cb) {
+        
+    }
+
+    // Posts for the courses that the user is following
+    getUserViewPosts = function(user_id,cb) {
+
+    }
+
+    // For admin/mod use only
+    getAllPendingPosts = function(cb) {
+
+    }
+
+    acceptPost = function(post_id,cb) {
+
+    }
+
+    declinePost = function(post_id,cb) {
+
+    }
+
+    //For admin/mod use only
+    getAllPost = function(cb) {
+
+    }
+
+    //For admin/mod use only
+    suspendUser = function(user_id,suspend_length) {
+        
+    }
+
+    // For admin/mod use only
+    banUser = function(user_id) {
+
+    }
+
+    // Register User Information
     register = function (firstname,lastname,email,password,type,cb) {
-            var id = createUuid();
-            db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
-            [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
-            function(err, result) {
-                if(err){
-                    console.log(err);
-                } else cb(id);
-            });
+        var id = createUuid();
+        db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
+        [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
+        function(err, result) {
+            if(err){
+                console.log(err);
+            } else cb(id);
+        });
     }
 
+    // Validate the Login information 
     login = function (email,password,cb) {
         db.query('select id from user where email = ?',
         [email],//,bcrypt.hashSync(password, null, null)

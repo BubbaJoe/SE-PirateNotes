@@ -21,7 +21,7 @@ module.exports = function(app, io, db, passport) {
         
     });
 
-    app.get('/profile/:uid', function (req,res) {
+    app.get('/profile_image/:uid', function (req,res) {
         uid = req.params.uid;
         getProfilePictureByID(uid,function(result) {
             if(result) {
@@ -29,7 +29,7 @@ module.exports = function(app, io, db, passport) {
                 var buf = 
                 res.send(buf);
             } else {
-                res.status(404).end();
+                res.redirect('/images/m_profile.svg');
         }
         });
     });
@@ -38,18 +38,12 @@ module.exports = function(app, io, db, passport) {
         if(req.isAuthenticated()) {
             res.render('home', {
                 user: req.user
-                // courses: {
-                // },
-                // myPosts: {
-                // },
-                // savedPosts: {
-                // },
-                // interests: {
-                // },
-                // notifications: {
-                // },
-                // posts: {
-                // }
+                // courses: {},
+                // myPosts: {},
+                // savedPosts: {},
+                // interests: {},
+                // notifications: {},
+                // posts: {}
             });
         }else{
             // use flash to display error messages

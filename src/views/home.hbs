@@ -31,21 +31,20 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
       <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
+      <a href="#" class="w3-bar-item w3-button">New post from John Doe</a>
       <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+      <a href="#" class="w3-bar-item w3-button">Your post has been approved</a>
     </div>
   </div>
   <div class="w3-dropdown-hover w3-hide-small w3-right">
     <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
+    <img src="profile_image/{{user.id}}" class="w3-circle" style="height:25px;width:25px"></img>
     <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
     </button>
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:150px;right:0;">
       <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">Account</a>
-      <a href="#" class="w3-bar-item w3-button">Setting</a>
-      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+      <a href="#" class="w3-bar-item w3-button">Settings</a>
+      <a href="/logout" class="w3-bar-item w3-button">Log out</a>
     </div>
   </div>
  </div>
@@ -67,9 +66,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         <div class="w3-container">
          <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
          <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
-         <a href='profile/{{user.id}}'>Image link</a>
+         
+         <p class="w3-center">Description: {{user.desc_text}}</p>
          <hr>
-         <p class="w3-center">{{user.desc_text}}</p>
          <!-- If the account is theirs -->
          <div>
             <button class="w3-button w3-right w3-theme-l1" style="margin-bottom:10px">edit</button>
