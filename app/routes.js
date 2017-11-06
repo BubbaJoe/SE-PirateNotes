@@ -4,13 +4,16 @@ module.exports = function(app, io, db, passport) {
 
     require('./database.js')(db);
     
-    // Add page for the Deparment (will show all the courses for that department and how many followers)
-    // Course (will show all the post from that course form users)
-    // Another persons page will show their most recent posts
-    // Your own page will show the most recent post from your followed courses
-    
     app.get('/profile', function (req,res) {
-        res.render('profile');
+        res.redirect("/");
+    });
+
+    app.get('/department', function (req,res) {
+        res.render("department")
+    });
+
+    app.get('/search', function (req,res) {
+        res.render("search");
     });
 
     app.get('/profile/:uid', function (req,res) {
@@ -120,11 +123,12 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.get('/infolog',function(req,res) {
+        //Check if admin/mod
         if(req.isAuthenticated())
-            data = JSON.stringify(req.user);
+            data = JSON.stringify(req.user,null,4);
         else data = "You are not authenticated"
         res.set('Content-Type', 'application/json');
-        res.send(req.user || 'Not logged in');
+        res.send(data);
     });
     
     app.get('/logout', function(req, res) {

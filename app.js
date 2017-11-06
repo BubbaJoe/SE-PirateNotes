@@ -43,7 +43,7 @@ var io = require('socket.io')
 );
 
 // DB AND SESSION
-const options = require('./localdbinfo.json');
+const options = require('./dbinfo.json');
 
 var db = mysql.createConnection(options);
 var sessionStore = new sqlsession(options);

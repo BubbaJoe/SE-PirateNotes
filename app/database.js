@@ -111,13 +111,12 @@ module.exports = function(db) {
 
     register = function (firstname,lastname,email,password,type,cb) {
             var id = createUuid();
-            db.query('insert into user(id,firstname,lastname,email,password,desc_text,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
+            db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
             [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
             function(err, result) {
                 if(err){
                     console.log(err);
-                    cb(id);
-                } else cb();
+                } else cb(id);
             });
     }
 

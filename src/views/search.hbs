@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<title>Pirate Notes</title>
+<meta charset="UTF-8">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="theme-color" content="#ffffff">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<!-- THEME -->
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+.course-list {margin-bottom: 1px}
+hr{ border: 1px thin;}
+.search-wrapper {display: inline-block;}
+.search-input, .search-button {border:0;background-color: transparent;}
+</style>
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
+  <div class="w3-dropdown-hover w3-hide-small">
+    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
+      <!-- NOTIFICATIONS -->
+      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
+      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+    </div>
+  </div>
+  <div class="w3-hide-small w3-left">
+    <input type="text" style="margin-top:4px;width:100px;" class="w3-bar-item w3-input" placeholder="Search..">
+    <a href="/search" style="margin-top:4px;margin-right:4px;" class="w3-bar-item w3-button w3-theme-d4"><i class="fa fa-search"></i></a>
+  </div>
+  <div class="w3-dropdown-hover w3-hide-small w3-right">
+    <button class="w3-button w3-padding-large" title="Notifications">
+    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
+    <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
+    </button>
+    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
+      <!-- NOTIFICATIONS -->
+      <a href="#" class="w3-bar-item w3-button">Account</a>
+      <a href="#" class="w3-bar-item w3-button">Setting</a>
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+    </div>
+  </div>
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
+  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
+  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
+  <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
+</div>
+
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
+  <div class="w3-row">
+
+    <div class="w3-col m9" style="margin-left:25px; width:91%;">
+      <!-- Profile -->
+      <div class="w3-card-2 w3-round w3-white" style="max-height:50px">
+        <div class="w3-container" >
+            <div class="search-wrapper" style="inline-block:none">
+          <input type="text" style="display:block;margin:auto auto auto auto;width:200px;"
+            class="w3-input search-input" placeholder="Search..">
+          <button class="w3-button search-button"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+      </div>
+      <br>
+    </div>
+
+    <div class="w3-col m3" style="margin-left:20px">      
+      <!-- Interests --> 
+      <div class="w3-card-2 w3-round w3-white w3-hide-small">
+        <div class="w3-container">
+          <p>Interests</p>
+          <p>
+            <!-- INTERESTS -->
+            <span class="w3-tag w3-small w3-theme-d5">News</span>
+            <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
+            <span class="w3-tag w3-small w3-theme-d3">Labels</span>
+            <span class="w3-tag w3-small w3-theme-d2">Games</span>
+            <span class="w3-tag w3-small w3-theme-d1">Friends</span>
+            <span class="w3-tag w3-small w3-theme">Games</span>
+            <span class="w3-tag w3-small w3-theme-l1">Friends</span>
+            <span class="w3-tag w3-small w3-theme-l2">Food</span>
+            <span class="w3-tag w3-small w3-theme-l3">Design</span>
+            <span class="w3-tag w3-small w3-theme-l4">Art</span>
+            <span class="w3-tag w3-small w3-theme-l5">Photos</span>
+          </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Alert Box -->
+      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+          <i class="fa fa-remove"></i>
+        </span>
+        <p><strong>Hey!</strong></p>
+        <p>People are looking at your profile. Find out who.</p>
+      </div>
+    
+    <!-- End Left Column -->
+    </div>
+    
+    <!-- Middle Column -->
+    <div class="w3-col m6">
+
+      <div class="w3-container w3-theme-d3 w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 3700</span>
+        <h4 style="margin-bottom:0px">CSCI Database Management Systems</h4><br>
+        <hr class="w3-theme-d4" style="margin-top:10px">
+        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
+        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
+      </div>
+
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 3030</span>
+        <h4 style="margin-bottom:0px">Software Engineering I</h4><br>
+        <hr style="margin-top:10px">
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
+      </div>
+
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 4710</span>
+        <h4 style="margin-bottom:0px">Web Applications</h4><br>
+        <hr style="margin-top:10px">
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
+      </div>
+      
+    <!-- End Middle Column -->
+    </div>
+    
+    <!-- Right Column -->
+    <div class="w3-col m2" style="float:left">
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Upcoming Events:</p>
+          <img src="#" alt="Forest" style="width:100%;">
+          <p><strong>Holiday</strong></p>
+          <p>Friday 15:00</p>
+          <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- MOD NOTIFICATION -->
+      <div class="w3-card-2 w3-round w3-white w3-center">
+        <div class="w3-container">
+          <p>Friend Request</p>
+          <img src="#" alt="Avatar" style="width:50%"><br>
+          <span>Jane Doe</span>
+          <div class="w3-row w3-opacity">
+            <div class="w3-half">
+              <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
+            </div>
+            <div class="w3-half">
+              <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      
+      <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
+        <p>ADS</p>
+      </div>
+      <br>
+      
+      <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
+        <p><i class="fa fa-bug w3-xxlarge"></i></p>
+      </div>
+      
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+<!-- End Page Container -->
+</div>
+<br>
+
+<!-- Footer -->
+<footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
+  <h5> Pirate Notes &copy; 2017</h5>
+</footer>
+
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="http://www.ecu.edu" target="_blank">ECU.edu</a></p>
+</footer>
+ 
+<script>
+function gotoUrl(url) {
+    if(typeof url != "string") return false;
+    window.location.href = url;
+}
+// Accordion
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+        x.previousElementSibling.className += " w3-theme-d1";
+    } else { 
+        x.className = x.className.replace("w3-show", "");
+        x.previousElementSibling.className = 
+        x.previousElementSibling.className.replace(" w3-theme-d1", "");
+    }
+}
+
+// Used to toggle the menu on smaller screens when clicking on the menu button
+function openNav() {
+    var x = document.getElementById("navDemo");
+    if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+    } else { 
+        x.className = x.className.replace(" w3-show", "");
+    }
+}
+</script>
+
+</body>
+</html> 

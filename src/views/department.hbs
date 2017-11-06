@@ -17,6 +17,7 @@
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 .course-list {margin-bottom: 1px}
+hr{ border: 1px thin;}
 </style>
 <body class="w3-theme-l5">
 
@@ -28,13 +29,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
   <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i></a>
   <div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
+    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
       <!-- NOTIFICATIONS -->
       <a href="#" class="w3-bar-item w3-button">One new friend request</a>
       <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
       <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
     </div>
+  </div>
+  <div class="w3-hide-small w3-left">
+    <input type="text" style="margin-top:4px;width:100px;" class="w3-bar-item w3-input" placeholder="Search..">
+    <a href="/search" style="margin-top:4px;margin-right:4px;" class="w3-bar-item w3-button w3-theme-d4"><i class="fa fa-search"></i></a>
   </div>
   <div class="w3-dropdown-hover w3-hide-small w3-right">
     <button class="w3-button w3-padding-large" title="Notifications">
@@ -65,12 +70,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
-         <h4 class="w3-center">Department: {{user.firstname}} {{user.lastname}}</h4>
-         <p class="w3-center"><img src="/profile/{{user.id}}" class="w3-circle" style="height:106px;width:106px"></p>
+         <button style="margin-top:10px" class="w3-button w3-right">
+          <span class="w3-right w3-opacity"><i class="fa fa-ellipsis-v"></i></span>
+         </button>
+         <h4 class="w3-center">Department: Computer Science (CSCI)</h4>
+         
+         <p class="w3-center"><img src="/images/ECU_department.jpg"style="height:106px;"></p>
          <hr>
          <p class="w3-center">{{user.desc_text}}</p>
          <div>
-            <button class="w3-button w3-right w3-theme-l1" style="margin-bottom:10px">edit</button>
+            <button class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Department</button>
          </div>
         </div>
       </div>
@@ -107,70 +116,39 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         <p><strong>Hey!</strong></p>
         <p>People are looking at your profile. Find out who.</p>
       </div>
-      <!-- Alert Box -->
-      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
-      </div>
-      <!-- Alert Box -->
-      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
-        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
-          <i class="fa fa-remove"></i>
-        </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
-      </div>
     
     <!-- End Left Column -->
     </div>
     
     <!-- Middle Column -->
     <div class="w3-col m6">
-      <!-- IMAGE POST -->
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">1 min</span>
-        <h4>John Doe</h4><br>
-        <hr class="w3-clear">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <div class="w3-row-padding" style="margin:0 -16px">
-            <div class="w3-half">
-              <img src="#" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
-            </div>
-            <div class="w3-half">
-              <img src="#" style="width:100%" alt="Nature" class="w3-margin-bottom">
-          </div>
-        </div>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i> &nbsp;Comment</button> 
+
+      <div class="w3-container w3-theme-d3 w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 3700</span>
+        <h4 style="margin-bottom:0px">CSCI Database Management Systems</h4><br>
+        <hr class="w3-theme-d4" style="margin-top:10px">
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
+        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
       </div>
 
-      <!-- POST -->
+      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 3030</span>
+        <h4 style="margin-bottom:0px">Software Engineering I</h4><br>
+        <hr style="margin-top:10px">
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
+      </div>
 
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">16 min</span>
-        <h4>Jane Doe</h4><br>
-        <hr class="w3-clear">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button> 
-      </div>  
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">32 min</span>
-        <h4>Angie Jane</h4><br>
-        <hr class="w3-clear">
-        <p>Have you seen this?</p>
-        <img src="#" style="width:100%" class="w3-margin-bottom">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i> &nbsp;Save</button> 
-      </div> 
+        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
+        <span class="w3-right w3-opacity">CSCI 4710</span>
+        <h4 style="margin-bottom:0px">Web Applications</h4><br>
+        <hr style="margin-top:10px">
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
+        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
+      </div>
       
     <!-- End Middle Column -->
     </div>

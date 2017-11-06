@@ -10,24 +10,6 @@ create database piratenotes;
 
 use piratenotes;
 
-# department
-create table department (
-    id varchar(32) not null,
-    dept_name varchar(256) not null,
-    dept_abbr varchar(4) not null,
-    primary key(id)
-);
-
-# course
-create table course (
-    id varchar(32) not null,
-    dept_abbr varchar(4),
-    course_name varchar(256),
-    course_num varchar(4),
-    primary key(id),
-    foreign key(dept_abbr) references department(dept_abbr)
-);
-
 # user
 create table user (
     id varchar(32) not null,
@@ -50,7 +32,27 @@ create table notification (
     user_id varchar(32) not null,
     n_time datetime,
     message text not null,
-    primary key()
+    checked boolean,
+    primary key(id),
+    foreign key (user_id) references user(id)
+);
+
+# department
+create table department (
+    id varchar(32) not null,
+    dept_name varchar(256) not null unique,
+    dept_abbr varchar(4) not null,
+    primary key(id)
+);
+
+# course
+create table course (
+    id varchar(32) not null,
+    dept_abbr varchar(4),
+    course_name varchar(256),
+    course_num varchar(4),
+    primary key(id),
+    foreign key(dept_abbr) references department(dept_abbr)
 );
 
 # post
@@ -122,5 +124,5 @@ create table reported_user (
     reason text not null,
     primary key(user_id_1, user_id_2),
     foreign key (user_id_1) references user(id),
-    foreign key (post_id_2) references user(id)
+    foreign key (user_id_2) references user(id)
 );
