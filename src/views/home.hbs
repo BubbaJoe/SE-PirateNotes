@@ -17,6 +17,34 @@
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 .course-list {margin-bottom: 1px}
+hr{ border: 1px thin;}
+.search-wrapper {display: inline-block;}
+.search-input, .search-button {border:0;background-color: transparent;}
+.search-div {max-height: 50px;  width: 100%;
+  margin: 0 auto;}
+  body{
+  background:#555;
+}
+.search input {width: 370px;padding: 10px 5px;float: left;color: #ccc;border: 0;background: transparent;border-radius: 3px 0 0 3px;}
+
+.search input:focus {outline: 0;background:transparent;}
+
+.search button {position: relative;float: right;border: 0;padding: 0;cursor: pointer;height: 40px;width: 120px;color: #fff;background: transparent;border-left: 1px solid #fff;border-radius: 0 3px 3px 0;}   
+
+#searchbox {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    font-size: 16px;
+    background-color: white;
+    background-image: url('images/searchicon.png');
+    background-position: 10px 14px; 
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 40px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
 </style>
 <body class="w3-theme-l5">
 
@@ -25,26 +53,27 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
  <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
   <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
   <a href="" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
-  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Profile"><i class="fa fa-user"></i></a>
-  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Search"><i class="fa fa-search"></i></a>
+  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
+  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
   <div class="w3-dropdown-hover w3-hide-small">
-    <button class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
+    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
       <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">New post from John Doe</a>
+      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
+      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
       <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
-      <a href="#" class="w3-bar-item w3-button">Your post has been approved</a>
     </div>
   </div>
   <div class="w3-dropdown-hover w3-hide-small w3-right">
     <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="profile_image/{{user.id}}" class="w3-circle" style="height:25px;width:25px"></img>
+    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
     <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
     </button>
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:150px;right:0;">
+    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
       <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">Settings</a>
-      <a href="/logout" class="w3-bar-item w3-button">Log out</a>
+      <a href="#" class="w3-bar-item w3-button">Account</a>
+      <a href="#" class="w3-bar-item w3-button">Setting</a>
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
     </div>
   </div>
  </div>
@@ -52,9 +81,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Notes</a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
+  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
+  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
   <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
 </div>
 
@@ -65,7 +94,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
          <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
-         <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>
+         <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px"></p>
          
          <p class="w3-center">Description: {{user.desc_text}}</p>
          <hr>
@@ -160,12 +189,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
               <form method="post" enctype="multipart/form-data" action="/post">
                 <h6 class="w3-opacity"> Post to 
                   <select style="width:130px" class="w3-button" name="course">
-                    <option value="hi">CSCI 2400</option>
-                    <option value="">MATH 2227</option>
-                    <option value="">CSCI 1100</option>
-                    <option value="">ENGL 1200</option>
+                    {{#each courses}}
+                    <option value="{{this.id}}">{{this.dept_abbr}} {{this.course_num}}</option>
+                    {{/each}}
                   </select></h6>
-                <input name="post-text" style="width:100%;margin-top:10px;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
+                <input name="post_text" style="width:100%;margin-top:10px;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
                 <br><p style=";margin-bottom:0px" id="fileList"></p><br>
                 <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
                 <button type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
@@ -179,19 +207,12 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       </div>
       <!-- IMAGE POST -->
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">1 min</span>
         <h4>John Doe</h4><br>
-        <hr class="w3-clear">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          <div class="w3-row-padding" style="margin:0 -16px">
-            <div class="w3-half">
-              <img src="#" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
-            </div>
-            <div class="w3-half">
-              <img src="#" style="width:100%" alt="Nature" class="w3-margin-bottom">
-          </div>
-        </div>
+
+        <hr class="w3-clear">
         <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
         <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>
       </div>
@@ -212,10 +233,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">32 min</span>
         <h4>Angie Jane</h4><br>
-        <hr class="w3-clear">
+        
         <p>Have you seen this?</p>
         <img src="#" style="width:100%" class="w3-margin-bottom">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <hr class="w3-clear">
         <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
         <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>
       </div> 

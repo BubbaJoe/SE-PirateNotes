@@ -30,17 +30,17 @@ module.exports = function(db) {
 
     // Get user profile image
     getProfilePictureByID = function(id,cb) {
-        db.query('select profile_image, profile_image_size from user where id = ?', 
-        [id],function(err,result) {
+        db.query('select profile_image from user where id = ?', 
+        [id,id],function(err,result) {
             if(err)console.log(err);
             console.log(result);
             cb(result);
         });
     }
 
-    // 
+    // Upload profile picture
     uploadProfilePictureByID = function(id,filedata,cb) {
-        db.query('update user set profile_image = ?, profile_image_size = ?, where id = ?', 
+        db.query('update user set profile_image = ?, where id = ?', 
         [filedata,filedata.length,id],function(err,result) {
             if(err)console.log(err);
             cb(result);
@@ -79,7 +79,12 @@ module.exports = function(db) {
 
     // get the courses that the user is following
     getUserCourses = function(user_id,cb) {
-        
+        return db.query('select * from course, (' +
+        'select * from followed where user_id = ?) c ' +
+        'where course.id = c.course_id', 
+        [user_id],function(err,result){
+            console.log(result);
+        });
     }
 
     // Posts for the courses that the user is following
@@ -92,26 +97,32 @@ module.exports = function(db) {
 
     }
 
+    //For admin/mod use only
+    getAllPost = function(cb) {
+        
+    }
+
+    //For admin/mod use only
     acceptPost = function(post_id,cb) {
 
     }
 
+    //For admin/mod use only
     declinePost = function(post_id,cb) {
 
     }
 
     //For admin/mod use only
-    getAllPost = function(cb) {
-
-    }
-
-    //For admin/mod use only
-    suspendUser = function(user_id,suspend_length) {
+    suspendUser = function(user_id,suspend_length,cb) {
         
     }
 
     // For admin/mod use only
-    banUser = function(user_id) {
+    banUser = function(user_id,cb) {
+
+    }
+
+    removeUserSession = function(user_id, cb) {
 
     }
 

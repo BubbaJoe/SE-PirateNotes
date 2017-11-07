@@ -1,8 +1,9 @@
 // app/routes.js
-module.exports = function(app, io, db, passport) {
-    var fs = require('fs');
 
-    require('./database.js')(db);
+var fs = require('fs');
+var path = require('path');
+
+module.exports = function(app, io, db, passport) {
     
     app.get('/profile', function (req,res) {
         res.redirect("/");
@@ -18,27 +19,27 @@ module.exports = function(app, io, db, passport) {
             console.log(data)
             res.render("search");
         } else res.render("search-blank");
-        
     });
 
     app.get('/profile_image/:uid', function (req,res) {
         uid = req.params.uid;
-        getProfilePictureByID(uid,function(result) {
-            if(result) {
-                console.log(result);
-                var buf = 
-                res.send(buf);
-            } else {
-                res.redirect('/images/m_profile.svg');
-        }
-        });
+        if(req.isAuthenticated())
+            getProfilePictureByID(uid,function(result) {
+                if(result[0].profile_image) {
+                    console.log()
+                    res.setHeader('Content-disposition', 'attachment; filename=profile.svg');
+                    res.send(result[0].profile_image);
+                } else res.status(404).end();
+            });
     });
     
     app.get('/', function (req,res) {
+        
         if(req.isAuthenticated()) {
+            courses = getUserCourses(req.user.id);
             res.render('home', {
-                user: req.user
-                // courses: {},
+                user: req.user,
+                courses: {courses}
                 // myPosts: {},
                 // savedPosts: {},
                 // interests: {},
@@ -46,9 +47,7 @@ module.exports = function(app, io, db, passport) {
                 // posts: {}
             });
         }else{
-            // use flash to display error messages
-            res.render('auth',{
-            });
+            res.render('auth',{});
         }
     });
     
@@ -81,7 +80,6 @@ module.exports = function(app, io, db, passport) {
         if(firstname != "" && lastname != "" && email != "" && password != "")
             register(firstname,lastname,email,password,type,function(id) {
                 if(id != undefined) {
-                    createProfileData(id);
                     req.login(id,
                     function(err) {
                         if(err) console.log(err);
@@ -101,24 +99,25 @@ module.exports = function(app, io, db, passport) {
         console.log(req.user);
         var fileArr = req.files.fileAttachments,
         numFiles = fileArr.length;
-        if(numFiles > 0) {
+        console.log(numFiles);
+        if(numFiles > 0)
             for(var i = 0; i < numFiles; i++) {
                 console.log(fileArr[i].name);
             }
 
             //course name, post text, file-arr, user-id
-            createPost(req.user.id,req.fields.course,req.fields.post-text,fileArr,function(){
+        createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr,function(){
+            res.redirect("/");
+        });
 
-                res.redirect("/");
-            });
-
+        if(numFiles > 0)
             for(var i = 0; i < numFiles; i++) {
                 fs.unlink(fileArr[i].path,function(err) {
                     if(err)console.log(err);
                     else console.log("File deleted!");
                 });
             }
-        }
+        
     });
 
     app.get('/infolog',function(req,res) {
@@ -131,7 +130,8 @@ module.exports = function(app, io, db, passport) {
     });
     
     app.get('/logout', function(req, res) {
-        req.logout();
+        if(req.isAuthenticated())
+            req.logout();
         res.redirect('/');
     });
 

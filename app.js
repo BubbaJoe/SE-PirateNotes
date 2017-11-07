@@ -30,7 +30,17 @@ app.use(function (req, res, next) {
 
 // HANDLEBARS
 app.set('views', './src/views');
-app.engine('hbs',exphbs({}));
+app.engine('hbs',exphbs({
+    helpers: {
+        foo: function(a,b,c) {
+            console.log(a);
+            console.log(b);
+            console.log(c);
+
+            return "foo";
+        }
+    }
+}));
 app.set('view engine','hbs')
 
 // SOCKET.IO
@@ -62,5 +72,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./app/handlebars.js')(exphbs);
+//require('./app/handlebars.js')(exphbs);
+require('./app/database.js')(db);
 require('./app/routes.js')(app, io, db, passport);
