@@ -34,18 +34,20 @@ module.exports = function(app, io, db, passport) {
     });
     
     app.get('/', function (req,res) {
-        
         if(req.isAuthenticated()) {
-            courses = getUserCourses(req.user.id);
-            res.render('home', {
-                user: req.user,
-                courses: {courses}
-                // myPosts: {},
-                // savedPosts: {},
-                // interests: {},
-                // notifications: {},
-                // posts: {}
+            getUserCourses(req.user.id,function(courses) {
+                console.log(courses)
+                res.render('home', {  
+                    user: req.user,
+                    courses: courses
+                    // myPosts: {},
+                    // savedPosts: {},
+                    // interests: {},
+                    // notifications: {},
+                    // posts: {}
+                });
             });
+
         }else{
             res.render('auth',{});
         }

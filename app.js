@@ -32,12 +32,8 @@ app.use(function (req, res, next) {
 app.set('views', './src/views');
 app.engine('hbs',exphbs({
     helpers: {
-        foo: function(a,b,c) {
-            console.log(a);
-            console.log(b);
-            console.log(c);
-
-            return "foo";
+        log: function(options) {
+            console.log(options);
         }
     }
 }));

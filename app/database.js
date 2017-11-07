@@ -79,11 +79,12 @@ module.exports = function(db) {
 
     // get the courses that the user is following
     getUserCourses = function(user_id,cb) {
-        return db.query('select * from course, (' +
+        db.query('select * from course, (' +
         'select * from followed where user_id = ?) c ' +
         'where course.id = c.course_id', 
         [user_id],function(err,result){
-            console.log(result);
+            if(err) console.log(err);
+            else cb(result);
         });
     }
 

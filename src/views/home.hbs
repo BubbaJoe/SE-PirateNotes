@@ -187,25 +187,27 @@ hr{ border: 1px thin;}
           <div class="w3-card-2 w3-round w3-white">
             <div class="w3-container w3-padding">
               <form method="post" enctype="multipart/form-data" action="/post">
+                {{#if courses}}
                 <h6 class="w3-opacity"> Post to 
                   <select style="width:130px" class="w3-button" name="course">
                     {{#each courses}}
                     <option value="{{this.id}}">{{this.dept_abbr}} {{this.course_num}}</option>
                     {{/each}}
                   </select></h6>
-                <input name="post_text" style="width:100%;margin-top:10px;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
-                <br><p style=";margin-bottom:0px" id="fileList"></p><br>
+                {{else}}
+                <h6 class="w3-opacity">You are not following any courses...</h6><br>
+                {{/if}}
+                <input {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="width:100%;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
+                <br><p style=";margin-bottom:0px" id="fileList"></p>
                 <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
-                <button type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
+                <button {{#if courses}}{{else}}disabled="disabled"{{/if}} type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
               </form>
-
-              <button onclick="postAttachment()" class="w3-button w3-theme w3-left"><i class="fa fa-paperclip"></i> &nbsp;Attachment</button>
-                
+              <button {{#if courses}}{{else}}disabled="disabled"{{/if}} onclick="postAttachment()" class="w3-button w3-theme w3-left"><i class="fa fa-paperclip"></i> &nbsp;Attachment</button>
             </div>
           </div>
         </div>
       </div>
-      <!-- IMAGE POST -->
+      <!-- {{#each post}} -->
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
         <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">1 min</span>
