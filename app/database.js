@@ -70,6 +70,11 @@ module.exports = function(db) {
         return new Promise( ( resolve, reject ) => {} );
     }
 
+        // check if user is mod
+        checkIfMod = function(user_id) {
+            return new Promise( ( resolve, reject ) => {} );
+        }
+
     // get the courses that the user is following
     getUserCourses = function(user_id) {
         return new Promise( ( resolve, reject ) => {
@@ -132,11 +137,6 @@ module.exports = function(db) {
         } );
     }
 
-    getPostFiles = function() {
-        return new Promise( ( resolve, reject ) => {
-            
-        } );
-    }
 
     //For admin/mod use only
     acceptPost = function(post_id) {
@@ -166,11 +166,6 @@ module.exports = function(db) {
         } );
     }
 
-    removeUserSession = function(user_id) {
-        return new Promise( ( resolve, reject ) => {
-
-        } );
-    }
 
     // Register User Information
     register = function (firstname,lastname,email,password,type) {
