@@ -53,17 +53,21 @@ module.exports = function(db) {
         // creates the post
         db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
         [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'],function(err,results){
-            for(var i = 0; i < fileArr.length; i++) {
-                // create a multiple files for each post
-                fs.readFile(fileArr[i].path,function(err,data) {
-                    db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
-                        [createUuid(),post_id,fileArr[i].name,fileArr[i].size,fileArr[i].type,data], 
-                        function(err,results) {
-                            if(err) console.log(err);
-                            else console.log(results);
-                        });
+            if(err) console.log(err); else {
+                console.log("Post Created");
+                fileArr.forEach(function(file) {
+                    console.log("File Created");
+                    fs.readFile(file.path,function(err,data) {
+                        db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
+                            [createUuid(),post_id,file.name,file.size,file.type,data], 
+                            function(err,results) {
+                                if(err) console.log(err);
+                                // Removes file from temp_uploads
+                                fs.unlinkSync(file.path);
+                            });
+                    });
                 });
-            }
+            } cb();
         });
     }
 

@@ -52,16 +52,19 @@ hr{ border: 1px thin;}
 <div class="w3-top">
  <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
   <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
   <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
   <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
   <div class="w3-dropdown-hover w3-hide-small">
-    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
+    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i>
+    {{#if courses}}<span class="w3-badge w3-right w3-small w3-yellow">{{courses.length}}</span>{{/if}}</button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
       <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
-      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
+      {{#each courses}}
+      <a href="" class="w3-bar-item w3-button">{{this.dept_abbr}} {{this.course_num}}</a>
+      {{else}}
+      <a href="/check" class="w3-bar-item w3-button">You have new notifications</a>
+      {{/each}}
     </div>
   </div>
   <div class="w3-dropdown-hover w3-hide-small w3-right">
@@ -111,9 +114,9 @@ hr{ border: 1px thin;}
         <div class="w3-white">
           <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-book fa-fw w3-margin-right"></i>&nbsp; My Courses</button>
           <div id="Demo1" class="w3-hide w3-container">
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
-            <button class="w3-button w3-block w3-theme-l1 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>...</button>
+            {{#each courses}}
+              <button onclick="gotoUrl('/course/{{this.id}}')" class="w3-button w3-block w3-theme-d3 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_abbr}} {{this.course_num}}</button>
+            {{/each}}
           </div>
           <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-pencil-square-o fa-fw w3-margin-right"></i>&nbsp; My Notes</button>
           <div id="Demo2" class="w3-hide w3-container">
@@ -197,8 +200,8 @@ hr{ border: 1px thin;}
                 {{else}}
                 <h6 class="w3-opacity">You are not following any courses...</h6><br>
                 {{/if}}
-                <input {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="width:100%;margin-bottom:5px;" placeholder="Type here..." class="w3-border w3-padding">
-                <br><p style=";margin-bottom:0px" id="fileList"></p>
+                <input {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="width:100%;margin-bottom:5px;" placeholder="Type here..." autocomplete="off" class="w3-border w3-padding" required>
+                <p style=";margin-bottom:0px" id="fileList"></p><br>
                 <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
                 <button {{#if courses}}{{else}}disabled="disabled"{{/if}} type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
               </form>
@@ -207,7 +210,7 @@ hr{ border: 1px thin;}
           </div>
         </div>
       </div>
-      <!-- {{#each post}} -->
+      
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
         <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">1 min</span>
@@ -222,7 +225,7 @@ hr{ border: 1px thin;}
       <!-- POST -->
 
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <img src="/images/w_profile.svg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">16 min</span>
         <h4>Jane Doe</h4><br>
         <hr class="w3-clear">
@@ -232,7 +235,7 @@ hr{ border: 1px thin;}
       </div>  
 
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="#" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+        <img src="/images/w_profile.svg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <span class="w3-right w3-opacity">32 min</span>
         <h4>Angie Jane</h4><br>
         
@@ -264,7 +267,7 @@ hr{ border: 1px thin;}
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
           <p>Friend Request</p>
-          <img src="#" alt="Avatar" style="width:50%"><br>
+          <img src="/images/w_profile.svg" alt="Avatar" style="width:50%"><br>
           <span>Jane Doe</span>
           <div class="w3-row w3-opacity">
             <div class="w3-half">
@@ -303,11 +306,14 @@ hr{ border: 1px thin;}
 </footer>
 
 <footer class="w3-container w3-theme-d5">
-  <p>Powered by <a href="http://www.ecu.edu" target="_blank">ECU.edu</a></p>
+  <p>Powered by <a href="http://www.ecu.edu" target="_blank">ecu.edu</a></p>
 </footer>
  
 <script>
-// Accordion
+  function gotoUrl(url) {
+    if(typeof url != "string") return false;
+    window.location.href = url;
+}
 function myFunction(id) {
     var x = document.getElementById(id);
     if (x.className.indexOf("w3-show") == -1) {
@@ -319,11 +325,9 @@ function myFunction(id) {
         x.previousElementSibling.className.replace(" w3-theme-d1", "");
     }
 }
-
 function postAttachment() {
   document.getElementById('fileAttachment').click();
 }
-
 function updateParagraph() {
   var fileArr = document.getElementById('fileAttachment').files,
   fileNames = "";
@@ -332,8 +336,6 @@ function updateParagraph() {
   }
   document.getElementById('fileList').innerHTML = fileNames;
 }
-
-// Used to toggle the menu on smaller screens when clicking on the menu button
 function openNav() {
     var x = document.getElementById("navDemo");
     if (x.className.indexOf("w3-show") == -1) {
@@ -345,4 +347,4 @@ function openNav() {
 </script>
 
 </body>
-</html> 
+</html>

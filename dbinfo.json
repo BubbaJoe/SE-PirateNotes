@@ -1,7 +1,8 @@
 {
-    "host"      : "localhost",
-    "user"      : "root",
-    "password"  : "",
-    "database"  : "piratenotes",
+    "port"      : "3307",
+    "host"     : "localhost",
+    "user"     : "root",
+    "password" : "",
+    "database" : "piratenotes",
     "waitForConnection" : "true"
 }

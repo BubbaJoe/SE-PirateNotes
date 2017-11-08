@@ -36,7 +36,6 @@ module.exports = function(app, io, db, passport) {
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             getUserCourses(req.user.id,function(courses) {
-                console.log(courses)
                 res.render('home', {  
                     user: req.user,
                     courses: courses
@@ -98,27 +97,21 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.post('/post', function(req, res) {
-        console.log(req.user);
-        var fileArr = req.files.fileAttachments,
-        numFiles = fileArr.length;
-        console.log(numFiles);
-        if(numFiles > 0)
-            for(var i = 0; i < numFiles; i++) {
-                console.log(fileArr[i].name);
-            }
+        if(!req.isAuthenticated()) res.redirect('/');
 
-            //course name, post text, file-arr, user-id
+        var fileArr = [];
+        if(req.files.fileAttachments.length)
+            fileArr = req.files.fileAttachments;
+        else fileArr.push(req.files.fileAttachments);
+        numFiles = fileArr.length;
+
+        //course name, post text, file-arr, user-id
         createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr,function(){
             res.redirect("/");
+            //for(var i = 0; i < fileArr.length; i++)
+
         });
 
-        if(numFiles > 0)
-            for(var i = 0; i < numFiles; i++) {
-                fs.unlink(fileArr[i].path,function(err) {
-                    if(err)console.log(err);
-                    else console.log("File deleted!");
-                });
-            }
         
     });
 
