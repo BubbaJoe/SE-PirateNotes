@@ -92,21 +92,21 @@ module.exports = function(db) {
     // Posts that the user has created that are accepted
     getUserPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
-            var final_posts;
+            var final_posts = [];
             db.query('select post.*, user.firstname, user.lastname,'+
-            ' profile_image from post, user where user_id = ?', [user_id])
+            'profile_image from post, user where user_id = ? ', [user_id])
             .then( posts => db.query('select file.* from file, user, post '+ 
                 'where user.id = ? and post_id = post.id',[user_id])
             .then( files => posts.forEach( (post,i,posts) => {
+                console.log(post);
                 for(var i = 0; i < files.length; i++) {
                     post.files = [];
                     if(files[i].post_id == post.id)
                         post.files.push(files[i])
                 }
-                final_post = posts;
-            } )
-            ))
-            .then(() => resolve(final_post))
+            } ) )
+            .then(() => final_post = posts ) )
+            .then(() => resolve(final_post) )
             .catch( err => console.log(err) )
         } );
     }

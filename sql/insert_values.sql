@@ -4,13 +4,13 @@
 #insert into user (id,email,password,firstname,lastname,acc_type,acc_status)
 #    values('id','email','password','firstname','lastname','acc_type','acc_status');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('2d29c09cb9be4293ac690b75531e1489', '' , 'Naruto', 'Uzimaki', 'general', 'active');
+values ('2d29c09cb9be4293ac690b75531e1489','name@email.com', '' , 'Naruto', 'Uzimaki', 'general', 'active');
 
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('f3e0023dea584c07ac7e78e9dc6a4729', '' , 'Itachi', 'Uchiha', 'moderator', 'active');
+values ('f3e0023dea584c07ac7e78e9dc6a4729','email@email.com','' , 'Itachi', 'Uchiha', 'moderator', 'active');
 
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('5eca01a62b8f4753a579dbbbbfb79c12', '' , 'Shareef', 'Ozair', 'admin', 'active');
+values ('5eca01a62b8f4753a579dbbbbfb79c12','me@email.com','' , 'Shareef', 'Ozair', 'admin', 'active');
 #insert into department (id,dept_name,dept_abbr) 
 #   values('id','dept_name','dept_abbr');
 insert into department (id, dept_name, dept_abbr)
@@ -31,5 +31,12 @@ values ('33897a56bee3475bbef1682325327149', 'ICTN', 'Digital Communications', '2
 
 insert into course (id, dept_abbr, course_name, course_num)
 values ('e11227b2f84d4175a16abbc2cf2ee3df', 'MIS', '', '');
+
 #insert into post (id,user_id,course_id,post_text,posdt_status) 
 #   values('id','user_id','course_id','post_text','post_status');
+
+insert into followed (user_id,course_id)
+values ('2d29c09cb9be4293ac690b75531e1489','42ae3034b4284f87af2539597aa4d614');
+
+insert into followed (user_id,course_id)
+values ('2d29c09cb9be4293ac690b75531e1489','33897a56bee3475bbef1682325327149');
