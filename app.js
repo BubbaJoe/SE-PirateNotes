@@ -31,6 +31,8 @@ app.use(function (req, res, next) {
 // HANDLEBARS
 app.set('views', './src/views');
 app.engine('hbs',exphbs({
+    partialsDir: './src/views/partials',
+    extname: '.hbs',
     helpers: {
         log: function(options) {
             console.log(options);
@@ -51,7 +53,45 @@ var io = require('socket.io')
 // DB AND SESSION
 const options = require('./dbinfo.json');
 
-var db = mysql.createConnection(options);
+class Database {
+
+    constructor( config ) {
+        this.connection = mysql.createConnection( config );
+    }
+
+    query( sql, args ) {
+        return new Promise( ( resolve, reject ) => {
+            this.connection.query( sql, args, ( err, results ) => {
+                if ( err )
+                    return reject( err );
+                resolve( results );
+            } );
+        } );
+    }
+
+    close() {
+        return new Promise( ( resolve, reject ) => {
+            this.connection.end( err => {
+                if ( err )
+                    return reject( err );
+                resolve();
+            } );
+        } );
+    }
+
+    on( event ) {
+        return new Promise( ( resolve, reject ) => {
+            this.connection.on( event, (err) => {
+                if( err )
+                    return reject( err);
+                resolve();
+            } );
+        } );
+    }
+}
+
+//var db = mysql.createConnection(options);
+var db = new Database(options);
 var sessionStore = new sqlsession(options);
 
 app.use(session({

@@ -1,0 +1,41 @@
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
+  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
+  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
+  <div class="w3-dropdown-hover w3-hide-small">
+    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i>
+    {{#if courses}}<span class="w3-badge w3-right w3-small w3-yellow">{{courses.length}}</span>{{/if}}</button>     
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
+      <!-- NOTIFICATIONS -->
+      {{#each courses}}
+      <a href="" class="w3-bar-item w3-button">{{this.dept_abbr}} {{this.course_num}}</a>
+      {{else}}
+      <a href="/check" class="w3-bar-item w3-button">You have new notifications</a>
+      {{/each}}
+    </div>
+  </div>
+  <div class="w3-dropdown-hover w3-hide-small w3-right">
+    <button class="w3-button w3-padding-large" title="Notifications">
+    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
+    <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
+    </button>
+    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
+      <!-- NOTIFICATIONS -->
+      <a href="#" class="w3-bar-item w3-button">Account</a>
+      <a href="#" class="w3-bar-item w3-button">Setting</a>
+      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
+    </div>
+  </div>
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
+  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
+  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
+  <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
+</div>

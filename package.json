@@ -31,7 +31,8 @@
     "browser-sync-webpack-plugin": "*",
     "gulp": "*",
     "gulp-nodemon": "*",
-    "nodemon": "*"
+    "nodemon": "*",
+    "promise": "^8.0.1"
   },
   "engines": {
     "node": "8.9.0",

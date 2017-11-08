@@ -48,47 +48,7 @@ hr{ border: 1px thin;}
 </style>
 <body class="w3-theme-l5">
 
-<!-- Navbar -->
-<div class="w3-top">
- <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
-  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
-  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
-  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
-  <div class="w3-dropdown-hover w3-hide-small">
-    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i>
-    {{#if courses}}<span class="w3-badge w3-right w3-small w3-yellow">{{courses.length}}</span>{{/if}}</button>     
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
-      <!-- NOTIFICATIONS -->
-      {{#each courses}}
-      <a href="" class="w3-bar-item w3-button">{{this.dept_abbr}} {{this.course_num}}</a>
-      {{else}}
-      <a href="/check" class="w3-bar-item w3-button">You have new notifications</a>
-      {{/each}}
-    </div>
-  </div>
-  <div class="w3-dropdown-hover w3-hide-small w3-right">
-    <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
-    <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
-    </button>
-    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
-      <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">Account</a>
-      <a href="#" class="w3-bar-item w3-button">Setting</a>
-      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
-    </div>
-  </div>
- </div>
-</div>
-
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
-  <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
-</div>
+{{> navbar }}
 
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
@@ -131,28 +91,8 @@ hr{ border: 1px thin;}
         </div>      
       </div>
       <br>
-      
-      <!-- Interests -->
-      <div class="w3-card-2 w3-round w3-white w3-hide-small">
-        <div class="w3-container">
-          <p>Interests</p>
-          <p>
-            <!-- INTERESTS -->
-            <span class="w3-tag w3-small w3-theme-d5">News</span>
-            <span class="w3-tag w3-small w3-theme-d4">W3Schools</span>
-            <span class="w3-tag w3-small w3-theme-d3">Labels</span>
-            <span class="w3-tag w3-small w3-theme-d2">Games</span>
-            <span class="w3-tag w3-small w3-theme-d1">Friends</span>
-            <span class="w3-tag w3-small w3-theme">Games</span>
-            <span class="w3-tag w3-small w3-theme-l1">Friends</span>
-            <span class="w3-tag w3-small w3-theme-l2">Food</span>
-            <span class="w3-tag w3-small w3-theme-l3">Design</span>
-            <span class="w3-tag w3-small w3-theme-l4">Art</span>
-            <span class="w3-tag w3-small w3-theme-l5">Photos</span>
-          </p>
-        </div>
-      </div>
-      <br>
+
+      {{> interest }}
       
       <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
@@ -187,40 +127,13 @@ hr{ border: 1px thin;}
     
       <div class="w3-row-padding">
         <div class="w3-col m12">
-          <div class="w3-card-2 w3-round w3-white">
-            <div class="w3-container w3-padding">
-              <form method="post" enctype="multipart/form-data" action="/post">
-                {{#if courses}}
-                <h6 class="w3-opacity"> Post to 
-                  <select style="width:130px" class="w3-button" name="course">
-                    {{#each courses}}
-                    <option value="{{this.id}}">{{this.dept_abbr}} {{this.course_num}}</option>
-                    {{/each}}
-                  </select></h6>
-                {{else}}
-                <h6 class="w3-opacity">You are not following any courses...</h6><br>
-                {{/if}}
-                <input {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="width:100%;margin-bottom:5px;" placeholder="Type here..." autocomplete="off" class="w3-border w3-padding" required>
-                <p style=";margin-bottom:0px" id="fileList"></p><br>
-                <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
-                <button {{#if courses}}{{else}}disabled="disabled"{{/if}} type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 
-              </form>
-              <button {{#if courses}}{{else}}disabled="disabled"{{/if}} onclick="postAttachment()" class="w3-button w3-theme w3-left"><i class="fa fa-paperclip"></i> &nbsp;Attachment</button>
-            </div>
-          </div>
+
+          {{> create_post }}
+
         </div>
       </div>
-      
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">1 min</span>
-        <h4>John Doe</h4><br>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-        <hr class="w3-clear">
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>
-      </div>
+      {{> post }}
 
       <!-- POST -->
 
@@ -300,17 +213,10 @@ hr{ border: 1px thin;}
 </div>
 <br>
 
-<!-- Footer -->
-<footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
-  <h5> Pirate Notes &copy; 2017</h5>
-</footer>
-
-<footer class="w3-container w3-theme-d5">
-  <p>Powered by <a href="http://www.ecu.edu" target="_blank">ecu.edu</a></p>
-</footer>
+{{> footer}}
  
 <script>
-  function gotoUrl(url) {
+function gotoUrl(url) {
     if(typeof url != "string") return false;
     window.location.href = url;
 }

@@ -18,6 +18,8 @@ create table user (
     firstname varchar(64) not null,
     lastname varchar(64) not null,
     gender enum('male','female'),
+    major varchar(256),
+    interests text,
     profile_image mediumblob,
     profile_desc text,
     acc_type enum('general','moderator','admin') not null,

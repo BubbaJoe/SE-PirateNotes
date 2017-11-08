@@ -5,13 +5,6 @@ var bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
 
-    db.on('error',function(err) {
-        console.log(err);
-        db = require('mysql')
-            .createConnection(require('../dbinfo.json'));
-        require('./database')(db);
-    });
-
     // Create uuid 
     createUuid = function() {
         var id = uuid();
@@ -20,136 +13,148 @@ module.exports = function(db) {
     }
 
     // Get all user data
-    getUserByID = function (id,cb) {
-        db.query('select * from user where id = ?', 
-        [id], function(err,result) {
-            if(err)console.log(err);
-            cb(result[0]);
+    getUserByID = function (id) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from user where id = ?', [id])
+            .then( (result) =>  resolve(result[0]) )
+            .catch( err => console.log(err) );
         });
     }
 
     // Get user profile image
-    getProfilePictureByID = function(id,cb) {
-        db.query('select profile_image from user where id = ?', 
-        [id,id],function(err,result) {
-            if(err)console.log(err);
-            console.log(result);
-            cb(result);
+    getProfilePictureByID = function(id) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select profile_image from user where id = ?', [id,id])
+            .then( (result) =>  resolve(result) )
+            .catch( err => console.log(err) );
         });
     }
 
     // Upload profile picture
-    uploadProfilePictureByID = function(id,filedata,cb) {
-        db.query('update user set profile_image = ?, where id = ?', 
-        [filedata,filedata.length,id],function(err,result) {
-            if(err)console.log(err);
-            cb(result);
+    uploadProfilePictureByID = function(id,filedata) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set profile_image = ?, where id = ?', 
+            [filedata,filedata.length,id])
+            .then( (result) =>  resolve(result[0]) )
+            .catch( err => console.log(err) );
         });
     }
 
     // Create post
-    createPost = function(user_id,course_id,post_text,fileArr,cb) {
-        var post_id = createUuid();
-        // creates the post
+    createPost = function(user_id,course_id,post_text,fileArr) {
+        var post_id = createUuid()
+        return new Promise( ( resolve, reject ) => {
         db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
-        [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'],function(err,results){
-            if(err) console.log(err); else {
-                console.log("Post Created");
-                fileArr.forEach(function(file) {
-                    console.log("File Created");
-                    fs.readFile(file.path,function(err,data) {
+        [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'])
+        .then(results => 
+                resolve(fileArr.forEach( file => 
+                    fs.readFile(file.path, (err,data) => 
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
-                            [createUuid(),post_id,file.name,file.size,file.type,data], 
-                            function(err,results) {
-                                if(err) console.log(err);
-                                // Removes file from temp_uploads
-                                fs.unlinkSync(file.path);
-                            });
-                    });
-                });
-            } cb();
-        });
+                            [createUuid(),post_id,file.name,file.size,file.type,data])
+                            .then ( results => fs.unlinkSync(file.path) )
+                            .catch( err => console.log(err))
+                    )
+                ))
+            )
+            .catch( err => console.log(err))
+        })
     }
 
     // check if user is admin
-    checkIfAdmin = function(user_id,cb) {
-
+    checkIfAdmin = function(user_id) {
+        return new Promise( ( resolve, reject ) => {} );
     }
 
     // check if user is admin or mod
-    checkIfAdminOrMod = function(user_id,cb) {
-
+    checkIfAdminOrMod = function(user_id) {
+        return new Promise( ( resolve, reject ) => {} );
     }
 
     // get the courses that the user is following
-    getUserCourses = function(user_id,cb) {
-        db.query('select * from course, (' +
-        'select * from followed where user_id = ?) c ' +
-        'where course.id = c.course_id', 
-        [user_id],function(err,result){
-            if(err) console.log(err);
-            else cb(result);
-        });
+    getUserCourses = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from course, (' +
+            'select * from followed where user_id = ?) c ' +
+            'where course.id = c.course_id', 
+            [user_id])
+            .then(result => resolve(result))
+            .catch(err => console.log(err));
+        } );
     }
 
     // Posts for the courses that the user is following
-    getUserViewPosts = function(user_id,cb) {
+    getUserViewPosts = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
 
+        } );
     }
 
     // For admin/mod use only
-    getAllPendingPosts = function(cb) {
+    getAllPendingPosts = function() {
+        return new Promise( ( resolve, reject ) => {
 
+        } );
     }
 
     //For admin/mod use only
-    getAllPost = function(cb) {
-        
+    getAllPost = function() {
+        return new Promise( ( resolve, reject ) => {
+
+        } );
     }
 
     //For admin/mod use only
-    acceptPost = function(post_id,cb) {
-
+    acceptPost = function(post_id) {
+        return new Promise( ( resolve, reject ) => {
+            
+        } );
     }
 
     //For admin/mod use only
-    declinePost = function(post_id,cb) {
+    declinePost = function(post_id) {
+        return new Promise( ( resolve, reject ) => {
 
+        } );
     }
 
     //For admin/mod use only
-    suspendUser = function(user_id,suspend_length,cb) {
-        
+    suspendUser = function(user_id,suspend_length) {
+        return new Promise( ( resolve, reject ) => {
+
+        } );
     }
 
     // For admin/mod use only
-    banUser = function(user_id,cb) {
+    banUser = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
 
+        } );
     }
 
-    removeUserSession = function(user_id, cb) {
+    removeUserSession = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
 
+        } );
     }
 
     // Register User Information
-    register = function (firstname,lastname,email,password,type,cb) {
+    register = function (firstname,lastname,email,password,type) {
         var id = createUuid();
+        return new Promise( ( resolve, reject ) => {
         db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
-        [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"],
-        function(err, result) {
-            if(err){
-                console.log(err);
-            } else cb(id);
-        });
+        [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"])
+        .then( () =>  resolve(id) )
+        .catch( err => console.log(err) );
+    });
     }
 
     // Validate the Login information 
-    login = function (email,password,cb) {
-        db.query('select id from user where email = ?',
-        [email],//,bcrypt.hashSync(password, null, null)
-        function(err, result) {
-            if(err)console.log(err); 
-            else cb(result[0]);
+    login = function (email,password) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select id from user where email = ?',
+            [email])//,bcrypt.hashSync(password, null, null)]
+            .then( (result) => resolve(result[0]) )
+            .catch( err => console.log(err) );
         });
     }
 }

@@ -26,7 +26,6 @@ module.exports = function(app, io, db, passport) {
         if(req.isAuthenticated())
             getProfilePictureByID(uid,function(result) {
                 if(result[0].profile_image) {
-                    console.log()
                     res.setHeader('Content-disposition', 'attachment; filename=profile.svg');
                     res.send(result[0].profile_image);
                 } else res.status(404).end();
@@ -35,17 +34,23 @@ module.exports = function(app, io, db, passport) {
     
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
-            getUserCourses(req.user.id,function(courses) {
+            let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
+            getUserCourses( req.user.id ).then( results => courses = results ).then(function(){
+                //getUserCourses( req.user.id ).then( results => courses = results ).then
+                //getUserPosts( req.user.id ).then( results => myPosts = results ).then
+                //getUserNotifications( req.user.id ).then( results => notifications = results ).then
+                //getSavedPosts( req.user.id ).then( results => savedPosts = results ).then
                 res.render('home', {  
                     user: req.user,
-                    courses: courses
-                    // myPosts: {},
-                    // savedPosts: {},
-                    // interests: {},
-                    // notifications: {},
-                    // posts: {}
+                    courses: courses,
+                    myPosts: myPosts,
+                    savedPosts: savedPosts,
+                    notifications: notifications
                 });
-            });
+            })
+
+
+            
 
         }else{
             res.render('auth',{});
@@ -55,10 +60,11 @@ module.exports = function(app, io, db, passport) {
     app.post('/login', function(req, res) {
         var email = req.fields.email,
         password = req.fields.password;
-        login(email,password,function(result) {
+        login(email,password)
+        .then( results => {
             if(result != undefined) {
                 id = result.id;
-                req.login(id, function(err) {
+                req.login(id, (err) => {
                     if(err)console.log(err);
                     res.redirect('/');
                 });
@@ -105,14 +111,17 @@ module.exports = function(app, io, db, passport) {
         else fileArr.push(req.files.fileAttachments);
         numFiles = fileArr.length;
 
+        for(var i = 0; i < fileArr.length; i++) {
+            if(size)
+            console.log(fileArr[i].size);
+        }
+
         //course name, post text, file-arr, user-id
         createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr,function(){
             res.redirect("/");
             //for(var i = 0; i < fileArr.length; i++)
 
         });
-
-        
     });
 
     app.get('/infolog',function(req,res) {
@@ -130,13 +139,10 @@ module.exports = function(app, io, db, passport) {
         res.redirect('/');
     });
 
-    passport.serializeUser((user, done) => {
-        done(null, user)
-    });
+    passport.serializeUser((user, done) => done(null, user) );
     
     passport.deserializeUser((id, done) => {
-        getUserByID(id,function(result) {
-            done(null, result);
-        });
+        getUserByID(id)
+        .then(result => done(null, result) );
     });
 };
