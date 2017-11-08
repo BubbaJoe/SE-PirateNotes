@@ -35,19 +35,28 @@ module.exports = function(app, io, db, passport) {
     app.get('/', function (req,res) {
         if(req.isAuthenticated()) {
             let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
-            getUserCourses( req.user.id ).then( results => courses = results ).then(function(){
-                //getUserCourses( req.user.id ).then( results => courses = results ).then
-                //getUserPosts( req.user.id ).then( results => myPosts = results ).then
-                //getUserNotifications( req.user.id ).then( results => notifications = results ).then
-                //getSavedPosts( req.user.id ).then( results => savedPosts = results ).then
-                res.render('home', {  
+            getUserCourses( req.user.id ).then( results => courses = results )
+            .then(() => getUserPosts( req.user.id )
+            .then( results => myPosts = results )
+
+            // .then(() => getUserSavedPosts( req.user.id )
+            // .then( results => savedPosts = results )
+
+            // .then(() => getUserNotifications( req.user.id )
+            // .then( results => Notifications = results )
+
+            .then(() => {
+                for(var i = 0; i < myPosts.length; i++)
+                console.log(myPosts[i].files)
+                res.render('home', {
                     user: req.user,
                     courses: courses,
                     myPosts: myPosts,
                     savedPosts: savedPosts,
                     notifications: notifications
-                });
-            })
+                })}
+            )
+            )
 
 
             
@@ -61,9 +70,10 @@ module.exports = function(app, io, db, passport) {
         var email = req.fields.email,
         password = req.fields.password;
         login(email,password)
-        .then( results => {
+        .then( result => {
             if(result != undefined) {
-                id = result.id;
+                id = result[0].id;
+                console.log(result)
                 req.login(id, (err) => {
                     if(err)console.log(err);
                     res.redirect('/');
@@ -111,17 +121,9 @@ module.exports = function(app, io, db, passport) {
         else fileArr.push(req.files.fileAttachments);
         numFiles = fileArr.length;
 
-        for(var i = 0; i < fileArr.length; i++) {
-            if(size)
-            console.log(fileArr[i].size);
-        }
-
         //course name, post text, file-arr, user-id
-        createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr,function(){
-            res.redirect("/");
-            //for(var i = 0; i < fileArr.length; i++)
-
-        });
+        createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)
+        .then(() => res.redirect('/'))
     });
 
     app.get('/infolog',function(req,res) {
@@ -141,8 +143,9 @@ module.exports = function(app, io, db, passport) {
 
     passport.serializeUser((user, done) => done(null, user) );
     
-    passport.deserializeUser((id, done) => {
+    passport.deserializeUser((id, done) =>
         getUserByID(id)
-        .then(result => done(null, result) );
-    });
+        .then( result => done(null, result[0]) )
+        .catch( err => console.log(err) )
+    );
 };

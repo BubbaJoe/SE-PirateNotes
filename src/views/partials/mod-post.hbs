@@ -3,7 +3,7 @@
     <img src="/profile_images/{{this.user_id}}" class="w3-left w3-circle w3-margin-right" style="width:60px">
     <span class="w3-right w3-opacity">{{this.post_status}} 1 min</span>
     <h4>{{this.firstname}} {{this.lastname}}</h4><br>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>{{this.post_text}} {{#each this.files}}####{{this.file_name}}{{/each}}</p>
     <hr class="w3-clear">
     <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-check"></i> &nbsp;Accept</button> 
     <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-ban"></i> &nbsp;Decline</button>

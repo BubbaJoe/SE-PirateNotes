@@ -132,9 +132,10 @@ hr{ border: 1px thin;}
 
         </div>
       </div>
-
-      {{> post }}
-
+      {{#each myPosts}}
+        {{> post }}
+      {{else}}
+      {{/each}}
       <!-- POST -->
 
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>

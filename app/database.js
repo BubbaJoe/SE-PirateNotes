@@ -16,7 +16,7 @@ module.exports = function(db) {
     getUserByID = function (id) {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from user where id = ?', [id])
-            .then( (result) =>  resolve(result[0]) )
+            .then( (result) =>  resolve(result) )
             .catch( err => console.log(err) );
         });
     }
@@ -46,12 +46,12 @@ module.exports = function(db) {
         return new Promise( ( resolve, reject ) => {
         db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
         [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'])
-        .then(results => 
+        .then( () => 
                 resolve(fileArr.forEach( file => 
                     fs.readFile(file.path, (err,data) => 
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
                             [createUuid(),post_id,file.name,file.size,file.type,data])
-                            .then ( results => fs.unlinkSync(file.path) )
+                            .then ( () => fs.unlinkSync(file.path) )
                             .catch( err => console.log(err))
                     )
                 ))
@@ -82,6 +82,35 @@ module.exports = function(db) {
         } );
     }
 
+    // Posts that the user has created that are accepted
+    getAcceptedUserPosts = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
+
+        } );
+    }
+
+    // Posts that the user has created that are accepted
+    getUserPosts = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
+            var final_posts;
+            db.query('select post.*, user.firstname, user.lastname,'+
+            ' profile_image from post, user where user_id = ?', [user_id])
+            .then( posts => db.query('select file.* from file, user, post '+ 
+                'where user.id = ? and post_id = post.id',[user_id])
+            .then( files => posts.forEach( (post,i,posts) => {
+                for(var i = 0; i < files.length; i++) {
+                    post.files = [];
+                    if(files[i].post_id == post.id)
+                        post.files.push(files[i])
+                }
+                final_post = posts;
+            } )
+            ))
+            .then(() => resolve(final_post))
+            .catch( err => console.log(err) )
+        } );
+    }
+
     // Posts for the courses that the user is following
     getUserViewPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
@@ -100,6 +129,12 @@ module.exports = function(db) {
     getAllPost = function() {
         return new Promise( ( resolve, reject ) => {
 
+        } );
+    }
+
+    getPostFiles = function() {
+        return new Promise( ( resolve, reject ) => {
+            
         } );
     }
 
@@ -153,8 +188,7 @@ module.exports = function(db) {
         return new Promise( ( resolve, reject ) => {
             db.query('select id from user where email = ?',
             [email])//,bcrypt.hashSync(password, null, null)]
-            .then( (result) => resolve(result[0]) )
-            .catch( err => console.log(err) );
+            .then( (result) => resolve(result))
         });
     }
 }
