@@ -72,8 +72,8 @@ create table post (
 # file
 create table file (
     id varchar(32) not null,
-    post_id varchar(32),
-    file_name varchar(256),
+    post_id varchar(32) not null,
+    file_name varchar(256) not null,
     file_size int,
     file_type varchar(256),
     file_data mediumblob,
