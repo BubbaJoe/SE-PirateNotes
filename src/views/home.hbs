@@ -1,75 +1,50 @@
 <!DOCTYPE html>
 <html>
-<title>Pirate Notes</title>
-<meta charset="UTF-8">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-<meta name="theme-color" content="#ffffff">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<!-- THEME -->
-<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
-<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
-.course-list {margin-bottom: 1px}
-hr{ border: 1px thin;}
-.search-wrapper {display: inline-block;}
-.search-input, .search-button {border:0;background-color: transparent;}
-.search-div {max-height: 50px;  width: 100%;
-  margin: 0 auto;}
-  body{
-  background:#555;
-}
-.search input {width: 370px;padding: 10px 5px;float: left;color: #ccc;border: 0;background: transparent;border-radius: 3px 0 0 3px;}
-
-.search input:focus {outline: 0;background:transparent;}
-
-.search button {position: relative;float: right;border: 0;padding: 0;cursor: pointer;height: 40px;width: 120px;color: #fff;background: transparent;border-left: 1px solid #fff;border-radius: 0 3px 3px 0;}   
-
-#searchbox {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('images/searchicon.png');
-    background-position: 10px 14px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
-</style>
+<head>
+  <title>Pirate Notes</title>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+  html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+  body{background:#555;}
+  hr{ border: 1px thin;}
+  .course-list {margin-bottom: 1px}
+  .search-wrapper {display: inline-block;}
+  .search-input, .search-button {border:0;background-color: transparent;}
+  .search-div {max-height: 50px;  width: 100%;margin: 0 auto;}
+  .search input {width: 370px;padding: 10px 5px;float: left;color: #ccc;border: 0;background: transparent;border-radius: 3px 0 0 3px;}
+  .search input:focus {outline: 0;background:transparent;}
+  .search button {position: relative;float: right;border: 0;padding: 0;cursor: pointer;height: 40px;width: 120px;color: #fff;background: transparent;border-left: 1px solid #fff;border-radius: 0 3px 3px 0;}   
+  #searchbox {width: 100%;box-sizing: border-box;border: 1px solid #ccc;border-radius: 2px;font-size: 16px;background-color: white;background-image: url('images/searchicon.png');background-position: 10px 14px; background-repeat: no-repeat;padding: 12px 20px 12px 40px;-webkit-transition: width 0.4s ease-in-out;transition: width 0.4s ease-in-out;}
+  </style>
+</head>
 <body class="w3-theme-l5">
-
 {{> navbar }}
-
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
     <div class="w3-col m3">
-      <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
          <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
          <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px"></p>
-         
          <p class="w3-center">Description: {{user.desc_text}}</p>
          <hr>
-         <!-- If the account is theirs -->
          <div>
             <button class="w3-button w3-right w3-theme-l1" style="margin-bottom:10px">edit</button>
          </div>
         </div>
       </div>
       <br>
-      
-      <!-- Profile Lists -->
       <div class="w3-card-2 w3-round">
         <div class="w3-white">
           <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-book fa-fw w3-margin-right"></i>&nbsp; My Courses</button>
@@ -91,10 +66,7 @@ hr{ border: 1px thin;}
         </div>      
       </div>
       <br>
-
       {{> interest }}
-      
-      <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
@@ -102,7 +74,6 @@ hr{ border: 1px thin;}
         <p><strong>Hey!</strong></p>
         <p>People are looking at your profile. Find out who.</p>
       </div>
-      <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
@@ -110,7 +81,6 @@ hr{ border: 1px thin;}
         <p><strong>Hey!</strong></p>
         <p>People are looking at your profile. Find out who.</p>
       </div>
-      <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
@@ -118,53 +88,18 @@ hr{ border: 1px thin;}
         <p><strong>Hey!</strong></p>
         <p>People are looking at your profile. Find out who.</p>
       </div>
-    
-    <!-- End Left Column -->
     </div>
-    
-    <!-- Middle Column -->
     <div class="w3-col m7">
-    
       <div class="w3-row-padding">
         <div class="w3-col m12">
-
           {{> create_post }}
-
         </div>
       </div>
       {{#each myPosts}}
         {{> post }}
       {{else}}
       {{/each}}
-      <!-- POST -->
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/w_profile.svg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">16 min</span>
-        <h4>Jane Doe</h4><br>
-        <hr class="w3-clear">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>
-      </div>  
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/w_profile.svg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
-        <span class="w3-right w3-opacity">32 min</span>
-        <h4>Angie Jane</h4><br>
-        
-        <p>Have you seen this?</p>
-        <img src="#" style="width:100%" class="w3-margin-bottom">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <hr class="w3-clear">
-        <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
-        <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>
-      </div> 
-      
-    <!-- End Middle Column -->
     </div>
-    
-    <!-- Right Column -->
     <div class="w3-col m2">
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
@@ -176,7 +111,6 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
       <!-- MOD NOTIFICATION -->
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
@@ -194,23 +128,15 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
       <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
         <p>ADS</p>
       </div>
       <br>
-      
       <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
         <p><i class="fa fa-bug w3-xxlarge"></i></p>
       </div>
-      
-    <!-- End Right Column -->
     </div>
-    
-  <!-- End Grid -->
   </div>
-  
-<!-- End Page Container -->
 </div>
 <br>
 

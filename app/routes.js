@@ -46,8 +46,6 @@ module.exports = function(app, io, db, passport) {
             // .then( results => Notifications = results )
 
             .then(() => {
-                for(var i = 0; i < myPosts.length; i++)
-                console.log(myPosts[i].files)
                 res.render('home', {
                     user: req.user,
                     courses: courses,
