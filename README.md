@@ -23,6 +23,7 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 implement Saving Posts/Liking Posts 
 implement Notifications
 implement Search Features
+implement Flash Messages
 create Account Settings Page
 create Admin Page / Mod Page
 

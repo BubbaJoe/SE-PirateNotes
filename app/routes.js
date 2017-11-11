@@ -13,6 +13,27 @@ module.exports = function(app, io, db, passport) {
         res.render("department")
     });
 
+    app.get('/course/:course_id', function (req,res) {
+        course_id = req.params.course_id;
+        if(req.isAuthenticated()) {
+            let course, posts;
+            getCoursePosts( course_id ).then( results => posts = results )
+            .then(() => getCourse( course_id )
+            .then( results => course = results[0] )
+            .then(() => {
+                res.render('course', {
+                    course: course,
+                    posts: posts
+                })
+                return;
+            }
+            ))
+        }else{
+            res.redirect('/');
+            return;
+        }
+    });
+
     app.get('/search', function (req,res) {
         if(req.query.q != undefined) {
             data = req.query.q.split(" ");
@@ -52,15 +73,14 @@ module.exports = function(app, io, db, passport) {
                     myPosts: myPosts,
                     savedPosts: savedPosts,
                     notifications: notifications
-                })}
+                })
+            })
             )
-            )
-
-
-            
-
         }else{
-            res.render('auth',{});
+            req.flash('danger','incorrect information')
+            res.render('auth',{
+                messages: req.flash('INCORRECT INFO') 
+            });
         }
     });
     
@@ -69,9 +89,8 @@ module.exports = function(app, io, db, passport) {
         password = req.fields.password;
         login(email,password)
         .then( result => {
-            if(result != undefined) {
+            if(result.length > 0) {
                 id = result[0].id;
-                console.log(result)
                 req.login(id, (err) => {
                     if(err)console.log(err);
                     res.redirect('/');
@@ -112,12 +131,26 @@ module.exports = function(app, io, db, passport) {
 
     app.post('/post', function(req, res) {
         if(!req.isAuthenticated()) res.redirect('/');
-
         var fileArr = [];
         if(req.files.fileAttachments.length)
             fileArr = req.files.fileAttachments;
-        else fileArr.push(req.files.fileAttachments);
+        else fileArr = req.files.fileAttachments?[req.files.fileAttachments]:[];
         numFiles = fileArr.length;
+
+        var FileTooBig = false;
+        fileArr.forEach(function(file) {
+            if(file.size > 10000000){
+                stop = true;
+            }
+        });
+
+        if(FileTooBig) {
+            res.redirect('/');
+            return;
+        } else if(fileArr.length > 5) {
+            res.redirect('/');
+            return;
+        }
 
         //course name, post text, file-arr, user-id
         createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)

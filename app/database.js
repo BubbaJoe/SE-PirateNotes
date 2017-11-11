@@ -1,9 +1,13 @@
 //database.js
 var fs 			= require('fs');
-var uuid		= require('uuid/v1');
+var uuid		= require('uuid/v4');
 var bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
+
+    db.on('error',function() {
+
+    }) 
 
     // Create uuid 
     createUuid = function() {
@@ -50,7 +54,7 @@ module.exports = function(db) {
                 resolve(fileArr.forEach( file => 
                     fs.readFile(file.path, (err,data) => 
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
-                            [createUuid(),post_id,file.name,file.size,file.type,data])
+                            [createUuid(),post_id,file.name || fileArr.length,file.size,file.type,data])
                             .then ( () => fs.unlinkSync(file.path) )
                             .catch( err => console.log(err))
                     )
@@ -105,16 +109,17 @@ module.exports = function(db) {
                 'where user.id = ? and post_id = post.id',[user_id])
             .then( files => {
                 if(posts.length == 0) final_post = [];
-                posts.forEach( (post,i,posts) => {
+                for(var j = 0; j < posts.length; j++) {
+                    posts[j].files = [];
                     for(var i = 0; i < files.length; i++) {
-                        post.files = [];
-                        if(files[i].post_id == post.id)
-                            post.files.push(files[i])
+                        if(files[i].post_id == posts[j].id) {
+                            posts[j].files.push(files[i])
+                            //delete files[i]; i--;
+                        }
                     }
-                    final_post = posts;
-                } )
-            }
-            ))
+                }
+                final_post = posts;
+            }))
             .then(() => resolve(final_post))
             .catch( err => console.log(err) )
         } );
@@ -124,6 +129,70 @@ module.exports = function(db) {
     getUserViewPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
 
+        } );
+    }
+
+        // Posts that the user has created that are accepted
+    getUserPosts = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
+            var final_post;
+            db.query('select post.*, course.*, firstname, lastname'+
+            ' from post inner join user on user.id = post.user_id inner '+
+            'join course on course_id = course.id where user_id = ? order'+
+            ' by post_date desc',[user_id])
+            .then( posts => db.query('select file.* from file, user, post '+ 
+                'where user.id = ? and post_id = post.id',[user_id])
+            .then( files => {
+                if(posts.length == 0) final_post = [];
+                for(var j = 0; j < posts.length; j++) {
+                    posts[j].files = [];
+                    for(var i = 0; i < files.length; i++) {
+                        if(files[i].post_id == posts[j].id) {
+                            posts[j].files.push(files[i])
+                            //delete files[i]; i--;
+                        }
+                    }
+                }
+                final_post = posts;
+            }))
+            .then(() => resolve(final_post))
+            .catch( err => console.log(err) )
+        } );
+    }
+
+    // Posts that the user has created that are accepted
+    getCoursePosts = function(course_id) {
+        return new Promise( ( resolve, reject ) => {
+            var final_post;
+            db.query('select post.*, firstname, lastname from post inner'+
+            ' join user on user.id = post.user_id inner join course on course_id'+
+            ' = course.id where course_id = ? order by post_date desc', [course_id])
+            .then( posts => db.query('select file.* from file inner join'+ 
+                ' post on post.id = post_id where course_id = ? ',[course_id])
+            .then( files => {
+                if(posts.length == 0) final_post = [];
+                for(var j = 0; j < posts.length; j++) {
+                    posts[j].files = [];
+                    for(var i = 0; i < files.length; i++) {
+                        if(files[i].post_id == posts[j].id) {
+                            posts[j].files.push(files[i])
+                        }
+                    }
+                }
+                final_post = posts;
+            }))
+            .then(() => resolve(final_post))
+            .catch( err => console.log(err) )
+        } );
+    }
+
+    getCourse = function(course_id) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from course ' +
+            'where course.id = ?', 
+            [course_id])
+            .then(result => resolve(result))
+            .catch(err => console.log(err));
         } );
     }
 

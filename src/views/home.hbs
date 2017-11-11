@@ -18,7 +18,7 @@
   html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
   body{background:#555;}
   hr{ border: 1px thin;}
-  .course-list {margin-bottom: 1px}
+  .course-list {margin-bottom: 1px;margin-top: 1px;}
   .search-wrapper {display: inline-block;}
   .search-input, .search-button {border:0;background-color: transparent;}
   .search-div {max-height: 50px;  width: 100%;margin: 0 auto;}
@@ -50,7 +50,7 @@
           <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-book fa-fw w3-margin-right"></i>&nbsp; My Courses</button>
           <div id="Demo1" class="w3-hide w3-container">
             {{#each courses}}
-              <button onclick="gotoUrl('/course/{{this.id}}')" class="w3-button w3-block w3-theme-d3 w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_abbr}} {{this.course_num}}</button>
+              <button onclick="gotoUrl('/course/{{this.id}}')" class="w3-button w3-block w3-theme w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_abbr}} {{this.course_num}}</button>
             {{/each}}
           </div>
           <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-pencil-square-o fa-fw w3-margin-right"></i>&nbsp; My Notes</button>

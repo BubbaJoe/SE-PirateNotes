@@ -1,9 +1,11 @@
 <!-- POST -->
-<div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
+<div id="post_div" class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
     <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
     <span class="w3-right w3-opacity">1 min</span>
-    <h4>{{this.firstname}} {{this.lastname}}</h4><br>
+    <h4>{{this.firstname}} {{this.lastname}} to <a href="/course/{{this.course_id}}" 
+        title="{{this.course_name}}">{{this.dept_abbr}} {{this.course_num}}</a></h4><br>
     <p>{{this.post_text}}</p>
+    {{#each files}}<a href='files/{{this.id}}'>{{this.file_name}}</a>&nbsp;{{/each}}
     <hr class="w3-clear">
     <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i> &nbsp;Like</button> 
     <button type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i> &nbsp;Save</button>

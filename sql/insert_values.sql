@@ -13,7 +13,7 @@ values ('f3e0023dea584c07ac7e78e9dc6a4729', 'b@gmail.com' , 'password' , 'Itachi
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
 values ('5eca01a62b8f4753a579dbbbbfb79c12', 'c@gmail.com' , 'password' , 'Ozair', 'Shareef', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('40bcee06412f47908691e7fe52102199', 'd@gmail.com' , 'password' , 'Joe', 'Williams', 'admin', 'active');
+values ('40bcee06412f47908691e7fe52102199', 'name@gmail.com' , 'password' , 'Joe', 'Williams', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
 values ('60e2da55449f4d8fa513614c72b48d80', 'e@gmail.com' , 'password' , 'Will', 'Brimson', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
@@ -60,4 +60,4 @@ values ('c980c0d7d0824b7a8ca8b1a57eb52dfd', 'BIME', 'Biomechanics and Materials'
 # Followed
 
 insert into followed (user_id,course_id)
-values ('2d29c09cb9be4293ac690b75531e1489','42ae3034b4284f87af2539597aa4d614');
+values ('40bcee06412f47908691e7fe52102199','42ae3034b4284f87af2539597aa4d614');

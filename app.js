@@ -54,7 +54,6 @@ var io = require('socket.io')
 const options = require('./dbinfo.json');
 
 class Database {
-
     constructor( config ) {
         this.connection = mysql.createConnection( config );
     }
@@ -101,7 +100,10 @@ app.use(session({
     store: sessionStore,
     resave: true,
     saveUninitialized: false,
-    cookie: {maxAge: 3600000/2}
+    cookie: {
+        maxAge: 3600000/2,
+        secure: true
+    }
 }));
 
 // PASSPORT
