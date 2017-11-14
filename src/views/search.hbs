@@ -48,44 +48,7 @@ hr{ border: 1px thin;}
 </style>
 <body class="w3-theme-l5">
 
-<!-- Navbar -->
-<div class="w3-top">
- <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
-  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
-  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
-  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
-  <div class="w3-dropdown-hover w3-hide-small">
-    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
-      <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
-      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover w3-hide-small w3-right">
-    <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
-    <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
-    </button>
-    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
-      <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">Account</a>
-      <a href="#" class="w3-bar-item w3-button">Setting</a>
-      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
-    </div>
-  </div>
- </div>
-</div>
-
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
-  <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
-</div>
+{{> navbar }}
 
 <div class="w3-container w3-content " style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
@@ -94,7 +57,7 @@ hr{ border: 1px thin;}
       <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
-            <form id="search-form" class="search" method="get" action="/search">
+            <form id="search-form" class="search" method="post" action="/search">
                 <input name="q" style="margin-top:15px;margin-bottom:15px;" id="searchbox" type="text" class="w3-input" placeholder="Search here..." required>
             </form>   
         </div>
@@ -102,19 +65,23 @@ hr{ border: 1px thin;}
       <br>
     </div>
 
-    <div class="w3-col m3" style="margin-left:20px">      
-      <!-- Interests --> 
+    <div class="w3-col m3" style="margin-left:20px">
+      <!-- Interests -->
       <div class="w3-card-2 w3-round w3-white w3-hide-small">
         <div class="w3-container">
           <p>Result Data</p>
           <p>
-            <!-- INTERESTS -->
             <span class="w3-tag w3-small w3-theme-d5">3700</span>
             <span class="w3-tag w3-small w3-theme-l5">cscis</span>
           </p>
-          <input type="checkbox" checked>Courses<br>
-          <input type="checkbox" checked>Departments
-          <button style="margin-top:10px;margin-bottom:15px;" class="w3-button w3-theme">Search again</button>
+          <form id="form2" method="post" action="/search" onsubmit="">
+            <input style="display:none" name='q' value="" ></input>
+            <input name='course' class="w3-check" type="checkbox" checked>&nbsp;Courses<br>
+            <input name='department' class="w3-check" type="checkbox" checked>&nbsp;Departments<br>
+            <input name='post' class="w3-check" type="checkbox" >&nbsp;Posts<br>
+            <input name='file' class="w3-check" type="checkbox" >&nbsp;Files<br>
+            <button type='submit' style="margin-top:20px;margin-bottom:15px;" class="w3-button w3-theme">Search again</button>
+          </form>
         </div>
       </div>
       <br>

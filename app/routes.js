@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var referenceLink = '';
 
 module.exports = function(app, io, db, passport) {
     
@@ -11,6 +12,10 @@ module.exports = function(app, io, db, passport) {
 
     app.get('/department', function (req,res) {
         res.render("department")
+    });
+
+    app.get('/audit', function (req,res) {
+        res.render("audit")
     });
 
     app.get('/course/:course_id', function (req,res) {
@@ -29,17 +34,35 @@ module.exports = function(app, io, db, passport) {
             }
             ))
         }else{
+            referenceLink = req.url;
             res.redirect('/');
             return;
         }
     });
 
+    app.get('/file/:file_id', function (req,res) {
+        file_id = req.params.file_id;
+        if(req.isAuthenticated()) {
+            let fileData
+            getFile(file_id)
+            .then( data => {
+                console.log(data)
+            })
+        }
+    });
     app.get('/search', function (req,res) {
-        if(req.query.q != undefined) {
-            data = req.query.q.split(" ");
-            console.log(data)
-            res.render("search");
-        } else res.render("search-blank");
+        if(req.isAuthenticated()) {
+            res.render('search-blank',{})
+        } else res.redirect('/')
+    });
+    app.post('/search', function (req,res) {
+        console.log(req.fields)
+        if(req.fields.q != undefined) {
+            dataArr = req.fields.q.split(" ");
+            console.log(dataArr)
+            res.render("search",{
+            });
+        }
     });
 
     app.get('/profile_image/:uid', function (req,res) {
@@ -54,7 +77,10 @@ module.exports = function(app, io, db, passport) {
     });
     
     app.get('/', function (req,res) {
-        if(req.isAuthenticated()) {
+        if(req.isAuthenticated() && referenceLink) {
+            res.redirect(referenceLink);
+            referenceLink = '';
+        } else if(req.isAuthenticated()) {
             let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
             getUserCourses( req.user.id ).then( results => courses = results )
             .then(() => getUserPosts( req.user.id )
@@ -130,29 +156,34 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.post('/post', function(req, res) {
-        if(!req.isAuthenticated()) res.redirect('/');
+        if(!req.isAuthenticated()) {
+            referenceLink = req.url;
+            res.redirect('/');
+        }
         var fileArr = [];
         if(req.files.fileAttachments.length)
             fileArr = req.files.fileAttachments;
-        else fileArr = req.files.fileAttachments?[req.files.fileAttachments]:[];
+        else fileArr = [req.files.fileAttachments];
         numFiles = fileArr.length;
 
         var FileTooBig = false;
         fileArr.forEach(function(file) {
+            if(file.size == 0 || file.name == '') {
+                fs.unlinkSync(file.path);
+                fileArr.pop(file)
+            }
             if(file.size > 10000000){
                 stop = true;
             }
         });
 
         if(FileTooBig) {
+            req.flash('The file was too big (10M max)');
             res.redirect('/');
-            return;
         } else if(fileArr.length > 5) {
+            req.flash('Too many files (5 files max)');
             res.redirect('/');
-            return;
-        }
-
-        //course name, post text, file-arr, user-id
+        } else
         createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)
         .then(() => res.redirect('/'))
     });

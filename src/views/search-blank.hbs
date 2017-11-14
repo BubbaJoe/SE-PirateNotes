@@ -20,11 +20,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 hr{ border: 1px thin;}
 .search-wrapper {display: inline-block;}
 .search-input, .search-button {border:0;background-color: transparent;}
-.search-div {max-height: 50px;  width: 100%;
-  margin: 0 auto;}
-  body{
-  background:#555;
-}
+.search-div {max-height: 50px;  width: 100%;margin: 0 auto;}
+body{background:#555;}
+html{min-height:500px; }
 .search input {width: 370px;padding: 10px 5px;float: left;color: #ccc;border: 0;background: transparent;border-radius: 3px 0 0 3px;}
 
 .search input:focus {outline: 0;background:transparent;}
@@ -45,59 +43,44 @@ hr{ border: 1px thin;}
     -webkit-transition: width 0.4s ease-in-out;
     transition: width 0.4s ease-in-out;
 }
+
+#footer
+{
+    clear: both;
+    border: 1px groove #aaaaaa;
+    background: blue;
+    color: White;
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+    line-height: normal;
+    margin: 0;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+
+.centerDiv{
+width:100%;
+padding:10px;
+height:50px;
+position:absolute;
+top:25%;
+}
 </style>
 <body class="w3-theme-l5">
 
-<!-- Navbar -->
-<div class="w3-top">
- <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
-  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><img src="/images/ecu_logo.svg" class="" style="height:35px;margin-bottom:-15px;padding-bottom:5px;"></a>
-  <a href="/" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i></a>
-  <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
-  <div class="w3-dropdown-hover w3-hide-small">
-    <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i><span class="w3-badge w3-right w3-small w3-yellow">3</span></button>     
-    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
-      <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">One new friend request</a>
-      <a href="#" class="w3-bar-item w3-button">John Doe posted on your wall</a>
-      <a href="#" class="w3-bar-item w3-button">Jane likes your post</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover w3-hide-small w3-right">
-    <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
-    <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
-    </button>
-    <div class="w3-dropdown-content w3-card-4q w3-bar-block" style="width:150px;right:0;">
-      <!-- NOTIFICATIONS -->
-      <a href="#" class="w3-bar-item w3-button">Account</a>
-      <a href="#" class="w3-bar-item w3-button">Setting</a>
-      <a href="/logout" class="w3-bar-item w3-button">Logout</a>
-    </div>
-  </div>
- </div>
-</div>
+{{> navbar }}
 
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
-  <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
-</div>
-
-<div class="w3-container w3-content " style="max-width:1400px;margin-top:80px">  
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
-    <div class="w3-col m9" style="height:500px;margin-left:25px; width:91%;">
+    <div class="w3-col m9 centerDiv" style="height:500px;margin-left:25px; width:91%;">
       <!-- Profile -->
-      <p style="margin-top:150px;"align="center">
-        Search Courses and Departments
-      </p>
+      <h3 style="margin-bottom:20px" align="center">Search Courses and Departments</h3>
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container" >
-            <form id="search-form" class="search" method="get" action="/search">
-                <input name="q" style="margin-top:15px;margin-bottom:15px;" id="searchbox" type="text" class="w3-input" placeholder="Search here..." required>
+            <form id="search-form" class="search" method="post" action="/search">
+                <input name="q" style="color:black;margin-top:15px;margin-bottom:15px;" id="searchbox" type="text" class="w3-input" placeholder="Search here..." required>
             </form>   
         </div>
       </div>
@@ -116,6 +99,7 @@ hr{ border: 1px thin;}
 <br>
 
 <!-- Footer -->
+<div id='footer'>
 <footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
   <h5> Pirate Notes &copy; 2017</h5>
 </footer>
@@ -123,7 +107,7 @@ hr{ border: 1px thin;}
 <footer class="w3-container w3-theme-d5">
   <p>Powered by <a href="http://www.ecu.edu" target="_blank">ECU.edu</a></p>
 </footer>
- 
+ </div>
 <script>
 function gotoUrl(url) {
     if(typeof url != "string") return false;

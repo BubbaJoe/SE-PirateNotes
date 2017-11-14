@@ -23,21 +23,12 @@ app.use(morgan('dev'));
 
 // FLASH
 app.use(flash());
-app.use(function (req, res, next) {
-    res.locals.messages = require('express-messages')(req, res);
-    next();
-  });
 
 // HANDLEBARS
 app.set('views', './src/views');
 app.engine('hbs',exphbs({
     partialsDir: './src/views/partials',
-    extname: '.hbs',
-    helpers: {
-        log: function(options) {
-            console.log(options);
-        }
-    }
+    extname: '.hbs'
 }));
 app.set('view engine','hbs')
 
@@ -98,11 +89,10 @@ app.use(session({
     key: '7586de50ba81-11e7-86b6-1d6eec7d1af9',
     secret: 'aff85184-4a74-488f-97ea-c5da3a500cfa',
     store: sessionStore,
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 3600000/2,
-        secure: true
+        maxAge: 3600000/2
     }
 }));
 

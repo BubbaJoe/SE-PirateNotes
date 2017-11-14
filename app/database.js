@@ -54,7 +54,7 @@ module.exports = function(db) {
                 resolve(fileArr.forEach( file => 
                     fs.readFile(file.path, (err,data) => 
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
-                            [createUuid(),post_id,file.name || fileArr.length,file.size,file.type,data])
+                            [createUuid(),post_id,file.name,file.size,file.type,data])
                             .then ( () => fs.unlinkSync(file.path) )
                             .catch( err => console.log(err))
                     )
@@ -64,28 +64,21 @@ module.exports = function(db) {
         })
     }
 
-    // check if user is admin
-    checkIfAdmin = function(user_id) {
-        return new Promise( ( resolve, reject ) => {} );
+    getFile = function (file_id) {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from file'+
+            ' where id = ?',[file_id])
+            .then(result => resolve(result))
+            .catch(err => console.log(err))
+        } );
     }
-
-    // check if user is admin or mod
-    checkIfAdminOrMod = function(user_id) {
-        return new Promise( ( resolve, reject ) => {} );
-    }
-
-        // check if user is mod
-        checkIfMod = function(user_id) {
-            return new Promise( ( resolve, reject ) => {} );
-        }
 
     // get the courses that the user is following
     getUserCourses = function(user_id) {
         return new Promise( ( resolve, reject ) => {
-            db.query('select * from course, (' +
-            'select * from followed where user_id = ?) c ' +
-            'where course.id = c.course_id', 
-            [user_id])
+            db.query('select * from course, (select' +
+            ' * from followed where user_id = ?) c ' +
+            'where course.id = c.course_id', [user_id])
             .then(result => resolve(result))
             .catch(err => console.log(err));
         } );
@@ -95,33 +88,6 @@ module.exports = function(db) {
     getAcceptedUserPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
 
-        } );
-    }
-
-    // Posts that the user has created that are accepted
-    getUserPosts = function(user_id) {
-        return new Promise( ( resolve, reject ) => {
-            var final_post;
-            db.query('select post.*, firstname, lastname, profile_image'+
-            ' from post inner join user on user.id = post.user_id where'+
-            ' user_id = ? order by post_date desc',[user_id])
-            .then( posts => db.query('select file.* from file, user, post '+ 
-                'where user.id = ? and post_id = post.id',[user_id])
-            .then( files => {
-                if(posts.length == 0) final_post = [];
-                for(var j = 0; j < posts.length; j++) {
-                    posts[j].files = [];
-                    for(var i = 0; i < files.length; i++) {
-                        if(files[i].post_id == posts[j].id) {
-                            posts[j].files.push(files[i])
-                            //delete files[i]; i--;
-                        }
-                    }
-                }
-                final_post = posts;
-            }))
-            .then(() => resolve(final_post))
-            .catch( err => console.log(err) )
         } );
     }
 
@@ -136,20 +102,20 @@ module.exports = function(db) {
     getUserPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
             var final_post;
-            db.query('select post.*, course.*, firstname, lastname'+
+            db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
             ' from post inner join user on user.id = post.user_id inner '+
             'join course on course_id = course.id where user_id = ? order'+
             ' by post_date desc',[user_id])
-            .then( posts => db.query('select file.* from file, user, post '+ 
-                'where user.id = ? and post_id = post.id',[user_id])
+            .then( posts => db.query('select file.* from file inner join'+ 
+                ' post on post_id = post.id inner join user on user_id'+
+                ' = user.id where user.id = ?',[user_id])
             .then( files => {
-                if(posts.length == 0) final_post = [];
+                if(posts.length == 0) return final_post = [];
                 for(var j = 0; j < posts.length; j++) {
                     posts[j].files = [];
                     for(var i = 0; i < files.length; i++) {
                         if(files[i].post_id == posts[j].id) {
                             posts[j].files.push(files[i])
-                            //delete files[i]; i--;
                         }
                     }
                 }
@@ -170,7 +136,7 @@ module.exports = function(db) {
             .then( posts => db.query('select file.* from file inner join'+ 
                 ' post on post.id = post_id where course_id = ? ',[course_id])
             .then( files => {
-                if(posts.length == 0) final_post = [];
+                if(posts.length == 0) return final_post = [];
                 for(var j = 0; j < posts.length; j++) {
                     posts[j].files = [];
                     for(var i = 0; i < files.length; i++) {
@@ -238,7 +204,20 @@ module.exports = function(db) {
 
         } );
     }
+        // check if user is admin
+    checkIfAdmin = function(user_id) {
+        return new Promise( ( resolve, reject ) => {} );
+    }
 
+    // check if user is admin or mod
+    checkIfAdminOrMod = function(user_id) {
+        return new Promise( ( resolve, reject ) => {} );
+    }
+
+    // check if user is mod
+    checkIfMod = function(user_id) {
+        return new Promise( ( resolve, reject ) => {} );
+    }
 
     // Register User Information
     register = function (firstname,lastname,email,password,type) {
