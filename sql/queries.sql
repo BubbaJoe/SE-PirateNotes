@@ -1,21 +1,40 @@
+#Name: queries.sql
+#Author: Dakota
+#This file contains many of the queries that are used on the databse.
+
 #select all post information and first name and last name using the user id.
-#Search Query
+#Posts for the courses that the user is following
 
-# Department
-select * from department
-where dept_name like '%?%'
-or dept_abbr like '%?%';
+select post.*
+from followed inner join post
+on followed.course_id = post.course_id
+where followed.user_id = ?;
 
-# Course
-select * from course
-where course_name like '%?%' or
-dept_abbr like '%?%' or
-course_num like '%?%';
+#get all pending posts
+select *
+from post
+where post_status = 'pending';
 
-# Post
-select * from post
-where post_text like '%?%';
+#get all posts
+select *
+from post;
 
-# File
-select * from post
-where post_text like '%?%';
+#accept a pending post
+update post
+set post_status = 'allowed'
+where post.id = '?';
+
+#decline a pending post
+update post
+set post_status = 'denied'
+where post.id = '?';
+
+#suspend a user's account
+update user
+set acc_status = 'suspended'
+where user.id = '?';
+
+#ban a user's account
+update user
+set acc_status = 'banned'
+where user.id = '?';
