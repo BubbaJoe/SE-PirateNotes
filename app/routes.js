@@ -1,10 +1,33 @@
-// app/routes.js
+/*
 
-var fs = require('fs');
-var path = require('path');
-var referenceLink = '';
+    @author Joe Williams
+    Software Engineering: East Carolina University
+    PirateNotes
 
-module.exports = function(app, io, db, passport) {
+    routes.js - To configure the server endpoints or 'routes'.
+
+*/
+
+let fs = require('fs');
+let path = require('path');
+let referenceLink = '';
+
+module.exports = function(app, io, db, email, passport) {
+
+    app.get('/forgot',function () {
+        //only for forgotten passwords
+    })
+
+    app.get('/tos',function () {
+        //only for forgotten passwords
+    })
+
+    app.get('/verify/:uid',function () {
+        // 3 cases!
+        // The user id is not found, "User not found"
+        // The user is already verified, "You are already verified"
+        // The user verifies their self, "You have verified yourself click here to log in"
+    })
     
     app.get('/profile', function (req,res) {
         res.redirect("/");
@@ -15,7 +38,9 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.get('/audit', function (req,res) {
-        res.render("audit")
+        if(!req.isAuthenticated() &&
+            (req.user.acc_type == 'admin' || req.user.acc_type == 'admin'))
+                res.render("audit"); else res.send("Unauthorized")
     });
 
     app.get('/course/:course_id', function (req,res) {
@@ -30,10 +55,8 @@ module.exports = function(app, io, db, passport) {
                     course: course,
                     posts: posts
                 })
-                return;
-            }
-            ))
-        }else{
+            }))
+        } else {
             referenceLink = req.url;
             res.redirect('/');
             return;
@@ -50,11 +73,13 @@ module.exports = function(app, io, db, passport) {
             })
         }
     });
+
     app.get('/search', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('search-blank',{})
         } else res.redirect('/')
     });
+
     app.post('/search', function (req,res) {
         console.log(req.fields)
         if(req.fields.q != undefined) {
@@ -102,16 +127,16 @@ module.exports = function(app, io, db, passport) {
                 })
             })
             )
-        }else{
+        } else {
             req.flash('danger','incorrect information')
-            res.render('auth',{
+            res.render('auth', {
                 messages: req.flash('INCORRECT INFO') 
             });
         }
     });
     
     app.post('/login', function(req, res) {
-        var email = req.fields.email,
+        let email = req.fields.email,
         password = req.fields.password;
         login(email,password)
         .then( result => {
@@ -119,6 +144,7 @@ module.exports = function(app, io, db, passport) {
                 id = result[0].id;
                 req.login(id, (err) => {
                     if(err)console.log(err);
+                    sendEmail(email,id)
                     res.redirect('/');
                 });
             } else {
@@ -130,7 +156,7 @@ module.exports = function(app, io, db, passport) {
     });
 
     app.post('/register', function(req,res) {
-        var firstname = req.fields.first_name || '',
+        let firstname = req.fields.first_name || '',
         lastname = req.fields.last_name || '',
         email = req.fields.email || '',
         password = req.fields.password || '',
@@ -160,13 +186,13 @@ module.exports = function(app, io, db, passport) {
             referenceLink = req.url;
             res.redirect('/');
         }
-        var fileArr = [];
+        let fileArr = [];
         if(req.files.fileAttachments.length)
             fileArr = req.files.fileAttachments;
         else fileArr = [req.files.fileAttachments];
         numFiles = fileArr.length;
 
-        var FileTooBig = false;
+        let FileTooBig = false;
         fileArr.forEach(function(file) {
             if(file.size == 0 || file.name == '') {
                 fs.unlinkSync(file.path);
@@ -188,11 +214,10 @@ module.exports = function(app, io, db, passport) {
         .then(() => res.redirect('/'))
     });
 
-    app.get('/infolog',function(req,res) {
-        //Check if admin/mod
-        if(req.isAuthenticated())
+    app.get('/infolog', function(req,res) {
+        if(req.isAuthenticated() && (req.user.acc_type == 'admin' || req.user.acc_type == 'mod'))
             data = JSON.stringify(req.user,null,4);
-        else data = "You are not authenticated"
+        else data = "You are not authorized to view this data"
         res.set('Content-Type', 'application/json');
         res.send(data);
     });
@@ -205,9 +230,5 @@ module.exports = function(app, io, db, passport) {
 
     passport.serializeUser((user, done) => done(null, user) );
     
-    passport.deserializeUser((id, done) =>
-        getUserByID(id)
-        .then( result => done(null, result[0]) )
-        .catch( err => console.log(err) )
-    );
+    passport.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ));
 };

@@ -1,15 +1,26 @@
-var express		= require('express');
-var passport 	= require('passport');
-var flash    	= require('connect-flash');
-var morgan      = require('morgan');
-var form		= require('express-formidable');
-var session     = require('express-session');
-var sqlsession	= require('express-mysql-session')(session);
-var exphbs		= require('express-handlebars')
-var mysql		= require('mysql');
+/*
+    @author Joe Williams
+    Software Engineering : East Carolina University
+    PirateNotes
 
-var port     	= process.env.PORT || 8080;
-var app			= express();
+    app.js - set up all of the server requirments
+
+*/
+
+// imports
+let express		= require('express');
+let passport 	= require('passport');
+let flash    	= require('connect-flash');
+let morgan      = require('morgan');
+let form		= require('express-formidable');
+let session     = require('express-session');
+let sqlsession	= require('express-mysql-session')(session);
+let exphbs		= require('express-handlebars')
+let mysql		= require('mysql');
+let email       = require('nodemailer');
+
+let port     	= process.env.PORT || 8080;
+let app			= express();
 
 // GENERAL
 app.use(express.static('public'));
@@ -28,12 +39,18 @@ app.use(flash());
 app.set('views', './src/views');
 app.engine('hbs',exphbs({
     partialsDir: './src/views/partials',
-    extname: '.hbs'
+    extname: '.hbs',
+    helpers: {
+        'iff': (conditional, options) => {
+            if (options.hash.value === conditional)
+                return options.fn(this); else return options.inverse(this);
+        }
+    }
 }));
 app.set('view engine','hbs')
 
 // SOCKET.IO
-var io = require('socket.io')
+let io = require('socket.io')
 .listen(app.listen(port,"0.0.0.0",
     function (err) {
         if(err) console.log(err);
@@ -41,11 +58,9 @@ var io = require('socket.io')
     })
 );
 
-// DB AND SESSION
-const options = require('./dbinfo.json');
-
+// database class
 class Database {
-    constructor( config ) {
+    constructor ( config ) {
         this.connection = mysql.createConnection( config );
     }
 
@@ -80,26 +95,24 @@ class Database {
     }
 }
 
-//var db = mysql.createConnection(options);
-var db = new Database(options);
-var sessionStore = new sqlsession(options);
+let options = require('./dbinfo.json');
+let db = new Database(options);
+let sessionStore = new sqlsession(options);
 
 app.use(session({
     name: 'piratenotes',
     key: '7586de50ba81-11e7-86b6-1d6eec7d1af9',
     secret: 'aff85184-4a74-488f-97ea-c5da3a500cfa',
     store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 3600000/2
-    }
+    resave: true,
+    saveUninitialized: true,
+    cookie: {maxAge: 3600000/2}
 }));
 
 // PASSPORT
 app.use(passport.initialize());
 app.use(passport.session());
 
-//require('./app/handlebars.js')(exphbs);
 require('./app/database.js')(db);
-require('./app/routes.js')(app, io, db, passport);
+require('./app/email.js')(email, db);
+require('./app/routes.js')(app, io, db, email, passport);

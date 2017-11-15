@@ -20,11 +20,10 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 
 ## TO DO: 
 
-implement Saving Posts/Liking Posts 
-implement Notifications
-implement Search Features
 implement Flash Messages
-create Account Settings Page
+implement Saving Posts/Liking Posts 
+implement Search Features
 create Admin Page / Mod Page
-
+create Account Settings Page
+implement Notifications
 Then DONE!!!!!

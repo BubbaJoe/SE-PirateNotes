@@ -1,4 +1,4 @@
-NetCode source code license
+PirateNotes - Software Engineering class project
 ===================================
 Copyright (c) `<2017>`, `<Joe Williams>`
 

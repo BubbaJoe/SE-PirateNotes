@@ -1,17 +1,21 @@
-//database.js
-var fs 			= require('fs');
-var uuid		= require('uuid/v4');
-var bcrypt		= require('bcrypt-nodejs');
+/*
+    @author Joe Williams
+    Software Engineering : East Carolina University
+    PirateNotes
+
+    database.js - handles on communication of the web server to the database.
+    
+*/
+
+let fs 			= require('fs');
+let uuid		= require('uuid/v4');
+let bcrypt		= require('bcrypt-nodejs');
 
 module.exports = function(db) {
 
-    db.on('error',function() {
-
-    }) 
-
-    // Create uuid 
+    // Create uuid for the IDs of each table
     createUuid = function() {
-        var id = uuid();
+        let id = uuid();
         while(id.includes('-'))id = id.replace('-','');
         return id;
     }
@@ -46,24 +50,25 @@ module.exports = function(db) {
 
     // Create post
     createPost = function(user_id,course_id,post_text,fileArr) {
-        var post_id = createUuid()
+        let post_id = createUuid()
         return new Promise( ( resolve, reject ) => {
-        db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
-        [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'])
-        .then( () => 
-                resolve(fileArr.forEach( file => 
-                    fs.readFile(file.path, (err,data) => 
-                        db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
-                            [createUuid(),post_id,file.name,file.size,file.type,data])
-                            .then ( () => fs.unlinkSync(file.path) )
-                            .catch( err => console.log(err))
-                    )
-                ))
-            )
+            db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
+            [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'])
+            .then( () => 
+                    resolve(fileArr.forEach( file => 
+                        fs.readFile(file.path, (err,data) => 
+                            db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
+                                [createUuid(),post_id,file.name,file.size,file.type,data])
+                                .then ( () => fs.unlinkSync(file.path) )
+                                .catch( err => console.log(err))
+                        )
+                    ))
+                )
             .catch( err => console.log(err))
         })
     }
 
+    // Get data from a file with file id
     getFile = function (file_id) {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from file'+
@@ -98,10 +103,10 @@ module.exports = function(db) {
         } );
     }
 
-        // Posts that the user has created that are accepted
+    // Posts that the user has created that are accepted
     getUserPosts = function(user_id) {
         return new Promise( ( resolve, reject ) => {
-            var final_post;
+            let final_post;
             db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
             ' from post inner join user on user.id = post.user_id inner '+
             'join course on course_id = course.id where user_id = ? order'+
@@ -111,9 +116,9 @@ module.exports = function(db) {
                 ' = user.id where user.id = ?',[user_id])
             .then( files => {
                 if(posts.length == 0) return final_post = [];
-                for(var j = 0; j < posts.length; j++) {
+                for(let j = 0; j < posts.length; j++) {
                     posts[j].files = [];
-                    for(var i = 0; i < files.length; i++) {
+                    for(let i = 0; i < files.length; i++) {
                         if(files[i].post_id == posts[j].id) {
                             posts[j].files.push(files[i])
                         }
@@ -129,7 +134,7 @@ module.exports = function(db) {
     // Posts that the user has created that are accepted
     getCoursePosts = function(course_id) {
         return new Promise( ( resolve, reject ) => {
-            var final_post;
+            let final_post;
             db.query('select post.*, firstname, lastname from post inner'+
             ' join user on user.id = post.user_id inner join course on course_id'+
             ' = course.id where course_id = ? order by post_date desc', [course_id])
@@ -137,9 +142,9 @@ module.exports = function(db) {
                 ' post on post.id = post_id where course_id = ? ',[course_id])
             .then( files => {
                 if(posts.length == 0) return final_post = [];
-                for(var j = 0; j < posts.length; j++) {
+                for(let j = 0; j < posts.length; j++) {
                     posts[j].files = [];
-                    for(var i = 0; i < files.length; i++) {
+                    for(let i = 0; i < files.length; i++) {
                         if(files[i].post_id == posts[j].id) {
                             posts[j].files.push(files[i])
                         }
@@ -175,7 +180,6 @@ module.exports = function(db) {
 
         } );
     }
-
 
     //For admin/mod use only
     acceptPost = function(post_id) {
@@ -219,15 +223,22 @@ module.exports = function(db) {
         return new Promise( ( resolve, reject ) => {} );
     }
 
+    // Set the user's account to active from unverifed
+    verifyUser = function(user_id) {
+        return new Promise( ( resolve, reject ) => {
+
+        } );
+    }
+
     // Register User Information
     register = function (firstname,lastname,email,password,type) {
-        var id = createUuid();
+        let id = createUuid();
         return new Promise( ( resolve, reject ) => {
-        db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
-        [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"active"])
-        .then( () =>  resolve(id) )
-        .catch( err => console.log(err) );
-    });
+            db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
+            [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),"",type,"unverified"])
+            .then( () =>  resolve(id) )
+            .catch( err => console.log(err) );
+        });
     }
 
     // Validate the Login information 

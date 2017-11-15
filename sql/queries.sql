@@ -22,19 +22,19 @@ from post;
 #accept a pending post
 update post
 set post_status = 'allowed'
-where post.id = '?';
+where post.id = ?;
 
 #decline a pending post
 update post
 set post_status = 'denied'
-where post.id = '?';
+where post.id = ?;
 
 #suspend a user's account
 update user
 set acc_status = 'suspended'
-where user.id = '?';
+where user.id = ?;
 
 #ban a user's account
 update user
 set acc_status = 'banned'
-where user.id = '?';
+where user.id = ?;

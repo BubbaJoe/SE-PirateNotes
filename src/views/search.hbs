@@ -16,43 +16,20 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+hr { border: 1px thin;}
 .course-list {margin-bottom: 1px}
-hr{ border: 1px thin;}
 .search-wrapper {display: inline-block;}
 .search-input, .search-button {border:0;background-color: transparent;}
-.search-div {max-height: 50px;  width: 100%;
-  margin: 0 auto;}
-  body{
-  background:#555;
-}
+.search-div {max-height: 50px;  width: 100%;margin: 0 auto;}body{background:#555;}
 .search input {width: 370px;padding: 10px 5px;float: left;color: #ccc;border: 0;background: transparent;border-radius: 3px 0 0 3px;}
-
 .search input:focus {outline: 0;background:transparent;}
-
 .search button {position: relative;float: right;border: 0;padding: 0;cursor: pointer;height: 40px;width: 120px;color: #fff;background: transparent;border-left: 1px solid #fff;border-radius: 0 3px 3px 0;}   
-
-#searchbox {
-    width: 100%;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 2px;
-    font-size: 16px;
-    background-color: white;
-    background-image: url('images/searchicon.png');
-    background-position: 10px 14px; 
-    background-repeat: no-repeat;
-    padding: 12px 20px 12px 40px;
-    -webkit-transition: width 0.4s ease-in-out;
-    transition: width 0.4s ease-in-out;
-}
+#searchbox {width: 100%;box-sizing: border-box;border: 1px solid #ccc;border-radius: 2px;font-size: 16px;background-color: white;background-image: url('images/searchicon.png');background-position: 10px 14px;background-repeat: no-repeat;padding: 12px 20px 12px 40px;-webkit-transition: width 0.4s ease-in-out;transition: width 0.4s ease-in-out;}
 </style>
 <body class="w3-theme-l5">
-
 {{> navbar }}
-
 <div class="w3-container w3-content " style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
-
     <div class="w3-col m9" style="margin-left:25px; width:91%;">
       <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
@@ -64,7 +41,6 @@ hr{ border: 1px thin;}
       </div>
       <br>
     </div>
-
     <div class="w3-col m3" style="margin-left:20px">
       <!-- Interests -->
       <div class="w3-card-2 w3-round w3-white w3-hide-small">
@@ -85,8 +61,6 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
-      <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
@@ -94,11 +68,7 @@ hr{ border: 1px thin;}
         <p><strong>Hey!</strong></p>
         <p>People are looking at your profile. Find out who.</p>
       </div>
-    
-    <!-- End Left Column -->
     </div>
-    
-    <!-- Middle Column -->
     <div class="w3-col m6">
     <div>
         <p align="center"style="margin-top:0" class="w3-opacity">Results</p>
@@ -111,7 +81,6 @@ hr{ border: 1px thin;}
         <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
         <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
       </div>
-
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
         <span class="w3-right w3-opacity">Course</span>
         <h4 style="margin-bottom:0px">CSCI 3030</h4><br>
@@ -120,7 +89,6 @@ hr{ border: 1px thin;}
         <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
         <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
       </div>
-
       <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
         <span class="w3-right w3-opacity">Course</span>
         <h4 style="margin-bottom:0px">CSCI 4710</h4><br>
@@ -129,11 +97,7 @@ hr{ border: 1px thin;}
         <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
         <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
       </div>
-      
-    <!-- End Middle Column -->
     </div>
-    
-    <!-- Right Column -->
     <div class="w3-col m2" style="float:left">
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
@@ -145,8 +109,6 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
-      <!-- MOD NOTIFICATION -->
       <div class="w3-card-2 w3-round w3-white w3-center">
         <div class="w3-container">
           <p>Friend Request</p>
@@ -163,36 +125,23 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
       <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
         <p>ADS</p>
       </div>
       <br>
-      
       <div class="w3-card-2 w3-round w3-white w3-padding-32 w3-center">
         <p><i class="fa fa-bug w3-xxlarge"></i></p>
       </div>
-      
-    <!-- End Right Column -->
     </div>
-    
-  <!-- End Grid -->
   </div>
-  
-<!-- End Page Container -->
 </div>
 <br>
-
-<!-- Footer -->
 <footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
   <h5> Pirate Notes &copy; 2017</h5>
 </footer>
-
 <footer class="w3-container w3-theme-d5">
   <p>Powered by <a href="http://www.ecu.edu" target="_blank">ECU.edu</a></p>
 </footer>
- 
 <script src="/js/piratenotes.js"/>
-
 </body>
 </html> 

@@ -22,8 +22,8 @@ create table user (
     interests text,
     profile_image mediumblob,
     profile_desc text,
-    acc_type enum('general','moderator','admin') not null,
-    acc_status enum('active','suspended','banned') not null,
+    acc_type enum('general','mod','admin') not null,
+    acc_status enum('active','suspended','banned','unverified') not null,
     primary key(id)
 );
 

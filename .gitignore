@@ -1,3 +1,5 @@
-/node_modules
-/tmpfiles
+# You can auto-generate these by running the command "npm install"
+package-lock.json
+node_modules
+# Ignore this so it doesnt overwrite anyones database login info
 dbinfo.json

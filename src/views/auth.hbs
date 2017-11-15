@@ -80,12 +80,9 @@
 				</center>
 			</div>
 		</form>
-		{{#if messages}}
-			<div class="alert alert-danger">{{messages}}</div>
-		{{/if}}
-		{{#if messages}}
-			<div class="alert alert-danger">{{messages}}</div>
-		{{/if}}
+		{{#each messages}}
+			<div class="alert alert-danger">{{this}}</div>
+		{{/each}}
 	</div>
 	<div id="register" class="col s12">
 		<form class="col s12"  method="post" action="/register">
@@ -118,8 +115,8 @@
 				</div>
                 <div class="row">
 					<div class="input-field checkbox col s12">
-						<input name="checkbox" type="checkbox" class="validate">
-						<label for="checkbox">I agree to the <a href="termsOfServices" target="_blank">Terms Of Services</a></label>
+						<input name="checkbox" type="checkbox" class="validate" checked>
+						<label for="checkbox">I agree to the <a href="tos" target="_blank">Terms Of Services</a></label>
 					</div>
 				</div>
 				<center>
