@@ -19,7 +19,7 @@ module.exports = function(app, io, db, email, passport) {
     })
 
     app.get('/tos',function () {
-        //only for forgotten passwords
+        // send tos doc
     })
 
     app.get('/verify/:uid',function () {
@@ -38,9 +38,11 @@ module.exports = function(app, io, db, email, passport) {
     });
 
     app.get('/audit', function (req,res) {
-        if(!req.isAuthenticated() &&
-            (req.user.acc_type == 'admin' || req.user.acc_type == 'admin'))
-                res.render("audit"); else res.send("Unauthorized")
+        if(req.isAuthenticated()) {
+            if (req.user.acc_type == 'admin' || req.user.acc_type == 'admin')
+                res.render("audit"); else res.send('Unauthorized')
+        }
+        else res.render('404');
     });
 
     app.get('/course/:course_id', function (req,res) {
@@ -62,6 +64,13 @@ module.exports = function(app, io, db, email, passport) {
             return;
         }
     });
+
+    app.get('/profile/:uid',function (req,res) {
+        uid = req.params.uid;
+        if(req.isAuthenticated())
+        if(uid == req.user.id) res.redirect('/')
+        else res.send(uid);
+    })
 
     app.get('/file/:file_id', function (req,res) {
         file_id = req.params.file_id;
