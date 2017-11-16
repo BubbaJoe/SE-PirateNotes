@@ -14,13 +14,14 @@ let flash    	= require('connect-flash');
 let morgan      = require('morgan');
 let form		= require('express-formidable');
 let session     = require('express-session');
-let sqlsession	= require('express-mysql-session')(session);
+let sqlsess     = require('express-mysql-session');
 let exphbs		= require('express-handlebars')
 let mysql		= require('mysql');
 let email       = require('nodemailer');
 
 let port     	= process.env.PORT || 8080;
 let app			= express();
+let SqlSession  = sqlsess(session);
 
 // GENERAL
 app.use(express.static('public'));
@@ -58,7 +59,7 @@ let io = require('socket.io')
     })
 );
 
-// database class
+// Database class
 class Database {
     constructor ( config ) {
         this.connection = mysql.createConnection( config );
@@ -97,7 +98,7 @@ class Database {
 
 let options = require('./dbinfo.json');
 let db = new Database(options);
-let sessionStore = new sqlsession(options);
+let sessionStore = new SqlSession(options);
 
 app.use(session({
     name: 'piratenotes',
