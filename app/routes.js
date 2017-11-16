@@ -10,7 +10,7 @@
 
 let fs = require('fs');
 let path = require('path');
-let referenceLink = '';
+let referenceLink = [];
 
 module.exports = function(app, io, db, email, passport) {
 
@@ -40,9 +40,12 @@ module.exports = function(app, io, db, email, passport) {
     app.get('/audit', function (req,res) {
         if(req.isAuthenticated()) {
             if (req.user.acc_type == 'admin' || req.user.acc_type == 'admin')
-                res.render("audit"); else res.send('Unauthorized')
+                res.render("audit")
+            else res.send('Unauthorized')
+        } else {
+            referenceLink[req.ip] = req.url;
+            res.redirect('/');
         }
-        else res.render('404');
     });
 
     app.get('/course/:course_id', function (req,res) {
@@ -59,7 +62,7 @@ module.exports = function(app, io, db, email, passport) {
                 })
             }))
         } else {
-            referenceLink = req.url;
+            referenceLink[req.ip] = req.url;
             res.redirect('/');
             return;
         }
@@ -80,13 +83,21 @@ module.exports = function(app, io, db, email, passport) {
             .then( data => {
                 console.log(data)
             })
+        } else {
+            referenceLink[req.ip] = req.url;
+            res.redirect('/');
+            return;
         }
     });
 
     app.get('/search', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('search-blank',{})
-        } else res.redirect('/')
+        } else {
+            referenceLink[req.ip] = req.url;
+            res.redirect('/');
+            return;
+        }
     });
 
     app.post('/search', function (req,res) {
@@ -112,8 +123,8 @@ module.exports = function(app, io, db, email, passport) {
     
     app.get('/', function (req,res) {
         if(req.isAuthenticated() && referenceLink) {
-            res.redirect(referenceLink);
-            referenceLink = '';
+            res.redirect(referenceLink[req.ip] || '/');
+            referenceLink = '/';
         } else if(req.isAuthenticated()) {
             let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
             getUserCourses( req.user.id ).then( results => courses = results )
