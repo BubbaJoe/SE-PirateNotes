@@ -169,75 +169,80 @@ module.exports = function(app, io, db, email, passport) {
         lastname = req.fields.last_name || '',
         email = req.fields.email || '',
         password = req.fields.password || '',
-        type = 'general';
+        type = 'general'
+        
+        if(!email.includes('@students.ecu.edu')) {
+            req.flash('You need to you use ECU student email to register')
+            res.redirect('/')
+        }
 
         // validate here
-        if(firstname != "" && lastname != "" && email != "" && password != "")
-            register(firstname,lastname,email,password,type,function(id) {
+        if(firstname != "" || lastname != "" || email != "" || password != "")
+            register(firstname, lastname, email, password, type, function(id) {
                 if(id != undefined) {
                     req.login(id,
                     function(err) {
-                        if(err) console.log(err);
-                        res.redirect('/');
+                        if(err) console.log(err)
+                        res.redirect('/')
                     });
                 } else {
-                    req.flash('alert alert-danger','Incorrect login information.');
-                    res.redirect('/');
+                    req.flash('alert alert-danger','Incorrect login information.')
+                    res.redirect('/')
                 }
             }); else {
-                req.flash('alert alert-danger','Missing information');
-                res.redirect('/');
+                req.flash('alert alert-danger','Missing information')
+                res.redirect('/')
             }
     });
 
     app.post('/post', function(req, res) {
         if(!req.isAuthenticated()) {
-            referenceLink = req.url;
-            res.redirect('/');
+            referenceLink = req.url
+            res.redirect('/')
         }
         let fileArr = [];
         if(req.files.fileAttachments.length)
-            fileArr = req.files.fileAttachments;
-        else fileArr = [req.files.fileAttachments];
-        numFiles = fileArr.length;
+            fileArr = req.files.fileAttachments
+        else fileArr = [req.files.fileAttachments]
+        numFiles = fileArr.length
 
-        let FileTooBig = false;
+        let FileTooBig = false
         fileArr.forEach(function(file) {
             if(file.size == 0 || file.name == '') {
-                fs.unlinkSync(file.path);
+                fs.unlinkSync(file.path)
                 fileArr.pop(file)
             }
             if(file.size > 10000000){
-                stop = true;
+                stop = true
             }
-        });
+        })
 
         if(FileTooBig) {
             req.flash('The file was too big (10M max)');
-            res.redirect('/');
+            res.redirect('/')
         } else if(fileArr.length > 5) {
-            req.flash('Too many files (5 files max)');
-            res.redirect('/');
+            req.flash('Too many files (5 files max)')
+            res.redirect('/')
         } else
         createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)
         .then(() => res.redirect('/'))
-    });
+    })
 
     app.get('/infolog', function(req,res) {
         if(req.isAuthenticated() && (req.user.acc_type == 'admin' || req.user.acc_type == 'mod'))
-            data = JSON.stringify(req.user,null,4);
+            data = JSON.stringify(req.user,null,4)
         else data = "You are not authorized to view this data"
-        res.set('Content-Type', 'application/json');
+        res.set('Content-Type', 'application/json')
         res.send(data);
-    });
+    })
     
     app.get('/logout', function(req, res) {
         if(req.isAuthenticated())
             req.logout();
-        res.redirect('/');
-    });
+        res.redirect('/')
+    })
 
-    passport.serializeUser((user, done) => done(null, user) );
+    passport.serializeUser((user, done) => done(null, user) )
     
-    passport.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ));
+    passport.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ))
 };
