@@ -23,7 +23,7 @@ create table user (
     profile_image mediumblob,
     profile_desc text,
     acc_type enum('general','mod','admin') not null,
-    acc_status enum('active','suspended','banned','unverified') not null,
+    acc_status enum('active','warning','banned','unverified') not null,
     primary key(id)
 );
 

@@ -7,13 +7,49 @@
 
 */
 
-module.exports = function(email, db) {
+module.exports = (nodemailer, db) => {
 
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        secure: false,
+        port: 25,
+        auth: {
+            user: 'no.reply.piratenotes@gmail.com',
+            pass: 'AsDf1234'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    })
 
-
-    sendEmail = function(user_email, user_id) {
-        // Check db to see if user is verified
-
+    mailOptions = {
+        from: '"Pirate Notes" <no.reply.piratenotes@gmail.com>', // static
+        to: 'no.reply.piratenotes@gmail.com',
+        subject: 'Hello',
+        html: '<h1>Hello</h1>',
+        text: 'Hello!'
     }
 
+    sendEmail = (user_email,callback) => {
+        // Check db to see if user is verified
+        console.log('sending email')
+        //mailOptions.to = user_email
+        
+        transporter.sendMail(mailOptions, (err,info) => {
+            if(err) console.log(err)
+            else return callback(info)
+            return
+        })
+    }
+
+    sendMassEmail = (email_arr,callback) => {
+
+        //mailOptions.to = email_arr
+
+        transporter.sendMail(mailOptions, (err,info) => {
+            if(err) console.log(err)
+            else return callback(info)
+            return
+        })
+    }
 }

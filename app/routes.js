@@ -10,34 +10,43 @@
 
 let fs = require('fs');
 let path = require('path');
+
 let referenceLink = [];
 
-module.exports = function(app, io, db, email, passport) {
+// Express, Socket.IO, MySQL, NodeMailer and Passport
+module.exports = (app, io, db, nm, pp) => {
 
-    app.get('/forgot',function () {
+    app.get('/follow/:cid', () => {
+        // follow course
+        if(req.isAuthenticated()) {
+            req.user.id
+        }
+    })
+
+    app.get('/forgot', () => {
         //only for forgotten passwords
     })
 
-    app.get('/tos',function () {
+    app.get('/tos', () => {
         // send tos doc
     })
 
-    app.get('/verify/:uid',function () {
+    app.get('/verify/:uid', () => {
         // 3 cases!
         // The user id is not found, "User not found"
         // The user is already verified, "You are already verified"
         // The user verifies their self, "You have verified yourself click here to log in"
     })
     
-    app.get('/profile', function (req,res) {
+    app.get('/profile',  (req,res) => {
         res.redirect("/");
     });
 
-    app.get('/department', function (req,res) {
+    app.get('/department', (req,res) => {
         res.render("department")
     });
 
-    app.get('/audit', function (req,res) {
+    app.get('/audit', (req,res) => {
         if(req.isAuthenticated()) {
             if (req.user.acc_type == 'admin' || req.user.acc_type == 'admin')
                 res.render("audit")
@@ -48,7 +57,7 @@ module.exports = function(app, io, db, email, passport) {
         }
     });
 
-    app.get('/course/:course_id', function (req,res) {
+    app.get('/course/:course_id', (req,res) => {
         course_id = req.params.course_id;
         if(req.isAuthenticated()) {
             let course, posts;
@@ -68,14 +77,14 @@ module.exports = function(app, io, db, email, passport) {
         }
     });
 
-    app.get('/profile/:uid',function (req,res) {
+    app.get('/profile/:uid', (req,res) => {
         uid = req.params.uid;
         if(req.isAuthenticated())
         if(uid == req.user.id) res.redirect('/')
         else res.send(uid);
     })
 
-    app.get('/file/:file_id', function (req,res) {
+    app.get('/file/:file_id', (req,res) => {
         file_id = req.params.file_id;
         if(req.isAuthenticated()) {
             let fileData
@@ -102,18 +111,36 @@ module.exports = function(app, io, db, email, passport) {
 
     app.post('/search', function (req,res) {
         console.log(req.fields)
-        if(req.fields.q != undefined) {
-            dataArr = req.fields.q.split(" ");
-            console.log(dataArr)
-            res.render("search",{
-            });
+        if(req.isAuthenticated())
+            if(req.fields.q != undefined) {
+                wordArr = req.fields.q.split(" ");
+                courseArr = []
+                departmentArr = []
+                fileArr.forEach( (word, i) => {
+                    searchCourse(word)
+                    .then( (course) => dataArr.push(course) )
+                    .then( () => searchDepartment(word)
+                    .then( (department) => departmentArr.push(department) ) )
+                    .then( () => {
+                        //end of the last loop
+                        if(i == word.length)
+                            res.render("search",{
+                                courses: courseArr,
+                                department: departmentArr
+                            });
+                    })
+                })
+            }
+        else {
+            referenceLink[req.ip] = req.url;
+            res.redirect('/');
         }
     });
 
-    app.get('/profile_image/:uid', function (req,res) {
+    app.get('/profile_image/:uid', (req,res) => {
         uid = req.params.uid;
         if(req.isAuthenticated())
-            getProfilePictureByID(uid,function(result) {
+            getProfilePictureByID(uid,(result) => {
                 if(result[0].profile_image) {
                     res.setHeader('Content-disposition', 'attachment; filename=profile.svg');
                     res.send(result[0].profile_image);
@@ -121,10 +148,10 @@ module.exports = function(app, io, db, email, passport) {
             });
     });
     
-    app.get('/', function (req,res) {
-        if(req.isAuthenticated() && referenceLink) {
-            res.redirect(referenceLink[req.ip] || '/');
-            referenceLink = '/';
+    app.get('/', (req,res) => {
+        if(req.isAuthenticated() && referenceLink[req.ip]) {
+            res.redirect(referenceLink[req.ip])
+            delete referenceLink[req.ip]
         } else if(req.isAuthenticated()) {
             let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
             getUserCourses( req.user.id ).then( results => courses = results )
@@ -151,11 +178,12 @@ module.exports = function(app, io, db, email, passport) {
             req.flash('danger','incorrect information')
             res.render('auth', {
                 messages: req.flash('INCORRECT INFO') 
-            });
+            })
         }
-    });
+    })
     
-    app.post('/login', function(req, res) {
+    app.get('/login',(req,res) => res.redirect('/') )
+    app.post('/login', (req, res) => {
         let email = req.fields.email,
         password = req.fields.password;
         login(email,password)
@@ -164,82 +192,78 @@ module.exports = function(app, io, db, email, passport) {
                 id = result[0].id;
                 req.login(id, (err) => {
                     if(err)console.log(err);
-                    sendEmail(email,id)
+                    console.log('...')
                     res.redirect('/');
                 });
             } else {
                 req.flash('alert alert-danger',
                     '<b>Sorry!</b> Incorrect login information.');
                 res.redirect('/');
+                console.log('...')
             }
         });
     });
 
-    app.post('/register', function(req,res) {
+    app.get('/register', (req,res) => res.redirect('/') )
+    app.post('/register', (req,res) => {
         let firstname = req.fields.first_name || '',
         lastname = req.fields.last_name || '',
         email = req.fields.email || '',
-        password = req.fields.password || '',
-        type = 'general'
+        password = req.fields.password || ''
         
-        if(!email.includes('@students.ecu.edu')) {
+        if(!email || email.includes('@students.ecu.edu')) {
             req.flash('You need to you use ECU student email to register')
             res.redirect('/')
-        }
+        } else console.log("email usable")
 
         // validate here
-        if(firstname != "" || lastname != "" || email != "" || password != "")
-            register(firstname, lastname, email, password, type, function(id) {
-                if(id != undefined) {
-                    req.login(id,
-                    function(err) {
-                        if(err) console.log(err)
-                        res.redirect('/')
-                    });
+        if(firstname != "" || lastname != "" || email != "" || password != "") {
+            register(firstname, lastname, email, password)
+            .then((id) => {
+                if(id) {
+                    sendEmail(email,() => res.redirect('/') )
                 } else {
                     req.flash('alert alert-danger','Incorrect login information.')
                     res.redirect('/')
                 }
-            }); else {
-                req.flash('alert alert-danger','Missing information')
-                res.redirect('/')
-            }
+            }); 
+        } else {
+            req.flash('alert alert-danger','Missing information')
+            res.redirect('/')
+        }
     });
 
-    app.post('/post', function(req, res) {
-        if(!req.isAuthenticated()) {
+    app.get('/post',(req,res) => res.redirect('/') )
+    app.post('/post', (req, res) => {
+        if(req.isAuthenticated()) {
+            let fileArr = [];
+            if(req.files.fileAttachments.length)
+                fileArr = req.files.fileAttachments
+            else fileArr = [req.files.fileAttachments]
+            numFiles = fileArr.length
+
+            let FileTooBig = false
+            fileArr.forEach( (file,i) => {
+                if(file.size == 0 || file.name == '') fs.unlinkSync(fileArr.splice(i,1)[0].path)
+                if(file.size > 10000000) stop = true
+            } )
+
+            if(FileTooBig) {
+                req.flash('The file was too big (10M max)');
+                res.redirect('/')
+            } else if(fileArr.length > 5) {
+                req.flash('Too many files (5 files max)')
+                res.redirect('/')
+            } else
+                createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)
+                .then(() => res.redirect('/'))
+        } else {
             referenceLink = req.url
             res.redirect('/')
         }
-        let fileArr = [];
-        if(req.files.fileAttachments.length)
-            fileArr = req.files.fileAttachments
-        else fileArr = [req.files.fileAttachments]
-        numFiles = fileArr.length
-
-        let FileTooBig = false
-        fileArr.forEach(function(file) {
-            if(file.size == 0 || file.name == '') {
-                fs.unlinkSync(file.path)
-                fileArr.pop(file)
-            }
-            if(file.size > 10000000){
-                stop = true
-            }
-        })
-
-        if(FileTooBig) {
-            req.flash('The file was too big (10M max)');
-            res.redirect('/')
-        } else if(fileArr.length > 5) {
-            req.flash('Too many files (5 files max)')
-            res.redirect('/')
-        } else
-        createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)
-        .then(() => res.redirect('/'))
     })
 
-    app.get('/infolog', function(req,res) {
+    app.get('/infolog', (req,res) => {
         if(req.isAuthenticated() && (req.user.acc_type == 'admin' || req.user.acc_type == 'mod'))
             data = JSON.stringify(req.user,null,4)
         else data = "You are not authorized to view this data"
@@ -247,13 +271,13 @@ module.exports = function(app, io, db, email, passport) {
         res.send(data);
     })
     
-    app.get('/logout', function(req, res) {
+    app.get('/logout', (req, res) => {
         if(req.isAuthenticated())
             req.logout();
         res.redirect('/')
     })
 
-    passport.serializeUser((user, done) => done(null, user) )
+    pp.serializeUser((user, done) => done(null, user) )
     
-    passport.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ))
+    pp.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ))
 };

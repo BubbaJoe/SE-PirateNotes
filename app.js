@@ -17,7 +17,7 @@ let session     = require('express-session');
 let sqlsess     = require('express-mysql-session');
 let exphbs		= require('express-handlebars')
 let mysql		= require('mysql');
-let email       = require('nodemailer');
+let nodemailer  = require('nodemailer');
 
 let port     	= process.env.PORT || 8080;
 let app			= express();
@@ -115,5 +115,5 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./app/database.js')(db);
-require('./app/email.js')(email, db);
-require('./app/routes.js')(app, io, db, email, passport);
+require('./app/email.js')(nodemailer, db);
+require('./app/routes.js')(app, io, db, nodemailer, passport);
