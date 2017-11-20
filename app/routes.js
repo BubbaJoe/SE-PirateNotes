@@ -8,30 +8,41 @@
 
 */
 
-let fs = require('fs');
-let path = require('path');
+let fs = require('fs')
+let path = require('path')
 
-let referenceLink = [];
+// referenceLink = [user.ip, (the last link they requested before session was lost) ]
+let referenceLink = []
+let verifyId = []
 
 // Express, Socket.IO, MySQL, NodeMailer and Passport
 module.exports = (app, io, db, nm, pp) => {
 
-    app.get('/follow/:cid', () => {
+    app.get('/follow_course/:cid', (req,res) => {
         // follow course
         if(req.isAuthenticated()) {
-            req.user.id
         }
     })
 
-    app.get('/forgot', () => {
+    app.get('/follow_department/:did', (req,res) => {
+        // follow department
+        if(req.isAuthenticated()) {
+        }
+    })
+
+    app.post('/forgot', (req,res) => {
         //only for forgotten passwords
     })
 
-    app.get('/tos', () => {
+    app.post('/password', (req,res) => {
+        //only for forgotten passwords
+    })
+
+    app.get('/tos', (req,res) => {
         // send tos doc
     })
 
-    app.get('/verify/:uid', () => {
+    app.get('/verify/:uid', (req,res) => {
         // 3 cases!
         // The user id is not found, "User not found"
         // The user is already verified, "You are already verified"
@@ -39,28 +50,28 @@ module.exports = (app, io, db, nm, pp) => {
     })
     
     app.get('/profile',  (req,res) => {
-        res.redirect("/");
-    });
+        res.redirect("/")
+    })
 
     app.get('/department', (req,res) => {
         res.render("department")
-    });
+    })
 
     app.get('/audit', (req,res) => {
         if(req.isAuthenticated()) {
-            if (req.user.acc_type == 'admin' || req.user.acc_type == 'admin')
+            if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod')
                 res.render("audit")
             else res.send('Unauthorized')
         } else {
-            referenceLink[req.ip] = req.url;
-            res.redirect('/');
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
         }
-    });
+    })
 
     app.get('/course/:course_id', (req,res) => {
-        course_id = req.params.course_id;
+        course_id = req.params.course_id
         if(req.isAuthenticated()) {
-            let course, posts;
+            let course, posts
             getCoursePosts( course_id ).then( results => posts = results )
             .then(() => getCourse( course_id )
             .then( results => course = results[0] )
@@ -71,89 +82,120 @@ module.exports = (app, io, db, nm, pp) => {
                 })
             }))
         } else {
-            referenceLink[req.ip] = req.url;
-            res.redirect('/');
-            return;
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+            return
         }
-    });
+    })
 
     app.get('/profile/:uid', (req,res) => {
-        uid = req.params.uid;
+        uid = req.params.uid
         if(req.isAuthenticated())
         if(uid == req.user.id) res.redirect('/')
-        else res.send(uid);
+        else res.send(uid)
     })
 
     app.get('/file/:file_id', (req,res) => {
-        file_id = req.params.file_id;
+        file_id = req.params.file_id
         if(req.isAuthenticated()) {
-            let fileData
+            let fileData, path
             getFile(file_id)
-            .then( data => {
-                console.log(data)
+            .then( f => {
+                path = './temp_uploads/' + (f.file_name || '')
+                if(f) fs.writeFile(path, f.file_data, (err) => res.download(path) )
+                setTimeout(() => fs.unlinkSync(path), 3000)
             })
         } else {
-            referenceLink[req.ip] = req.url;
-            res.redirect('/');
-            return;
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+            return
         }
-    });
+    })
 
     app.get('/search', function (req,res) {
         if(req.isAuthenticated()) {
-            res.render('search-blank',{})
+            res.render('search-blank',{
+
+            })
         } else {
-            referenceLink[req.ip] = req.url;
-            res.redirect('/');
-            return;
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+            return
         }
-    });
+    })
 
     app.post('/search', function (req,res) {
-        console.log(req.fields)
         if(req.isAuthenticated())
             if(req.fields.q != undefined) {
-                wordArr = req.fields.q.split(" ");
-                courseArr = []
-                departmentArr = []
-                fileArr.forEach( (word, i) => {
+                let wordArr = req.fields.q.split(" "),
+                courseArr = [],
+                departmentArr = [],
+                lastCourseArr = [],
+                lastDepartmentArr = []
+                wordArr.forEach( (word, i) => {
+                    courseArr = []
+                    departmentArr = []
                     searchCourse(word)
-                    .then( (course) => dataArr.push(course) )
+                    .then( (courses) => {
+                        courses.forEach( (course, i) => {
+                            if(!courseArr.find((c) => { return (c.id == course.id) } ))
+                                courseArr.push(course)
+                        } )
+                    } )
                     .then( () => searchDepartment(word)
-                    .then( (department) => departmentArr.push(department) ) )
+                    .then( (departments) => {
+                        departments.forEach( (department, i) => {
+                            if(!departmentArr.find((d) => { return (d.id == department.id) } ))
+                                departmentArr.push(department)
+                        } )
+                    } ) )
                     .then( () => {
-                        //end of the last loop
-                        if(i == word.length)
-                            res.render("search",{
+                        if(lastCourseArr.length > 0) {
+                            temp = courseArr.filter(({ id: id1 }) => 
+                                lastCourseArr.every(({ id: id2 }) => id1 !== id2 ))
+                            courseArr = courseArr.concat(temp)
+                            console.log(courseArr)
+                        } else  {
+                            lastCourseArr = courseArr
+                        }
+                        if(lastDepartmentArr.length > 0) {
+                            temp = departmentArr.filter(({ id: id1 }) => 
+                                lastDepartmentArr.every(({ id: id2 }) => id1 !== id2 ))
+                            departmentArr = departmentArr.concat(temp)
+                        } else {
+                            lastDepartmentArr = departmentArr
+                        }
+                        if(i == wordArr.length-1)
+                            res.render("search", {
                                 courses: courseArr,
-                                department: departmentArr
-                            });
+                                departments: departmentArr
+                            })
                     })
                 })
             }
         else {
-            referenceLink[req.ip] = req.url;
-            res.redirect('/');
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
         }
-    });
+    })
 
     app.get('/profile_image/:uid', (req,res) => {
-        uid = req.params.uid;
+        uid = req.params.uid
         if(req.isAuthenticated())
             getProfilePictureByID(uid,(result) => {
                 if(result[0].profile_image) {
-                    res.setHeader('Content-disposition', 'attachment; filename=profile.svg');
-                    res.send(result[0].profile_image);
-                } else res.status(404).end();
-            });
-    });
+                    res.setHeader('Content-disposition', 'attachment filename=profile.svg')
+                    res.send(result[0].profile_image)
+                } else res.status(404).end()
+            })
+    })
     
     app.get('/', (req,res) => {
         if(req.isAuthenticated() && referenceLink[req.ip]) {
             res.redirect(referenceLink[req.ip])
             delete referenceLink[req.ip]
         } else if(req.isAuthenticated()) {
-            let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = [];
+            let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = []
             getUserCourses( req.user.id ).then( results => courses = results )
             .then(() => getUserPosts( req.user.id )
             .then( results => myPosts = results )
@@ -185,24 +227,23 @@ module.exports = (app, io, db, nm, pp) => {
     app.get('/login',(req,res) => res.redirect('/') )
     app.post('/login', (req, res) => {
         let email = req.fields.email,
-        password = req.fields.password;
+        password = req.fields.password
         login(email,password)
         .then( result => {
             if(result.length > 0) {
-                id = result[0].id;
+                id = result[0].id
                 req.login(id, (err) => {
-                    if(err)console.log(err);
+                    if(err)console.log(err)
                     console.log('...')
-                    res.redirect('/');
-                });
+                    res.redirect('/')
+                })
             } else {
                 req.flash('alert alert-danger',
-                    '<b>Sorry!</b> Incorrect login information.');
-                res.redirect('/');
-                console.log('...')
+                    '<b>Sorry!</b> Incorrect login information.')
+                res.redirect('/',{ message: req.flash('Incorrect login information') })
             }
-        });
-    });
+        })
+    })
 
     app.get('/register', (req,res) => res.redirect('/') )
     app.post('/register', (req,res) => {
@@ -226,17 +267,17 @@ module.exports = (app, io, db, nm, pp) => {
                     req.flash('alert alert-danger','Incorrect login information.')
                     res.redirect('/')
                 }
-            }); 
+            }) 
         } else {
             req.flash('alert alert-danger','Missing information')
             res.redirect('/')
         }
-    });
+    })
 
     app.get('/post',(req,res) => res.redirect('/') )
     app.post('/post', (req, res) => {
         if(req.isAuthenticated()) {
-            let fileArr = [];
+            let fileArr = []
             if(req.files.fileAttachments.length)
                 fileArr = req.files.fileAttachments
             else fileArr = [req.files.fileAttachments]
@@ -249,7 +290,7 @@ module.exports = (app, io, db, nm, pp) => {
             } )
 
             if(FileTooBig) {
-                req.flash('The file was too big (10M max)');
+                req.flash('The file was too big (10M max)')
                 res.redirect('/')
             } else if(fileArr.length > 5) {
                 req.flash('Too many files (5 files max)')
@@ -268,16 +309,16 @@ module.exports = (app, io, db, nm, pp) => {
             data = JSON.stringify(req.user,null,4)
         else data = "You are not authorized to view this data"
         res.set('Content-Type', 'application/json')
-        res.send(data);
+        res.send(data)
     })
     
     app.get('/logout', (req, res) => {
         if(req.isAuthenticated())
-            req.logout();
+            req.logout()
         res.redirect('/')
     })
 
     pp.serializeUser((user, done) => done(null, user) )
     
     pp.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ))
-};
+}

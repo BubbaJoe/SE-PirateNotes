@@ -1,3 +1,4 @@
+<!-- HTML Template by Joe Williams -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +19,9 @@
             background-position-x:center; 
             background-position-y:center;
         }
-        
+        h1, h2, h3, h4, h5 {
+			color: #592A8A;
+		}
         h5{
             font-weight: 400;
         }
@@ -46,18 +49,35 @@
         .confirmation-tabs-btn{
             position: absolute;
         }
+		.hide{
+			display:none;
+			max-width:0;
+			max-height:0;
+			right:0;
+			left:0;
+			top:0;
+			bottom:0;
+		}
     </style>
 </head>
 <body>
 <div class="container white z-depth-5">
-	<ul class="tabs purple">
+	<ul style="overflow:hidden;" class="tabs purple">
 		<li class="tab col s3"><a class="white-text active" href="#login">login</a></li>
 		<li class="tab col s3"><a class="white-text" href="#register">register</a></li>
+		<li class="tab hide"><a class="hide" href="#newpass"></a></li>
+		<li class="tab hide"><a class="hide" href="#thankyou"></a></li>
+		<li class="tab hide"><a class="hide" href="#forgotpass"></a></li>
+		<li class="tab hide"><a class="hide" href="#verified"></a></li>
 	</ul>
 	<div id="login" class="col s12">
 		<form class="col s12" method="post" action="/login">
 			<div class="form-container login">
-				<h3 style="" class="purple-text center"><img src="/images/ECU_department.jpg" class="left center" style="height:100px;margin-bottom:20px;display:inline-block;vertical-align:middle;">Pirate Notes</h3>
+				<h3 align="center" style="margin:0 0 0 0" class="center">Pirate Notes</h3>
+				<img src="/images/ECU_department.jpg" class="center"
+					style="height:100px;left:50;margin-bottom:10px;    display: block;
+    margin-left: auto;
+    margin-right: auto;">
 				<div class="row">
 					<div class="input-field col s12">
 						<input name="email" type="email" class="validate">
@@ -75,14 +95,11 @@
 					<button class="btn waves-effect waves-light purple" type="submit">Login</button>
 					<br>
 					<br>
-					<a href="forgot">Can't remember password?</a>
-					<p style='color:red'>{{> flash }}</p>
+					<a href="#forgotpass">Can't remember password?</a>
+					{{> flash }}
 				</center>
 			</div>
 		</form>
-		{{#each messages}}
-			<div class="alert alert-danger">{{this}}</div>
-		{{/each}}
 	</div>
 	<div id="register" class="col s12">
 		<form class="col s12"  method="post" action="/register">
@@ -121,9 +138,68 @@
 				</div>
 				<center>
 					<button class="btn waves-effect waves-light purple" name="Register" type="submit">Register</button>
+					{{> flash }}
 				</center>
 			</div>
 		</form>
+	</div>
+
+	<div id="thankyou" class="col s12">
+		<center>
+			<p style="height:100px"><h5>Thank you for Registering!</h5></p>
+			<p>Please check you email to verify your account!</p>
+		</center>
+	</div>
+
+	<div id="verified" class="col s12">
+		<center>
+			<p style="height:100px"><h5>You have verified your account!</h5></p>
+			<p>Click <a href="/">here</a> to Log in</p>
+		</center>
+	</div>
+
+	<div id="forgotpass" class="col s12">
+		<div class="form-container register">
+			<form class="col s12" method="post" action="/forgot">
+				<div class="row">
+					<p><h5>Please enter your email</h5></p>
+					<div class="input-field col s12">
+						<input name="email" type="email" class="validate">
+						<label for="email">Email</label>
+					</div>
+					<br>
+					<center>
+						<button style="margin-top:15px" class="btn waves-effect waves-light purple" name="Register" type="submit">Find Password</button>
+						{{> flash }}
+					</center>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="newpass" class="col s12">
+		<div class="form-container register">
+			<form class="col s12" method="post" action="/forgot">
+				<div class="row">
+					<p><h5>Please enter your new password</h5></p>
+					<div class="input-field col s12">
+						<center>
+						<input name="password" type="password" class="validate">
+						<label for="password">Password</label></center>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input name="password-confirm" type="password" class="validate">
+						<label for="password-confirm">Confirm</label>
+					</div>
+				</div>
+					<center>
+						<button style="margin-top:15px" class="btn waves-effect waves-light purple" name="Register" type="submit">Change Password</button>
+						{{> flash }}
+					</center>
+			</form>
+		</div>
 	</div>
 </div>
 </body>

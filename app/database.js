@@ -72,7 +72,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from file'+
             ' where id = ?',[file_id])
-            .then(result => resolve(result))
+            .then(result => resolve(result[0]))
             .catch(err => console.log(err))
         } )
     }
@@ -199,7 +199,9 @@ module.exports = (db) => {
 
     searchCourse = (word) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('select * from course where course_name like \'%?%\' or dept_abbr like \'%?%\' or course_num like \'%?%\'',[word.toLowerCase()])
+            word = '%' + word + '%';
+            db.query('select * from course where course_name like ? or dept_abbr like ? or course_num like ?',
+            [word.toLowerCase(), word.toLowerCase(), word.toLowerCase()])
             .then(result => resolve(result))
             .catch(err => console.log(err))
         } )
@@ -207,7 +209,9 @@ module.exports = (db) => {
 
     searchDepartment = (word) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('select * from department where dept_name like \'%?%\' or dept_abbr like \'%?%\'',[word.toLowerCase()])
+            word = '%' + word + '%';
+            db.query('select * from department where dept_name like ? or dept_abbr like ?',
+            [word.toLowerCase(), word.toLowerCase()])
             .then(result => resolve(result))
             .catch(err => console.log(err))
         } )
@@ -241,7 +245,8 @@ module.exports = (db) => {
             .catch(err => console.log(err))
         } )
     }
-        // check if user is admin
+    
+    // check if user is admin
     checkIfAdmin = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('',[])

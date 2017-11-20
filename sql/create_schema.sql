@@ -27,7 +27,7 @@ create table user (
     primary key(id)
 );
 
-# notification(user_id,time,message,checked) - a gets a notification
+# notification
 create table notification (
     id varchar(32) not null,
     user_id varchar(32) not null,
@@ -81,7 +81,7 @@ create table file (
     foreign key(post_id) references post(id)
 );
 
-# likes(user_id,post_id) - a user likes a post
+# likes
 create table liked (
     user_id varchar(32) not null,
     post_id varchar(32) not null,
@@ -90,7 +90,7 @@ create table liked (
     foreign key (post_id) references post(id)
 );
 
-# saved(user_id,post_id) - a user saved a post
+# saved
 create table saved (
     user_id varchar(32) not null,
     post_id varchar(32) not null,
@@ -99,8 +99,8 @@ create table saved (
     foreign key (post_id) references post(id)
 );
 
-# followed(user_id,course_id) - a user is following a course
-create table followed (
+# followed
+create table followed_course (
     user_id varchar(32) not null,
     course_id varchar(32) not null,
     primary key(user_id, course_id),
@@ -108,7 +108,16 @@ create table followed (
     foreign key (course_id) references course(id)
 );
 
-# reported_post(user_id,post_id,reason) - a user reports a post
+# followed
+create table followed_department (
+    user_id varchar(32) not null,
+    dept_id varchar(32) not null,
+    primary key(user_id, course_id),
+    foreign key (user_id) references user(id),
+    foreign key (dept_id) references department(id)
+);
+
+# reported_post
 create table reported_post (
     user_id varchar(32) not null,
     post_id varchar(32) not null,
@@ -118,7 +127,7 @@ create table reported_post (
     foreign key (post_id) references post(id)
 );
 
-# reported_user(user_id,user_id,reason) - a user reports a user
+# reported_user
 create table reported_user (
     user_id_1 varchar(32) not null,
     user_id_2 varchar(32) not null,
@@ -128,7 +137,10 @@ create table reported_user (
     foreign key (user_id_2) references user(id)
 );
 
-# sessions (auto-generated table for user sessions)
-# session_id varchar(128) not null
-# expires int(11) not null 
-# data text
+# reported_bug
+create table reported_bug (
+    user_id varchar(32) not null,
+    reason text not null,
+    primary key(user_id),
+    foreign key (user_id) references user(id)
+);

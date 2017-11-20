@@ -1,3 +1,4 @@
+<!-- HTML Template by w3schools, Edited by Joe Williams -->
 <!DOCTYPE html>
 <html>
 <title>Pirate Notes</title>
@@ -73,30 +74,16 @@ hr { border: 1px thin;}
     <div>
         <p align="center"style="margin-top:0" class="w3-opacity">Results</p>
     </div>
-      <div class="w3-container w3-theme-d2 w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
-        <span class="w3-right w3-opacity">Department</span>
-        <h4 style="margin-bottom:0px">Computer Science</h4><br>
-        <hr class="w3-theme-d4" style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <span class="w3-right w3-opacity">Course</span>
-        <h4 style="margin-bottom:0px">CSCI 3030</h4><br>
-        <h5 align="center">Software Engineering I</h5>
-        <hr style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <span class="w3-right w3-opacity">Course</span>
-        <h4 style="margin-bottom:0px">CSCI 4710</h4><br>
-        <h5 align="center">Web Applications</h5>
-        <hr style="margin-top:10px">
-        <button onclick="gotoUrl('/')" type="button" class="w3-button w3-theme w3-margin-bottom w3-left"> &nbsp;View</a> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
+      {{#each departments}}
+        {{> search_dept}}
+      {{else}}
+        <p> No Matching Departments </p>
+      {{/each}}
+      {{#each courses}}
+        {{> search_course}}
+      {{else}}
+        <p> No Matching Courses </p>
+      {{/each}}
     </div>
     <div class="w3-col m2" style="float:left">
       <div class="w3-card-2 w3-round w3-white w3-center">

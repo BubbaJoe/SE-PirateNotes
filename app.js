@@ -46,20 +46,17 @@ app.engine('hbs',exphbs({
             if (options.hash.value === conditional)
                 return options.fn(this); else return options.inverse(this);
         },
-        'timeAgo': () => {
-            
+        'timeAgo': (options) => {
             then = Date.parse(options.hash.time)
             
-            var diffMs = Math.abs(then - (new Date())),
+            var diffMs = Math.abs(then - new Date()),
             diffDays = Math.floor(diffMs / 86400000),
             diffHrs = Math.floor((diffMs % 86400000) / 3600000),
-            diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000),
-            diffSecs = Math.round((((diffMs % 86400000) % 3600000) / 60000) / 60000)
-
-            if (diffDays) return(diffDays + " days ago")
-            else if (diffHrs) return(diffHrs + " hours ago")
-            else if(diffMins) return(diffMins + " minutes ago")
-            else if (diffSecs) return(diffSecs + " minutes ago")
+            diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000)
+            
+            if (diffDays) return diffDays + ((diffDays == 1)?(" day ago"):(" days ago"))
+            else if (diffHrs) return diffHrs + ((diffHrs == 1)?(" hour ago"):(" hours ago"))
+            else if(diffMins) return diffMins + ((diffMins == 1)?(" minute ago"):(" minutes ago"))
             else return("Just now")
         }
     }

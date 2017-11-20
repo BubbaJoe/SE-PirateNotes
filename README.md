@@ -20,10 +20,12 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 
 ## TO DO: 
 
-implement Flash Messages
-implement Saving Posts/Liking Posts 
-implement Search Features
-create Admin Page / Mod Page
+finish Flash Messages
+
+implement socket.io for Saving Posts/Liking Posts 
+
+finish Search Features
+
+finish Admin Page / Mod Page
+
 create Account Settings Page
-implement Notifications
-Then DONE!!!!!
