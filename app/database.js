@@ -81,7 +81,7 @@ module.exports = (db) => {
     getUserCourses = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from course, (select' +
-            ' * from followed where user_id = ?) c ' +
+            ' * from followed_course where user_id = ?) c ' +
             'where course.id = c.course_id', [user_id])
             .then(result => resolve(result))
             .catch(err => console.log(err))
@@ -200,7 +200,7 @@ module.exports = (db) => {
     searchCourse = (word) => {
         return new Promise( ( resolve, reject ) => {
             word = '%' + word + '%';
-            db.query('select * from course where course_name like ? or dept_abbr like ? or course_num like ?',
+            db.query('select distinct * from course where course_name like ? or dept_abbr like ? or course_num like ?',
             [word.toLowerCase(), word.toLowerCase(), word.toLowerCase()])
             .then(result => resolve(result))
             .catch(err => console.log(err))
@@ -210,7 +210,7 @@ module.exports = (db) => {
     searchDepartment = (word) => {
         return new Promise( ( resolve, reject ) => {
             word = '%' + word + '%';
-            db.query('select * from department where dept_name like ? or dept_abbr like ?',
+            db.query('select distinct * from department where dept_name like ? or dept_abbr like ?',
             [word.toLowerCase(), word.toLowerCase()])
             .then(result => resolve(result))
             .catch(err => console.log(err))
@@ -285,7 +285,7 @@ module.exports = (db) => {
 
     followCourse = (user_id,course_id) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('insert into followed (user_id,course_id) values (?, ?)',
+            db.query('insert into followed_course (user_id,course_id) values (?, ?)',
             [user_id, course_id])
             .then(result => resolve())
             .catch(err => console.log(err))
@@ -293,7 +293,7 @@ module.exports = (db) => {
     }
     unfollowCourse = (user_id,course_id) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('delete from followed where user_id = ? and course_id = ?',
+            db.query('delete from followed_course where user_id = ? and course_id = ?',
             [user_id, course_id])
             .then(result => resolve())
             .catch(err => console.log(err))

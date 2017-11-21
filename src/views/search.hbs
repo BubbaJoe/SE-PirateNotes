@@ -48,11 +48,12 @@ hr { border: 1px thin;}
         <div class="w3-container">
           <p>Result Data</p>
           <p>
-            <span class="w3-tag w3-small w3-theme-d5">3700</span>
-            <span class="w3-tag w3-small w3-theme-l5">cscis</span>
+            {{#each wordArray}}
+              <span class="w3-tag w3-small w3-theme-d5">{{this.word}} | {{this.numResults}}</span>
+            {{/each}}
           </p>
           <form id="form2" method="post" action="/search" onsubmit="">
-            <input style="display:none" name='q' value="" ></input>
+            <input style="display:none" name='q' value="{{ searchString }}" ></input>
             <input name='course' class="w3-check" type="checkbox" checked>&nbsp;Courses<br>
             <input name='department' class="w3-check" type="checkbox" checked>&nbsp;Departments<br>
             <input name='post' class="w3-check" type="checkbox" >&nbsp;Posts<br>
@@ -66,8 +67,8 @@ hr { border: 1px thin;}
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
         </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
+        <p><strong>Hey {{user.firstname}}!</strong></p>
+        <p>Are you finding the courses you are looking for?</p>
       </div>
     </div>
     <div class="w3-col m6">
@@ -77,12 +78,12 @@ hr { border: 1px thin;}
       {{#each departments}}
         {{> search_dept}}
       {{else}}
-        <p> No Matching Departments </p>
+        <p align="center"style="margin-top:0" class="w3-opacity"> No Matching Departments </p>
       {{/each}}
       {{#each courses}}
         {{> search_course}}
       {{else}}
-        <p> No Matching Courses </p>
+        <p align="center"style="margin-top:0" class="w3-opacity"> No Matching Courses </p>
       {{/each}}
     </div>
     <div class="w3-col m2" style="float:left">

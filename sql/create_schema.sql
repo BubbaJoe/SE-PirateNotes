@@ -112,7 +112,7 @@ create table followed_course (
 create table followed_department (
     user_id varchar(32) not null,
     dept_id varchar(32) not null,
-    primary key(user_id, course_id),
+    primary key(user_id, dept_id),
     foreign key (user_id) references user(id),
     foreign key (dept_id) references department(id)
 );

@@ -57,12 +57,30 @@ values ('40bcee06412f47908691e7fe52102199', 'e11227b2f84d4175a16abbc2cf2ee3df');
 insert into followed_course (user_id, course_id)
 values ('40bcee06412f47908691e7fe52102199', '4b130312720747d9996f3122f0d7ea56');
 
+insert into followed_course (user_id, course_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '42ae3034b4284f87af2539597aa4d614');
+insert into followed_course (user_id, course_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '33897a56bee3475bbef1682325327149');
+insert into followed_course (user_id, course_id)
+values ('2d29c09cb9be4293ac690b75531e1489', 'e11227b2f84d4175a16abbc2cf2ee3df');
+insert into followed_course (user_id, course_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '4b130312720747d9996f3122f0d7ea56');
+
 # Followed Departments
-insert into followed_department (user_id, course_id)
+insert into followed_department (user_id, dept_id)
 values ('40bcee06412f47908691e7fe52102199', '6dae5f4c4bbe49f4ba4fd5312d61020a');
-insert into followed_department (user_id, course_id)
+insert into followed_department (user_id, dept_id)
 values ('40bcee06412f47908691e7fe52102199', '26ad98fd69524a9e98a2c1a17297b252');
-insert into followed_department (user_id, course_id)
+insert into followed_department (user_id, dept_id)
 values ('40bcee06412f47908691e7fe52102199', '7d4dd624d51647beb5b9023573f0d0fe');
-insert into followed_department (user_id, course_id)
+insert into followed_department (user_id, dept_id)
 values ('40bcee06412f47908691e7fe52102199', '45457b5021de4c878019514e70ef21bc');
+
+insert into followed_department (user_id, dept_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '6dae5f4c4bbe49f4ba4fd5312d61020a');
+insert into followed_department (user_id, dept_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '26ad98fd69524a9e98a2c1a17297b252');
+insert into followed_department (user_id, dept_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '7d4dd624d51647beb5b9023573f0d0fe');
+insert into followed_department (user_id, dept_id)
+values ('2d29c09cb9be4293ac690b75531e1489', '45457b5021de4c878019514e70ef21bc');

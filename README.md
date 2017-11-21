@@ -19,13 +19,12 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 
 
 ## TO DO: 
+implement socket.io for Saving Posts/Liking Posts
+
+create Account Settings Page
 
 finish Flash Messages
 
-implement socket.io for Saving Posts/Liking Posts 
+finish Search Features...
 
-finish Search Features
-
-finish Admin Page / Mod Page
-
-create Account Settings Page
+finish Audit Page (Ban, Decline Posts, Read Reports)

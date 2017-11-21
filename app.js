@@ -48,12 +48,10 @@ app.engine('hbs',exphbs({
         },
         'timeAgo': (options) => {
             then = Date.parse(options.hash.time)
-            
             var diffMs = Math.abs(then - new Date()),
             diffDays = Math.floor(diffMs / 86400000),
             diffHrs = Math.floor((diffMs % 86400000) / 3600000),
             diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000)
-            
             if (diffDays) return diffDays + ((diffDays == 1)?(" day ago"):(" days ago"))
             else if (diffHrs) return diffHrs + ((diffHrs == 1)?(" hour ago"):(" hours ago"))
             else if(diffMins) return diffMins + ((diffMins == 1)?(" minute ago"):(" minutes ago"))
@@ -115,12 +113,12 @@ let sessionStore = new SqlSession(options);
 
 app.use(session({
     name: 'piratenotes',
-    key: '7586de50ba81-11e7-86b6-1d6eec7d1af9',
-    secret: 'aff85184-4a74-488f-97ea-c5da3a500cfa',
+    key: '7586de50ba8111e786b61d6eec7d1af9',
+    secret: 'aff851844a74488f97eac5da3a500cfa',
     store: sessionStore,
     resave: true,
     saveUninitialized: true,
-    cookie: {maxAge: 3600000/2}
+    cookie: {secure: false}
 }));
 
 // PASSPORT

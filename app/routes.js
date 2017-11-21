@@ -18,12 +18,14 @@ let verifyId = []
 // Express, Socket.IO, MySQL, NodeMailer and Passport
 module.exports = (app, io, db, nm, pp) => {
 
+    // Maybe turned into a web socket for faster communication
     app.get('/follow_course/:cid', (req,res) => {
         // follow course
         if(req.isAuthenticated()) {
         }
     })
 
+    // Maybe turned into a web socket for faster communication
     app.get('/follow_department/:did', (req,res) => {
         // follow department
         if(req.isAuthenticated()) {
@@ -54,13 +56,20 @@ module.exports = (app, io, db, nm, pp) => {
     })
 
     app.get('/department', (req,res) => {
-        res.render("department")
+        res.render("department",{
+            user: req.user
+        })
+        req.login(req.user.id,()=>{})
     })
 
     app.get('/audit', (req,res) => {
         if(req.isAuthenticated()) {
-            if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod')
-                res.render("audit")
+            if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod') {
+                res.render("audit",{
+                    user: req.user
+                })
+                req.login(req.user.id,()=>{})
+            }
             else res.send('Unauthorized')
         } else {
             referenceLink[req.ip] = req.url
@@ -77,9 +86,11 @@ module.exports = (app, io, db, nm, pp) => {
             .then( results => course = results[0] )
             .then(() => {
                 res.render('course', {
+                    user: req.user,
                     course: course,
                     posts: posts
                 })
+                req.login(req.user.id,()=>{})
             }))
         } else {
             referenceLink[req.ip] = req.url
@@ -115,7 +126,7 @@ module.exports = (app, io, db, nm, pp) => {
     app.get('/search', function (req,res) {
         if(req.isAuthenticated()) {
             res.render('search-blank',{
-
+                user: req.user
             })
         } else {
             referenceLink[req.ip] = req.url
@@ -124,56 +135,63 @@ module.exports = (app, io, db, nm, pp) => {
         }
     })
 
+    // Not usable
+    innerJoin = (arr1, arr2, callback) => {
+        arr = []
+        for(i = 0; i < arr1.length; i++)
+            for(j = 0; j < arr2.length; j++) {
+                if (callback(arr1[i],arr2[j]))
+                    arr.push(arr1[i])
+            }
+        return arr;
+    }
+
     app.post('/search', function (req,res) {
-        if(req.isAuthenticated())
+        if(req.isAuthenticated()) {
             if(req.fields.q != undefined) {
                 let wordArr = req.fields.q.split(" "),
                 courseArr = [],
                 departmentArr = [],
                 lastCourseArr = [],
                 lastDepartmentArr = []
-                wordArr.forEach( (word, i) => {
-                    courseArr = []
-                    departmentArr = []
+                wordObjArray = []
+                wordArr.forEach( (word, count) => {
+                    if(word !== ' ') {
+                        wordObj = {word: word, numResults: 0}
+                        wordObjArray.push(wordObj)
+                    }
                     searchCourse(word)
                     .then( (courses) => {
+                        wordObjArray[wordObjArray.indexOf(wordObjArray.find((e) => e.word == word ))].numResults += courses.length
                         courses.forEach( (course, i) => {
-                            if(!courseArr.find((c) => { return (c.id == course.id) } ))
+                            if(!courseArr.find((c) => c.id == course.id ))
                                 courseArr.push(course)
                         } )
                     } )
-                    .then( () => searchDepartment(word)
+                    .then( () =>
+                    searchDepartment(word)
                     .then( (departments) => {
+                        wordObjArray[wordObjArray.indexOf(wordObjArray.find((e) => e.word == word ))].numResults += departments.length
                         departments.forEach( (department, i) => {
-                            if(!departmentArr.find((d) => { return (d.id == department.id) } ))
+                            if(!departmentArr.find((d) => d.id == department.id ))
                                 departmentArr.push(department)
                         } )
-                    } ) )
+                    } )
                     .then( () => {
-                        if(lastCourseArr.length > 0) {
-                            temp = courseArr.filter(({ id: id1 }) => 
-                                lastCourseArr.every(({ id: id2 }) => id1 !== id2 ))
-                            courseArr = courseArr.concat(temp)
-                            console.log(courseArr)
-                        } else  {
-                            lastCourseArr = courseArr
-                        }
-                        if(lastDepartmentArr.length > 0) {
-                            temp = departmentArr.filter(({ id: id1 }) => 
-                                lastDepartmentArr.every(({ id: id2 }) => id1 !== id2 ))
-                            departmentArr = departmentArr.concat(temp)
-                        } else {
-                            lastDepartmentArr = departmentArr
-                        }
-                        if(i == wordArr.length-1)
+                        if(count == wordArr.length-1) {
                             res.render("search", {
+                                wordArray: wordObjArray,
+                                searchString: req.fields.q,
+                                user: req.user,
                                 courses: courseArr,
                                 departments: departmentArr
                             })
-                    })
+                            req.login(req.user.id,()=>{})
+                        }
+                    }))
                 })
             }
-        else {
+        } else {
             referenceLink[req.ip] = req.url
             res.redirect('/')
         }
@@ -214,6 +232,7 @@ module.exports = (app, io, db, nm, pp) => {
                     savedPosts: savedPosts,
                     notifications: notifications
                 })
+                req.login(req.user.id,()=>{})
             })
             )
         } else {
