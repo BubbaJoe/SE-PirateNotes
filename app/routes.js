@@ -55,11 +55,24 @@ module.exports = (app, io, db, nm, pp) => {
         res.redirect("/")
     })
 
-    app.get('/department', (req,res) => {
-        res.render("department",{
-            user: req.user
-        })
-        req.login(req.user.id,()=>{})
+    app.get('/department/:did', (req,res) => {
+        if(req.isAuthenticated()) {
+            getUserCourses( req.user.id )
+            .then( (courses) =>
+            getDepartment( req.params.did )
+            .then( (department) => 
+            getDepartmentCourses(req.params.did)
+            .then( (_courses) => {
+                    res.render('department',{
+                        user: req.user,
+                        department: department,
+                        courses: courses,
+                        _courses: _courses
+                    })
+                    req.login(req.user.id,()=>{})
+                }
+            )))
+        }
     })
 
     app.get('/audit', (req,res) => {
@@ -81,9 +94,10 @@ module.exports = (app, io, db, nm, pp) => {
         course_id = req.params.course_id
         if(req.isAuthenticated()) {
             let course, posts
-            getCoursePosts( course_id ).then( results => posts = results )
+            getCoursePosts( course_id )
+            .then( results => posts = results )
             .then(() => getCourse( course_id )
-            .then( results => course = results[0] )
+            .then( results => course = results )
             .then(() => {
                 res.render('course', {
                     user: req.user,
@@ -125,9 +139,13 @@ module.exports = (app, io, db, nm, pp) => {
 
     app.get('/search', function (req,res) {
         if(req.isAuthenticated()) {
-            res.render('search-blank',{
-                user: req.user
-            })
+            getUserCourses( req.user.id )
+            .then( (user_courses) => 
+                res.render('search-blank',{
+                    user: req.user,
+                    courses: user_courses
+                })
+            )
         } else {
             referenceLink[req.ip] = req.url
             res.redirect('/')
@@ -135,22 +153,12 @@ module.exports = (app, io, db, nm, pp) => {
         }
     })
 
-    // Not usable
-    innerJoin = (arr1, arr2, callback) => {
-        arr = []
-        for(i = 0; i < arr1.length; i++)
-            for(j = 0; j < arr2.length; j++) {
-                if (callback(arr1[i],arr2[j]))
-                    arr.push(arr1[i])
-            }
-        return arr;
-    }
-
     app.post('/search', function (req,res) {
         if(req.isAuthenticated()) {
             if(req.fields.q != undefined) {
                 let wordArr = req.fields.q.split(" "),
                 courseArr = [],
+                userCourses = []
                 departmentArr = [],
                 lastCourseArr = [],
                 lastDepartmentArr = []
@@ -177,14 +185,18 @@ module.exports = (app, io, db, nm, pp) => {
                                 departmentArr.push(department)
                         } )
                     } )
+                    .then( () => getUserCourses( req.user.id )
+                        .then( (user_courses) => userCourses = user_courses )
+                    )
                     .then( () => {
                         if(count == wordArr.length-1) {
                             res.render("search", {
                                 wordArray: wordObjArray,
                                 searchString: req.fields.q,
                                 user: req.user,
-                                courses: courseArr,
-                                departments: departmentArr
+                                courses: userCourses,
+                                _courses: courseArr,
+                                _departments: departmentArr
                             })
                             req.login(req.user.id,()=>{})
                         }
@@ -213,21 +225,21 @@ module.exports = (app, io, db, nm, pp) => {
             res.redirect(referenceLink[req.ip])
             delete referenceLink[req.ip]
         } else if(req.isAuthenticated()) {
-            let courses = [], myPosts = [], interests = [], notifications = [], savedPosts = []
+            let courses = [], departments, myPosts = [], interests = [], notifications = [], savedPosts = []
             getUserCourses( req.user.id ).then( results => courses = results )
             .then(() => getUserPosts( req.user.id )
             .then( results => myPosts = results )
-
+            .then( () => getUserDepartments( req.user.id )
+            .then( (depts) => departments = depts ))
             // .then(() => getUserSavedPosts( req.user.id )
             // .then( results => savedPosts = results )
-
             // .then(() => getUserNotifications( req.user.id )
             // .then( results => Notifications = results )
-
             .then(() => {
                 res.render('home', {
                     user: req.user,
                     courses: courses,
+                    departments: departments,
                     myPosts: myPosts,
                     savedPosts: savedPosts,
                     notifications: notifications

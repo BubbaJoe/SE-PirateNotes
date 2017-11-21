@@ -127,4 +127,14 @@ app.use(passport.session());
 
 require('./app/database.js')(db);
 require('./app/email.js')(nodemailer, db);
+
+db.on('error')
+.then( (err) => {
+    console.log(err.code,err)
+    //reset db connection
+    let db = new Database(options);
+    require('./app/database.js')(db);
+    require('./app/email.js')(nodemailer, db);
+})
+
 require('./app/routes.js')(app, io, db, nodemailer, passport);

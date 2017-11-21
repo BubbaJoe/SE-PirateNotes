@@ -20,6 +20,7 @@
     body{background:#555;}
     hr{ border: 1px thin;}
     .course-list {margin-bottom: 1px;margin-top: 1px;}
+    .department-list {margin-bottom:1px;margin-top:1px;font-size:5;}
     .search-wrapper {display: inline-block;}
     .search-input, .search-button {border:0;background-color: transparent;}
     .search-div {max-height: 50px;  width: 100%;margin: 0 auto;}
@@ -58,12 +59,20 @@
           </div>
           <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-pencil-square-o fa-fw w3-margin-right"></i>&nbsp; Followed Departments</button>
           <div id="Demo2" class="w3-hide w3-container">
+            {{#each departments}}
+              <button onclick="gotoUrl('/department/{{this.id}}')" class="w3-button w3-block w3-theme w3-left-align department-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_name}}</button>
+            {{else}}
             <p align="center"><i class="fa fa-exclamation-circle"></i>&nbsp; You aren't following any departments!</p>
+            {{/each}}
           </div>
           <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-bookmark fa-fw w3-margin-right"></i>&nbsp; Saved Posts</button>
           <div id="Demo3" class="w3-hide w3-container">
             <div class="w3-row-padding">
-                <p align="center"><i class="fa fa-exclamation-circle"></i>&nbsp; You don't have any saved posts!</p>
+            {{#each savedPosts}}
+              <button onclick="gotoUrl('/course/{{this.id}}')" class="w3-button w3-block w3-theme w3-left-align course-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_abbr}} {{this.course_num}}</button>
+            {{else}}
+              <p align="center"><i class="fa fa-exclamation-circle"></i>&nbsp; You don't have any saved posts!</p>
+            {{/each}}
             </div>
           </div>
         </div>      
@@ -94,14 +103,7 @@
       {{/each}}
     </div>
     <div class="w3-col m2">
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Upcoming Events:</p>
-          <img src="images/ECU_department.jpg" style="width:50%;">
-          <p><strong>Turn-in project!!!</strong></p>
-          <p>Nov. 27, 2017</p>
-        </div>
-      </div>
+      {{> event }}
       <br>
       <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
         <p>ADS</p>

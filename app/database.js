@@ -88,6 +88,28 @@ module.exports = (db) => {
         } )
     }
 
+    // get the courses from specifed department
+    getDepartmentCourses = (dept_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from course, (select' +
+            ' * from department where id = ?) d' +
+            ' where course.dept_abbr = d.dept_abbr', [dept_id])
+            .then(result => resolve(result))
+            .catch(err => console.log(err))
+        } )
+    }
+
+    // get the courses that the user is following
+    getUserDepartments = (user_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from department, (select' +
+            ' * from followed_department where user_id = ?) c ' +
+            'where department.id = c.dept_id', [user_id])
+            .then(result => resolve(result))
+            .catch(err => console.log(err))
+        } )
+    }
+
     // Posts that the user has created that are accepted
     getAcceptedUserPosts = (user_id) => {
         return new Promise( ( resolve, reject ) => {
@@ -163,9 +185,17 @@ module.exports = (db) => {
     getCourse = (course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from course ' +
-            'where course.id = ?', 
-            [course_id])
-            .then(result => resolve(result))
+            'where id = ?', [course_id])
+            .then(result => resolve(result[0]))
+            .catch(err => console.log(err))
+        } )
+    }
+
+    getDepartment = (dept_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select * from department ' +
+            'where id = ?', [dept_id])
+            .then(result => resolve(result[0]))
             .catch(err => console.log(err))
         } )
     }

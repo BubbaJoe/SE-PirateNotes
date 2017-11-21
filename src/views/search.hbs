@@ -75,12 +75,12 @@ hr { border: 1px thin;}
     <div>
         <p align="center"style="margin-top:0" class="w3-opacity">Results</p>
     </div>
-      {{#each departments}}
+      {{#each _departments}}
         {{> search_dept}}
       {{else}}
         <p align="center"style="margin-top:0" class="w3-opacity"> No Matching Departments </p>
       {{/each}}
-      {{#each courses}}
+      {{#each _courses}}
         {{> search_course}}
       {{else}}
         <p align="center"style="margin-top:0" class="w3-opacity"> No Matching Courses </p>
@@ -124,6 +124,12 @@ hr { border: 1px thin;}
   </div>
 </div>
 <br>
+<script>
+  function gotoUrl(url) {
+      if(typeof url != "string") return false;
+      window.location.href = url;
+  }
+</script>
 <footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
   <h5> Pirate Notes &copy; 2017</h5>
 </footer>

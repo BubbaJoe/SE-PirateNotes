@@ -25,6 +25,4 @@ create Account Settings Page
 
 finish Flash Messages
 
-finish Search Features...
-
 finish Audit Page (Ban, Decline Posts, Read Reports)

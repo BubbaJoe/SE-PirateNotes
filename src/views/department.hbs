@@ -11,19 +11,16 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<!-- THEME -->
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
-.course-list {margin-bottom: 1px}
-hr{ border: 1px thin;}
+  html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+  .course-list {margin-bottom: 1px}
+  hr{ border: 1px thin;}
 </style>
 <body class="w3-theme-l5">
-
 {{> navbar }}
-
 <div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
   <div class="w3-row">
     <div class="w3-col m9" style="margin-left:25px; width:91%;">
@@ -33,11 +30,9 @@ hr{ border: 1px thin;}
          <button style="margin-top:10px" class="w3-button w3-right">
           <span class="w3-right w3-opacity"><i class="fa fa-ellipsis-v"></i></span>
          </button>
-         <h4 class="w3-center">Department: Computer Science (CSCI)</h4>
-         
+         <h4 class="w3-center">Department:{{department.dept_name}} ({{department.dept_abbr}})</h4>
          <p class="w3-center"><img src="/images/ECU_department.jpg"style="height:106px;"></p>
          <hr>
-         <p class="w3-center">{{user.desc_text}}</p>
          <div>
             <button class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Department</button>
          </div>
@@ -45,8 +40,7 @@ hr{ border: 1px thin;}
       </div>
       <br>
     </div>
-    <div class="w3-col m3" style="margin-left:20px">      
-      <!-- Interests --> 
+    <div class="w3-col m3" style="margin-left:20px">
       <div class="w3-card-2 w3-round w3-white w3-hide-small">
         <div class="w3-container">
           <p>Department Information</p>
@@ -55,81 +49,23 @@ hr{ border: 1px thin;}
         </div>
       </div>
       <br>
-      
-      <!-- Alert Box -->
       <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
         <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
           <i class="fa fa-remove"></i>
         </span>
-        <p><strong>Hey!</strong></p>
-        <p>People are looking at your profile. Find out who.</p>
+        <p><strong>Hey {{user.firstname}}!</strong></p>
+        <p>Can you find your courses? let us know!</p>
       </div>
-    
-    <!-- End Left Column -->
     </div>
-    
-    <!-- Middle Column -->
     <div class="w3-col m6">
-
-      <div class="w3-container w3-theme-d3 w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
-        <span class="w3-right w3-opacity">CSCI 3700</span>
-        <h4 style="margin-bottom:0px">CSCI Database Management Systems</h4><br>
-        <hr class="w3-theme-d4" style="margin-top:10px">
-        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
-        <button type="button" class="w3-button w3-theme w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
-        <span class="w3-right w3-opacity">CSCI 3030</span>
-        <h4 style="margin-bottom:0px">Software Engineering I</h4><br>
-        <hr style="margin-top:10px">
-        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
-        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-
-      <div class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-        <img src="/images/ECU_class.jpg" class="w3-left w3-circle w3-margin-right" style="width:60px;margin-bottom:10px">
-        <span class="w3-right w3-opacity">CSCI 4710</span>
-        <h4 style="margin-bottom:0px">Web Applications</h4><br>
-        <hr style="margin-top:10px">
-        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-left"> &nbsp;View</button> 
-        <button type="button" class="w3-button w3-theme-d4 w3-margin-bottom w3-right"> &nbsp;Follow</button> 
-      </div>
-      
-    <!-- End Middle Column -->
+      {{#each _courses}}
+        {{> dept_course}}
+      {{else}}
+        <p align="center"style="margin-top:0" class="w3-opacity"> No Courses </p>
+      {{/each}}
     </div>
-    
-    <!-- Right Column -->
     <div class="w3-col m2" style="float:left">
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Upcoming Events:</p>
-          <img src="#" alt="Forest" style="width:100%;">
-          <p><strong>Holiday</strong></p>
-          <p>Friday 15:00</p>
-          <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-        </div>
-      </div>
-      <br>
-      
-      <!-- MOD NOTIFICATION -->
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Friend Request</p>
-          <img src="#" alt="Avatar" style="width:50%"><br>
-          <span>Jane Doe</span>
-          <div class="w3-row w3-opacity">
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
-            </div>
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {{> event }}
       <br>
       <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
         <p>ADS</p>
@@ -142,16 +78,18 @@ hr{ border: 1px thin;}
   </div>
 </div>
 <br>
-
+<script>
+  function gotoUrl(url) {
+      if(typeof url != "string") return false;
+      window.location.href = url;
+  }
+</script>
 <footer class="w3-center w3-container w3-theme-d3 w3-padding-16">
   <h5> Pirate Notes &copy; 2017</h5>
 </footer>
-
 <footer class="w3-container w3-theme-d5">
   <p>Powered by <a href="http://www.ecu.edu" target="_blank">ECU.edu</a></p>
 </footer>
- 
 <script type="text/javascript" src="/js/piratenotes.js"/>
-
 </body>
 </html> 
