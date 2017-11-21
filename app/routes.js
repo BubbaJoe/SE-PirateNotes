@@ -93,16 +93,19 @@ module.exports = (app, io, db, nm, pp) => {
     app.get('/course/:course_id', (req,res) => {
         course_id = req.params.course_id
         if(req.isAuthenticated()) {
-            let course, posts
+            let course, posts, courses
             getCoursePosts( course_id )
             .then( results => posts = results )
             .then(() => getCourse( course_id )
             .then( results => course = results )
+            .then( () => getUserCourses( req.user.id )
+            .then( results => courses = results ))
             .then(() => {
                 res.render('course', {
                     user: req.user,
                     course: course,
-                    posts: posts
+                    posts: posts,
+                    courses: courses
                 })
                 req.login(req.user.id,()=>{})
             }))
