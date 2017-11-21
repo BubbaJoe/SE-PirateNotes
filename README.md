@@ -23,6 +23,8 @@ implement socket.io for Saving Posts/Liking Posts
 
 create Account Settings Page
 
+create Profile for other user to view
+
 finish Flash Messages
 
 finish Audit Page (Ban, Decline Posts, Read Reports)

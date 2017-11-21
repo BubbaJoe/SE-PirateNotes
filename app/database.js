@@ -25,7 +25,7 @@ module.exports = (db) => {
     getUserByID = (id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from user where id = ?', [id])
-            .then( (result) =>  resolve(result) )
+            .then( (result) =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -34,7 +34,7 @@ module.exports = (db) => {
     getProfilePictureByID = (id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select profile_image from user where id = ?', [id,id])
-            .then( (result) =>  resolve(result) )
+            .then( (result) =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -68,10 +68,19 @@ module.exports = (db) => {
     }
 
     // Get data from a file with file id
-    getFile =  (file_id) => {
+    getFile = (file_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from file'+
             ' where id = ?',[file_id])
+            .then(result => resolve(result[0]))
+            .catch(err => console.log(err))
+        } )
+    }
+
+    getUserInterests = (user_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('select interests from user'+
+            ' where id = ?',[user_id])
             .then(result => resolve(result[0]))
             .catch(err => console.log(err))
         } )
@@ -356,7 +365,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select id from user where email = ?',
             [email])//,bcrypt.hashSync(password, null, null)]
-            .then( (result) => resolve(result))
+            .then( (result) => resolve(result[0]))
         } )
     }
 }

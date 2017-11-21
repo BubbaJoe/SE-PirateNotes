@@ -216,9 +216,9 @@ module.exports = (app, io, db, nm, pp) => {
         uid = req.params.uid
         if(req.isAuthenticated())
             getProfilePictureByID(uid,(result) => {
-                if(result[0].profile_image) {
+                if(result.profile_image) {
                     res.setHeader('Content-disposition', 'attachment filename=profile.svg')
-                    res.send(result[0].profile_image)
+                    res.send(result.profile_image)
                 } else res.status(404).end()
             })
     })
@@ -264,8 +264,8 @@ module.exports = (app, io, db, nm, pp) => {
         password = req.fields.password
         login(email,password)
         .then( result => {
-            if(result.length > 0) {
-                id = result[0].id
+            if(result) {
+                id = result.id
                 req.login(id, (err) => {
                     if(err)console.log(err)
                     console.log('...')
@@ -319,8 +319,10 @@ module.exports = (app, io, db, nm, pp) => {
 
             let FileTooBig = false
             fileArr.forEach( (file,i) => {
-                if(file.size == 0 || file.name == '') fs.unlinkSync(fileArr.splice(i,1)[0].path)
-                if(file.size > 10000000) stop = true
+                if(file.size == 0 || file.name == '')
+                    fs.unlinkSync(fileArr.splice(i,1)[0].path)
+                if(file.size > 10000000)
+                    stop = true
             } )
 
             if(FileTooBig) {
@@ -354,5 +356,5 @@ module.exports = (app, io, db, nm, pp) => {
 
     pp.serializeUser((user, done) => done(null, user) )
     
-    pp.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result[0]) ).catch( err => console.log(err) ))
+    pp.deserializeUser((id, done) => getUserByID(id).then( result => done(null, result) ).catch( err => console.log(err) ))
 }
