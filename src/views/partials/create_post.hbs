@@ -13,7 +13,7 @@
         {{else}}
             <h6 class="w3-opacity">You are not following any courses... Click <a href="search">here</a> to find courses.</h6><br>
         {{/if}}
-        <input {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="width:100%;margin-bottom:5px;" placeholder="Type here..." autocomplete="off" class="w3-border w3-padding" required>
+        <textarea {{#if courses}}{{else}}disabled="disabled"{{/if}} name="post_text" style="resize:none;width:100%;margin-bottom:5px;" placeholder="Type here..." autocomplete="off" class="w3-border w3-padding" required></textarea>
         <p style=";margin-bottom:0px" id="fileList"></p><br>
         <div style="height:0px;overflow:hidden;"><input type="file" onchange="updateParagraph()" name="fileAttachments" id="fileAttachment" style="opacity:0;position:absolute;z-index:-1;" class="w3-button w3-theme" multiple></input></div>
         <button {{#if courses}}{{else}}disabled="disabled"{{/if}} type="submit" class="w3-button w3-theme w3-right"><i class="fa fa-pencil"></i> &nbsp;Post</button> 

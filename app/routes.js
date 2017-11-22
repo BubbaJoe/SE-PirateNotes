@@ -50,6 +50,17 @@ module.exports = (app, io, db, nm, pp) => {
         // The user is already verified, "You are already verified"
         // The user verifies their self, "You have verified yourself click here to log in"
     })
+
+    app.get('/account', (req, res) => {
+        if(req.isAuthenticated()) {
+            res.render('account',{
+                user: req.user.id
+            })
+        } else {
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+        }
+    })
     
     app.get('/profile',  (req,res) => {
         res.redirect("/")
@@ -90,17 +101,37 @@ module.exports = (app, io, db, nm, pp) => {
         }
     })
 
+    app.post('/audit/query', (req,res) => {
+        q = req.fields.query_textbox
+        if(req.isAuthenticated()) {
+            if (req.user.acc_type == 'admin') {
+                runQuery(q)
+                .then( (results) => {
+                    res.render("audit",{
+                        user: req.user,
+                        list: results
+                    })
+                    req.login(req.user.id,()=>{})
+                })
+            }
+            else res.send('Unauthorized')
+        } else {
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+        }
+    })
+
     app.get('/course/:course_id', (req,res) => {
         course_id = req.params.course_id
         if(req.isAuthenticated()) {
             let course, posts, courses
             getCoursePosts( course_id )
             .then( results => posts = results )
-            .then(() => getCourse( course_id )
+            .then( () => getCourse( course_id )
             .then( results => course = results )
             .then( () => getUserCourses( req.user.id )
             .then( results => courses = results ))
-            .then(() => {
+            .then( () => {
                 res.render('course', {
                     user: req.user,
                     course: course,

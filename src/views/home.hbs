@@ -144,7 +144,7 @@
     var fileArr = document.getElementById('fileAttachment').files,
     fileNames = "";
     for(i = 0; i < fileArr.length; i++) {
-      fileNames += fileArr[i].name+" ";
+      fileNames += '<u>'+fileArr[i].name+"</u> ";
     }
     document.getElementById('fileList').innerHTML = fileNames;
   }

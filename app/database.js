@@ -21,11 +21,19 @@ module.exports = (db) => {
         return id
     }
 
+    runQuery = (query,params) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query(query, params)
+            .then( result =>  resolve(result) )
+            .catch( err => console.log(err) )
+        } )
+    }
+
     // Get all user data
     getUserByID = (id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from user where id = ?', [id])
-            .then( (result) =>  resolve(result[0]) )
+            .then( result =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -34,7 +42,7 @@ module.exports = (db) => {
     getProfilePictureByID = (id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select profile_image from user where id = ?', [id,id])
-            .then( (result) =>  resolve(result[0]) )
+            .then( result =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -44,7 +52,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set profile_image = ?, where id = ?', 
             [filedata,filedata.length,id])
-            .then( (result) =>  resolve(result[0]) )
+            .then( result =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -72,8 +80,8 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from file'+
             ' where id = ?',[file_id])
-            .then(result => resolve(result[0]))
-            .catch(err => console.log(err))
+            .then( result => resolve(result[0]))
+            .catch( err => console.log(err))
         } )
     }
 
@@ -81,8 +89,8 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select interests from user'+
             ' where id = ?',[user_id])
-            .then(result => resolve(result[0]))
-            .catch(err => console.log(err))
+            .then( result => resolve(result[0]))
+            .catch( err => console.log(err))
         } )
     }
 
@@ -92,8 +100,8 @@ module.exports = (db) => {
             db.query('select * from course, (select' +
             ' * from followed_course where user_id = ?) c ' +
             'where course.id = c.course_id', [user_id])
-            .then(result => resolve(result))
-            .catch(err => console.log(err))
+            .then( result => resolve(result))
+            .catch( err => console.log(err))
         } )
     }
 
@@ -103,8 +111,8 @@ module.exports = (db) => {
             db.query('select * from course, (select' +
             ' * from department where id = ?) d' +
             ' where course.dept_abbr = d.dept_abbr', [dept_id])
-            .then(result => resolve(result))
-            .catch(err => console.log(err))
+            .then( result => resolve(result))
+            .catch( err => console.log(err))
         } )
     }
 
@@ -114,8 +122,8 @@ module.exports = (db) => {
             db.query('select * from department, (select' +
             ' * from followed_department where user_id = ?) c ' +
             'where department.id = c.dept_id', [user_id])
-            .then(result => resolve(result))
-            .catch(err => console.log(err))
+            .then( result => resolve(result))
+            .catch( err => console.log(err))
         } )
     }
 
