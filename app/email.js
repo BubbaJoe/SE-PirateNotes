@@ -29,6 +29,7 @@ module.exports = (nodemailer, db) => {
         subject: 'PirateNotes - Verify Account',
     }
 
+    // sends an email to the user
     sendEmail = (user_email,callback) => {
         let user = {}
         db.query('select * from user where email = ?',[user_email])
@@ -67,6 +68,7 @@ module.exports = (nodemailer, db) => {
         })
     }
 
+    // sends out emails to all users
     sendMassEmail = (email_arr,callback) => {
 
         //mailOptions.to = email_arr
