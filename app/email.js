@@ -105,6 +105,7 @@ module.exports = (nodemailer, db) => {
         })
     }
 
+    // sends out emails to all users
     sendMassEmail = (email_arr,callback) => {
 
         //mailOptions.to = email_arr

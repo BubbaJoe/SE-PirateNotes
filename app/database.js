@@ -128,7 +128,8 @@ module.exports = (db) => {
             .catch( err => console.log(err))
         } )
     }
-
+    
+    // Gets interests of the user
     getUserInterests = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select interests from user'+
@@ -243,6 +244,7 @@ module.exports = (db) => {
         } )
     }
 
+    // Gets the course
     getCourse = (course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from course ' +
@@ -252,6 +254,7 @@ module.exports = (db) => {
         } )
     }
 
+    // Gets the department
     getDepartment = (dept_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from department ' +
@@ -262,6 +265,7 @@ module.exports = (db) => {
     }
 
     // For admin/mod use only
+    // gets all posts pending approval
     getAllPendingPosts = () => {
         return new Promise( ( resolve, reject ) => {
             db.query('',[])
@@ -271,6 +275,7 @@ module.exports = (db) => {
     }
 
     //For admin/mod use only
+    // gets all posts
     getAllPost = () => {
         return new Promise( ( resolve, reject ) => {
             db.query('',[])
@@ -280,6 +285,7 @@ module.exports = (db) => {
     }
 
     //For admin/mod use only
+    // approves a post
     acceptPost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('',[])
@@ -288,6 +294,7 @@ module.exports = (db) => {
         } )
     }
 
+    // searches for the course
     searchCourse = (word) => {
         return new Promise( ( resolve, reject ) => {
             word = '%' + word + '%';
@@ -298,6 +305,7 @@ module.exports = (db) => {
         } )
     }
 
+    // searches  for the department
     searchDepartment = (word) => {
         return new Promise( ( resolve, reject ) => {
             word = '%' + word + '%';
@@ -309,6 +317,7 @@ module.exports = (db) => {
     }
 
     //For admin/mod use only
+    // declines a post
     declinePost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('',[])
@@ -318,6 +327,7 @@ module.exports = (db) => {
     }
 
     //For admin/mod use only
+    // suspends a user from posting
     suspendUser = (user_id,suspend_length) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set acc_status = \'warning\' where id = ?',
@@ -328,6 +338,7 @@ module.exports = (db) => {
     }
 
     // For admin/mod use only
+    // bans a user from posting
     banUser = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set acc_status = \'banned\' where id = ?',
@@ -374,6 +385,7 @@ module.exports = (db) => {
         } )
     }
 
+    // sets user to follow a course
     followCourse = (user_id,course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into followed_course (user_id,course_id) values (?, ?)',
@@ -382,6 +394,8 @@ module.exports = (db) => {
             .catch(err => console.log(err))
         } )
     }
+    
+    // sets user to unfollow a course
     unfollowCourse = (user_id,course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('delete from followed_course where user_id = ? and course_id = ?',
@@ -402,6 +416,7 @@ module.exports = (db) => {
         } )
     }
 
+    // Register Super User Information
     registerSuperUser = (firstname,lastname,email,password,type) => {
         let id = createUuid()
         return new Promise( ( resolve, reject ) => {
