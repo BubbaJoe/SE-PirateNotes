@@ -8,15 +8,44 @@
 
 */
 
-let fs = require('fs')
-let path = require('path')
+let fs      = require('fs')
+let path    = require('path')
+let bcrypt	= require('bcrypt-nodejs')
 
 // referenceLink = [user.ip, (the last link they requested before session was lost) ]
 let referenceLink = []
 let verifyId = []
 
-// Express, Socket.IO, MySQL, NodeMailer and Passport
-module.exports = (app, io, db, nm, pp) => {
+let numActiveUsers = 0
+
+// Express, Socket.IO, MySQL, and Passport
+module.exports = (app, io, db, pp) => {
+
+    io.sockets.on('connection',(socket) => {
+
+        numActiveUsers ++
+
+        socket.on("follow:department",(data) => {
+            console.log(data)
+            //socket.broadcast.emit('codeUpdate', data);
+        })
+
+        socket.on("follow:course",(data) => {
+            console.log(data)
+            //socket.broadcast.emit('codeUpdate', data);
+        })
+
+        socket.on("like",(data) => {
+            console.log(data)
+            //socket.broadcast.emit('codeUpdate', data);
+        })
+
+        socket.on('disconnect', (socket) => {
+            console.log(socket)
+            numActiveUsers --
+        })
+
+    });
 
     // Maybe turned into a web socket for faster communication
     app.get('/follow_course/:cid', (req,res) => {
@@ -56,6 +85,39 @@ module.exports = (app, io, db, nm, pp) => {
             res.render('account',{
                 user: req.user.id
             })
+        } else {
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+        }
+    })
+
+    app.post('/updateprofile', (req, res) => {
+        if(req.isAuthenticated()) {
+            p = req.fields
+            id = req.user.id
+
+            if( bcrypt.hashSync(password, null, null) === req.user.password) {
+                
+                if(p.firstname || p.lastname)
+                    updateUserName(id,p.firstname,p.lastname)
+                if(p.gender)
+                    updateUserGender(id,p.gender)
+                if(p.major)
+                    updateUserMajor(id,p.major)            
+                if(p.interests)
+                    updateUserInterests(id,p.interests)
+                if(p.profile_desc)
+                    updateProfileDesc(id,p.profile_desc)
+                if(p.profile_image)
+                    updateProfileImage(id,req.files)
+                
+                res.redirect('/')
+            } else {
+                res.render('account', {
+                    user: req.user,
+                    
+                })
+            }
         } else {
             referenceLink[req.ip] = req.url
             res.redirect('/')

@@ -52,9 +52,11 @@ app.engine('hbs',exphbs({
             diffDays = Math.floor(diffMs / 86400000),
             diffHrs = Math.floor((diffMs % 86400000) / 3600000),
             diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000)
+            diffSecs = Math.round((((diffMs % 86400000) % 3600000) % 60000) / 1000)
             if (diffDays) return diffDays + ((diffDays == 1)?(" day ago"):(" days ago"))
             else if (diffHrs) return diffHrs + ((diffHrs == 1)?(" hour ago"):(" hours ago"))
-            else if(diffMins) return diffMins + ((diffMins == 1)?(" minute ago"):(" minutes ago"))
+            else if (diffMins) return diffMins + ((diffMins == 1)?(" minute ago"):(" minutes ago"))
+            else if (diffSecs > 15) return diffSecs + " seconds ago"
             else return("Just now")
         }
     }
@@ -137,4 +139,4 @@ db.on('error')
     require('./app/email.js')(nodemailer, db);
 })
 
-require('./app/routes.js')(app, io, db, nodemailer, passport);
+require('./app/routes.js')(app, io, db, passport);

@@ -39,9 +39,6 @@
             background-color:rgba(255, 255, 255, 0.107);
             padding: 40px;
         }
-        .login .register {
-            padding-top: 45px;
-        }
         .checkbox {
             margin-bottom:40px;
             padding-top:0;
@@ -79,7 +76,7 @@
     margin-left: auto;
     margin-right: auto;">
 				<div class="row">
-					<div class="input-field col s12">
+					<div style="margin-top:25px" class="input-field col s12">
 						<input name="email" type="email" class="validate">
 						<label for="email">Email</label>
 					</div>
@@ -103,7 +100,7 @@
 	</div>
 	<div id="register" class="col s12">
 		<form class="col s12"  method="post" action="/register">
-			<div class="form-container register">
+			<div style="padding-top:20px" class="form-container register">
 				<div class="row">
 					<div class="input-field col s6">
 						<input name="first_name" type="text" class="validate">
@@ -130,9 +127,19 @@
 						<label for="password-confirm">Confirm</label>
 					</div>
 				</div>
+				<div class="row">
+					<div class="input-field col s6">
+						<input id="male" name="gender" type="radio" value="male">
+						<label for="gender">Male</label>
+					</div>
+					<div class="input-field col s6">
+						<input id="female" name="gender" type="radio" value="female" class="validate">
+						<label for="gender">Female</label>
+					</div>
+				</div>
                 <div class="row">
 					<div class="input-field checkbox col s12">
-						<input name="checkbox" type="checkbox" class="validate" checked>
+						<input id="tos" name="checkbox" type="checkbox" class="validate" checked>
 						<label for="checkbox">I agree to the <a href="tos" target="_blank">Terms Of Services</a></label>
 					</div>
 				</div>

@@ -1,6 +1,6 @@
 {
   "name": "piratenotes",
-  "version": "3.1.0",
+  "version": "5.1.0",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
@@ -21,8 +21,8 @@
     "formidable": "*",
     "morgan": "*",
     "mysql": "*",
-    "nodemailer": "^4.4.0",
-    "passport": "*",
+    "nodemailer": "*",
+    "passport": "4.3.1",
     "passport-local": "*",
     "socket.io": "*",
     "uuid": "*"

@@ -41,18 +41,62 @@ module.exports = (db) => {
     // Get user profile image
     getProfilePictureByID = (id) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('select profile_image from user where id = ?', [id,id])
+            db.query('select profile_image from user where id = ?', [id])
             .then( result =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
 
     // Upload profile picture
-    uploadProfilePictureByID = (id,filedata) => {
+    updateProfileImage = (id,filedata) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('update user set profile_image = ?, where id = ?', 
+            path = './temp_uploads/' + (f.file_name || 'temp_file'+ Math.round(Math.random()*10000) )
+            fs.readFile(file.path, (err, data) =>
+                db.query('update user set profile_image = ? where id = ?', 
+                [data, id] ).then( result => resolve(result[0]) )
+                .then( () => fs.unlink(path, () => {} ) )
+                .catch( err => console.log(err) )
+            )
+        } )
+    }
+
+    // Update p
+    updateUserName = (id,firstname,lastname) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set firstname = ?, lastname = ? where id = ?', 
+            [firstname, lastname, id] )
+            .catch( err => console.log(err) )
+        } )
+    }
+
+    updateUserGender = (id,gender) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set gender = ? where id = ?', 
+            [gender, id] )
+            .catch( err => console.log(err) )
+        } )
+    }
+
+    updateUserMajor = (id,major) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set major = ? where id = ?', 
+            [major, id] )
+            .catch( err => console.log(err) )
+        } )
+    }
+
+    updateUserInterests = (id,interests) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set interests = ? where id = ?', 
+            [interests,id])
+            .catch( err => console.log(err) )
+        } )
+    }
+
+    updateProfileDesc = (id,profile_desc) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set profile_desc = ? where id = ?', 
             [filedata,filedata.length,id])
-            .then( result =>  resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -372,7 +416,7 @@ module.exports = (db) => {
     login = (email,password) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select id from user where email = ?',
-            [email])//,bcrypt.hashSync(password, null, null)]
+            [email,bcrypt.hashSync(password, null, null)])
             .then( (result) => resolve(result[0]))
         } )
     }
