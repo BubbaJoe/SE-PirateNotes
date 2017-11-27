@@ -121,7 +121,8 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into post (id,user_id,course_id,post_text,post_date,post_status) values (?,?,?,?,?,?)',
             [post_id,user_id,course_id,post_text,new Date().toLocaleString(),'pending'])
-            .then( () => resolve(fileArr.forEach( file => 
+            .then( () => 
+                    resolve(fileArr.forEach( file => 
                     fs.readFile(file.path, (err,data) => 
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
                         [createUuid(),post_id,file.name,file.size,file.type,data])
