@@ -1,28 +1,31 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="js/socket.io.js"></script>
+<script src="/js/socket.io.js"></script>
 <script>
-function savePost(button_id,post_id) {
-    if($(button_id).innerHTML == "false") return
-    $(button_id).innerHTML = "Liked"
-    socket.emit('save', {post_id:post_id, user_id:user_id})
+
+var socket = io.connect();
+
+function savePost(button,post_id) {
+    button.innerHTML = button.innerHTML.replace('Save','Saved')
+    button.onclick = "";
+    socket.emit('save', {post_id:post_id, id:'{{user.id}}'})
 }
 
-function likePost(button_id,post_id) {
-    if($(button_id).innerHTML == "false") return
-    $(button_id).innerHTML = "Liked"
-    socket.emit('like', {post_id:post_id, user_id:user_id})
+function likePost(button,post_id) {
+    button.innerHTML = button.innerHTML.replace('Like','Liked')
+    button.onclick = "";
+    socket.emit('like', {post_id:post_id, id:'{{user.id}}'})
 }
 
-function followCourse(button_id,post_id) {
-    if($(button_id).innerHTML == "false") return
-    $(button_id).innerHTML = "Liked"
-    socket.emit('follow:course', {course_id:course_id, user_id:user_id})
+function followCourse(button,course_id) {
+    button.innerHTML = button.innerHTML.replace('Follow','Followed')
+    button.onclick = "";
+    socket.emit('follow:course', {course_id:course_id, id:'{{user.id}}'})
 }
 
-function followCourse(button_id,post_id) {
-    if($(button_id).innerHTML == "false") return
-    $(button_id).innerHTML = "Liked"
-    socket.emit('follow:department', {department_id:department_id, user_id:user_id})
+function followDepartment(button,department_id) {
+    button.innerHTML = button.innerHTML.replace('Follow','Followed')
+    button.onclick = "";
+    socket.emit('follow:department', {department_id:department_id, id:'{{user.id}}'})
 }
 
 </script>

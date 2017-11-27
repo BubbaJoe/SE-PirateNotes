@@ -34,7 +34,7 @@
          <p class="w3-center"><img src="/images/ECU_department.jpg"style="height:106px;"></p>
          <hr>
          <div>
-            <button class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Department</button>
+            <button onclick="followDepartment(this,'{{department.id}}')" class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Department</button>
          </div>
         </div>
       </div>
@@ -78,6 +78,7 @@
   </div>
 </div>
 <br>
+{{> javascript }}
 <script>
   function gotoUrl(url) {
       if(typeof url != "string") return false;

@@ -43,8 +43,7 @@ app.engine('hbs',exphbs({
     extname: '.hbs',
     helpers: {
         'iff': (conditional, options) => {
-            if (options.hash.value === conditional)
-                return options.fn(this); else return options.inverse(this);
+            return (options.hash.value === conditional)?options.fn(this):options.inverse(this)
         },
         'timeAgo': (options) => {
             then = Date.parse(options.hash.time)
@@ -128,7 +127,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 require('./app/database.js')(db);
-require('./app/email.js')(nodemailer, db);
+require('./app/email.js')(db);
 
 db.on('error')
 .then( (err) => {
@@ -136,7 +135,7 @@ db.on('error')
     //reset db connection
     let db = new Database(options);
     require('./app/database.js')(db);
-    require('./app/email.js')(nodemailer, db);
+    require('./app/email.js')(db);
 })
 
 require('./app/routes.js')(app, io, db, passport);

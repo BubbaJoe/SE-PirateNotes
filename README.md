@@ -18,10 +18,7 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 9. ```http://localhost:8080```
 
 
-## TO DO: 
-implement socket.io for Saving Posts/Liking Posts
-
-create Account Settings Page
+## TO DO:
 
 create Profile for other user to view
 

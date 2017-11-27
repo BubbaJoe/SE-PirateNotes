@@ -39,10 +39,11 @@
         <div class="w3-container">
          <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
          <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px"></p>
-         <p class="w3-center">Description: {{user.desc_text}}</p>
+         <p class="w3-center">Major: {{user.major}}</p>
+         <p class="w3-center">Description: {{user.profile_desc}}</p>
          <hr>
          <div>
-            <button class="w3-button w3-right w3-theme-l1" style="margin-bottom:10px">edit</button>
+            <button onclick="gotoUrl('/account')" class="w3-right w3-button w3-theme" style="margin-bottom:10px">EDIT</button>
          </div>
         </div>
       </div>

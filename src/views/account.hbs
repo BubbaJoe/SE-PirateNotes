@@ -9,6 +9,8 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 <meta name="theme-color" content="#ffffff">
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-deep-purple.css">
@@ -17,24 +19,66 @@
 <style>
   html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
   .course-list {margin-bottom: 1px}
-  hr{ border: 1px thin;}
+  hr {border:1px thin}
+  .input-field #imageChooser img {display: block;margin: 0 auto;}
 </style>
 <body class="w3-theme-l5">
 {{> navbar }}
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">  
+<div class="w3-container w3-content" style="max-width:700px;margin-top:80px">  
   <div class="w3-row">
     <div class="w3-col m9" style="margin-left:25px; width:91%;">
       <!-- Profile -->
       <div class="w3-card-2 w3-round w3-white">
-        <div class="w3-container">
-         <button style="margin-top:10px" class="w3-button w3-right">
-          <span class="w3-right w3-opacity"><i class="fa fa-ellipsis-v"></i></span>
-         </button>
-         <p class=""><img src="/images/ECU_department.jpg"style="height:106px;"></p>
-         <hr>
-         <div>
-            <button class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Update Profile</button>
-         </div>
+        <div class="w3-container w3-padding">
+          <center>
+            <h3>Account Settings</h3>
+          </center>
+          <form method="post" enctype="multipart/form-data" action="/updateprofile">
+           <div class="input-field">
+             <p>Profile Image</p>
+              <div  style="display:inline-block;vertical-align:top;">
+                <img id="pimage" src="/images/m_profile.svg" alt="/profileimage/{{user.id}}" class="w3-circle" style="height:106px;width:106px;margin-bottom:30px">
+              </div>
+              <div style="display:inline-block;">
+                <input name="profile_image" class="w3-button" id="imageChooser" type='file' onchange="readURL(this);" />
+              </div><br>
+              
+              <label for="name">Name</label>
+              <input class="w3-input w3-border" name="name" id="name" value="{{user.firstname}} {{user.lastname}}"><br>
+              
+              <label for="email">Email (Can't change)</label>
+              <input class="w3-input w3-border" name="email" id="email" value="{{user.email}}" disabled><br>
+
+              <label for="decription">Description</label>
+              <textarea class="w3-input w3-border" style="resize:none;width:100%;margin-bottom:5px;" name="description" id="description">{{user.profile_desc}}</textarea><br>
+              
+              <label for="interests">Interests</label>
+              <input class="w3-input w3-border" name="interests" id="interests" value="{{user.interests}}"><br>
+              
+              <label for="gender">Gender</label><br>
+              Male <input class="w3-button" type="radio" name="gender" value="male" {{#iff user.gender value="male"}} checked {{/iff}}>
+              Female <input class="w3-button" type="radio" name="gender" value="female"{{#iff user.gender value="female"}} checked {{/iff}}>
+              <BR><BR>
+
+              <label for="major">Major</label>
+              <input class="w3-input w3-border" name="major" id="major" value="{{user.major}}"><br>
+              
+              <label for="newPassword">New Password</label>
+              <input class="w3-input w3-border" type="password" placeholder="......" name="newPassword" id="newPassword" value=""><br>
+              
+              <label for="newPasswordConfirm">New Password Confirm</label>
+              <input class="w3-input w3-border" type="password" name="newPasswordConfirm" placeholder="......" id="newPasswordConfirm" value=""><br>
+              
+          <hr>
+              <label for="password">Current Password</label>
+              <input class="w3-input w3-border" type="password" name="password" id="password" value="" required><br>
+              {{> flash }}
+          </div>
+          <hr>
+          <div>
+              <button type="submit" class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Update Profile</button>
+          </div>
+         </form>
         </div>
       </div>
       <br>
@@ -44,9 +88,22 @@
 </div>
 <br>
 <script>
+    function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader()
+          reader.onload = function (e) {
+              $('#pimage')
+                  .attr('src', e.target.result)
+                  .width(106)
+                  .height(106)
+          }
+          reader.readAsDataURL(input.files[0])
+      }
+    }
   function gotoUrl(url) {
-      if(typeof url != "string") return false;
-      window.location.href = url;
+    if(typeof url != "string") 
+        return false
+    window.location.href = url
   }
 </script>
 <footer class="w3-center w3-container w3-theme-d3 w3-padding-16">

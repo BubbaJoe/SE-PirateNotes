@@ -32,7 +32,7 @@
          <p class="w3-center"><img src="/images/ECU_department.jpg"style="height:106px;"></p>
          <hr>
           <div>
-            <button class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Course</button>
+            <button onclick="followCourse(this,'{{course.id}}')" class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Follow Course</button>
          </div>
         </div>
       </div>
@@ -63,31 +63,7 @@
       {{/each}}
     </div>
     <div class="w3-col m2" style="float:left">
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Upcoming Events:</p>
-          <img src="#" alt="Forest" style="width:100%;">
-          <p><strong>Holiday</strong></p>
-          <p>Friday 15:00</p>
-          <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-        </div>
-      </div>
-      <br>
-      <div class="w3-card-2 w3-round w3-white w3-center">
-        <div class="w3-container">
-          <p>Friend Request</p>
-          <img src="#" alt="Avatar" style="width:50%"><br>
-          <span>Jane Doe</span>
-          <div class="w3-row w3-opacity">
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
-            </div>
-            <div class="w3-half">
-              <button class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
+      {{> event }}
       <br>
       <div class="w3-card-2 w3-round w3-white w3-padding-16 w3-center">
         <p>ADS</p>
@@ -100,6 +76,7 @@
   </div>
 </div>
 <br>
+{{> javascript }}
 <script>
   function gotoUrl(url) {
       if(typeof url != "string") return false;

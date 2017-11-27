@@ -1,0 +1,16 @@
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="js/socket.io.js"></script>
+<script>
+
+var socket = io.connect();
+
+function acceptPost(post,post_id) {
+    post.parentElement.style.display='none'
+    socket.emit('accept', post_id)
+}
+
+function declinePost(post,post_id) {
+    //post.parentElement.style.display='none'
+    socket.emit('decline', post_id)
+}
+</script>

@@ -33,7 +33,7 @@ module.exports = (db) => {
     getUserByID = (id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from user where id = ?', [id])
-            .then( result =>  resolve(result[0]) )
+            .then( result => resolve(result[0]) )
             .catch( err => console.log(err) )
         } )
     }
@@ -65,6 +65,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set firstname = ?, lastname = ? where id = ?', 
             [firstname, lastname, id] )
+            .then( result =>  resolve() )
             .catch( err => console.log(err) )
         } )
     }
@@ -73,6 +74,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set gender = ? where id = ?', 
             [gender, id] )
+            .then( result =>  resolve() )
             .catch( err => console.log(err) )
         } )
     }
@@ -81,6 +83,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set major = ? where id = ?', 
             [major, id] )
+            .then( result =>  resolve() )
             .catch( err => console.log(err) )
         } )
     }
@@ -89,6 +92,16 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set interests = ? where id = ?', 
             [interests,id])
+            .then( result =>  resolve() )
+            .catch( err => console.log(err) )
+        } )
+    }
+
+    updateUserPassword = (id,password) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('update user set password = ? where id = ?', 
+            [bcrypt.hashSync(password),id])
+            .then( result =>  resolve() )
             .catch( err => console.log(err) )
         } )
     }
@@ -96,7 +109,8 @@ module.exports = (db) => {
     updateProfileDesc = (id,profile_desc) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set profile_desc = ? where id = ?', 
-            [filedata,filedata.length,id])
+            [profile_desc,id])
+            .then( result =>  resolve() )
             .catch( err => console.log(err) )
         } )
     }
@@ -224,7 +238,7 @@ module.exports = (db) => {
             let final_post
             db.query('select post.*, firstname, lastname from post inner'+
             ' join user on user.id = post.user_id inner join course on course_id'+
-            ' = course.id where course_id = ? order by post_date desc', [course_id])
+            ' = course.id where course_id = ? and post_status = \'accepted\' order by post_date desc', [course_id])
             .then( posts => db.query('select file.* from file inner join'+ 
                 ' post on post.id = post_id where course_id = ? ',[course_id])
             .then( files => {
@@ -268,27 +282,65 @@ module.exports = (db) => {
     // gets all posts pending approval
     getAllPendingPosts = () => {
         return new Promise( ( resolve, reject ) => {
-            db.query('',[])
-            .then(result => resolve())
-            .catch(err => console.log(err))
+            db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
+            ' from post inner join user on user.id = post.user_id inner '+
+            'join course on course_id = course.id where post_status = \'pending\' order by post_date desc')
+            .then( posts => db.query('select file.* from file inner join'+ 
+                ' post on post_id = post.id inner join user on user_id'+
+                ' = user.id')
+            .then( files => {
+                if(posts.length == 0) return final_post = []
+                for(let j = 0; j < posts.length; j++) {
+                    posts[j].files = []
+                    for(let i = 0; i < files.length; i++) {
+                        if(files[i].post_id == posts[j].id) {
+                            posts[j].files.push(files[i])
+                            //delete files[i]
+                            // i --
+                        }
+                    }
+                }
+                final_post = posts
+            }))
+            .then( () => resolve(final_post) )
+            .catch( err => console.log(err) )
         } )
     }
 
-    //For admin/mod use only
+    // For admin/mod use only
     // gets all posts
-    getAllPost = () => {
+    getAllPosts = () => {
         return new Promise( ( resolve, reject ) => {
-            db.query('',[])
-            .then(result => resolve())
-            .catch(err => console.log(err))
+            db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
+            ' from post inner join user on user.id = post.user_id inner '+
+            'join course on course_id = course.id order by post_date desc')
+            .then( posts => db.query('select file.* from file inner join'+ 
+                ' post on post_id = post.id inner join user on user_id'+
+                ' = user.id')
+            .then( files => {
+                if(posts.length == 0) return final_post = []
+                for(let j = 0; j < posts.length; j++) {
+                    posts[j].files = []
+                    for(let i = 0; i < files.length; i++) {
+                        if(files[i].post_id == posts[j].id) {
+                            posts[j].files.push(files[i])
+                            //delete files[i]
+                            // i --
+                        }
+                    }
+                }
+                final_post = posts
+            }))
+            .then( () => resolve(final_post) )
+            .catch( err => console.log(err) )
         } )
     }
 
-    //For admin/mod use only
-    // approves a post
+    // For admin/mod use only
+    // accept this post
     acceptPost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('',[])
+            db.query('update post set post_status = \'accepted\' where id = ?',[post_id])
             .then(result => resolve())
             .catch(err => console.log(err))
         } )
@@ -316,11 +368,11 @@ module.exports = (db) => {
         } )
     }
 
-    //For admin/mod use only
-    // declines a post
+    // For admin/mod use only
+    // deny this post
     declinePost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
-            db.query('',[])
+            db.query('update post set post_status = \'denied\' where id = ?',[post_id])
             .then(result => resolve())
             .catch(err => console.log(err))
         } )
@@ -347,33 +399,6 @@ module.exports = (db) => {
             .catch(err => console.log(err))
         } )
     }
-    
-    // check if user is admin
-    checkIfAdmin = (user_id) => {
-        return new Promise( ( resolve, reject ) => {
-            db.query('',[])
-            .then(result => resolve())
-            .catch(err => console.log(err))
-        } )
-    }
-
-    // check if user is admin or mod
-    checkIfAdminOrMod = (user_id) => {
-        return new Promise( ( resolve, reject ) => {
-            db.query('',[])
-            .then(result => resolve())
-            .catch(err => console.log(err))
-        } )
-    }
-
-    // check if user is mod
-    checkIfMod = (user_id) => {
-        return new Promise( ( resolve, reject ) => {
-            db.query('',[])
-            .then(result => resolve())
-            .catch(err => console.log(err))
-        } )
-    }
 
     // Set the user's account to active from unverifed
     verifyUser = (user_id) => {
@@ -386,12 +411,65 @@ module.exports = (db) => {
     }
 
     // sets user to follow a course
+    likePost = (user_id, post_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('insert into liked (user_id,post_id) values (?, ?)',
+            [user_id, post_id])
+            .then(result => resolve())
+        } )
+    }
+
+    // sets user to follow a course
+    unlikePost = (user_id,post_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('delete from liked where user_id = ? and post_id = ?',
+            [user_id, post_id])
+            .then(result => resolve())
+        } )
+    }
+
+    // sets user to follow a course
+    savePost = (user_id,post_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('insert into saved (user_id,post_id) values (?, ?)',
+            [user_id, post_id])
+            .then(result => resolve())
+        } )
+    }
+
+    // sets user to follow a course
+    unsavePost = (user_id,post_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('delete from saved where user_id = ? and post_id = ?',
+            [user_id, post_id])
+            .then(result => resolve())
+        } )
+    }
+
+    // sets user to follow a course
+    followDepartment = (user_id,dept_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('insert into followed_department (user_id,dept_id) values (?, ?)',
+            [user_id, dept_id])
+            .then(result => resolve())
+        } )
+    }
+    
+    // sets user to unfollow a course
+    unfollowDepartment = (user_id,dept_id) => {
+        return new Promise( ( resolve, reject ) => {
+            db.query('delete from followed_department where user_id = ? and dept_id = ?',
+            [user_id, dept_id])
+            .then(result => resolve())
+        } )
+    }
+
+    // sets user to follow a course
     followCourse = (user_id,course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into followed_course (user_id,course_id) values (?, ?)',
             [user_id, course_id])
             .then(result => resolve())
-            .catch(err => console.log(err))
         } )
     }
     
@@ -401,27 +479,28 @@ module.exports = (db) => {
             db.query('delete from followed_course where user_id = ? and course_id = ?',
             [user_id, course_id])
             .then(result => resolve())
-            .catch(err => console.log(err))
         } )
     }
 
     // Register User Information
     register = (firstname,lastname,email,password) => {
         let id = createUuid()
+        let pw = bcrypt.hashSync(password)
         return new Promise( ( resolve, reject ) => {
-            db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
-            [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),'','general',"unverified"])
+            db.query('insert into user(id,firstname,lastname,email,password,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
+            [id,firstname.trim(),lastname.trim(),email.trim(),pw,'general',"unverified"])
             .then( () =>  resolve(id) )
-            .catch( err => console.log(err) )
+            .catch( err => reject(err) )
         } )
     }
 
-    // Register Super User Information
-    registerSuperUser = (firstname,lastname,email,password,type) => {
+    // Custom register to specify type
+    customRegister = (firstname,lastname,email,password,type) => {
         let id = createUuid()
+        let pw = bcrypt.hashSync(password)
         return new Promise( ( resolve, reject ) => {
             db.query('insert into user(id,firstname,lastname,email,password,profile_desc,acc_type,acc_status) values(?,?,?,?,?,?,?,?)',
-            [id,firstname.trim(),lastname.trim(),email,bcrypt.hashSync(password, null, null),'',type,"active"])
+            [id,firstname.trim(),lastname.trim(),email,pw,'',type,"active"])
             .then( () =>  resolve(id) )
             .catch( err => console.log(err) )
         } )
@@ -429,10 +508,17 @@ module.exports = (db) => {
 
     // Validate the Login information 
     login = (email,password) => {
+        console.log(password);
+        console.log(bcrypt.hashSync(password));
         return new Promise( ( resolve, reject ) => {
-            db.query('select id from user where email = ?',
-            [email,bcrypt.hashSync(password, null, null)])
-            .then( (result) => resolve(result[0]))
+            db.query('select id, password from user where email = ?',
+            [email])
+            .then( (result) => {
+                if(bcrypt.compareSync(password, result[0].password))
+                    resolve(result[0]) 
+                else resolve()
+            } )
+            .catch( (err) => console.log(err) )
         } )
     }
 }

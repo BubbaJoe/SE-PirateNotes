@@ -6,6 +6,6 @@
     <p>{{this.post_text}}</p>
     <p>{{#each files}}<a href='/file/{{this.id}}'>{{this.file_name}}</a>&nbsp;{{/each}}
     <hr class="w3-clear">
-    <button onclick="likePost(this.id,"{{this.id}}","{{user.id}}")" type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>Like</button> 
-    <button onclick="savePost(this.id,"{{this.id}}","{{user.id}}")" type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i>Save</button>
+    <button onclick="likePost(this,'{{this.id}}')" type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>&nbsp;Like</button> 
+    <button onclick="savePost(this,'{{this.id}}')" type="button" class="w3-button w3-right w3-theme-d2 w3-margin-bottom"><i class="fa fa-bookmark-o"></i>&nbsp;Save</button>
 </div>

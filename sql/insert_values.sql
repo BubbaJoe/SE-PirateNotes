@@ -1,23 +1,24 @@
 #https://www.guidgenerator.com/online-guid-generator.aspx
 #use the link above to generate uuid/guid
+#HASH $2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy = 123
 
 # Users
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('2d29c09cb9be4293ac690b75531e1489', 'a@gmail.com' , 'password' , 'Naruto', 'Uzimaki', 'general', 'active');
+values ('2d29c09cb9be4293ac690b75531e1489', 'a@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Naruto', 'Uzimaki', 'general', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('f3e0023dea584c07ac7e78e9dc6a4729', 'b@gmail.com' , 'password' , 'Itachi', 'Uchiha', 'mod', 'active');
+values ('f3e0023dea584c07ac7e78e9dc6a4729', 'b@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Itachi', 'Uchiha', 'mod', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('5eca01a62b8f4753a579dbbbbfb79c12', 'c@gmail.com' , 'password' , 'Ozair', 'Shareef', 'admin', 'active');
+values ('5eca01a62b8f4753a579dbbbbfb79c12', 'c@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Ozair', 'Shareef', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('40bcee06412f47908691e7fe52102199', 'name@email.com' , 'password' , 'Joe', 'Williams', 'admin', 'active');
+values ('40bcee06412f47908691e7fe52102199', 'name@email.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Joe', 'Williams', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('60e2da55449f4d8fa513614c72b48d80', 'e@gmail.com' , 'password' , 'Will', 'Brimson', 'admin', 'active');
+values ('60e2da55449f4d8fa513614c72b48d80', 'e@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Will', 'Brimson', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('1346ad8844b94a4a8ae76f01beabea10', 'f@gmail.com' , 'password' , 'Dakota', 'Long', 'admin', 'active');
+values ('1346ad8844b94a4a8ae76f01beabea10', 'f@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Dakota', 'Long', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('e3c4b01ab9054d5bb2a601c3f4b5bf6c', 'g@gmail.com' , 'password' , 'Evan', 'Loffink', 'admin', 'active');
+values ('e3c4b01ab9054d5bb2a601c3f4b5bf6c', 'g@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Evan', 'Loffink', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('2a771e780a56426ca9dd1f8f1f7c0bed', 'h@gmail.com' , 'password' , 'Sam', 'Twaiti', 'admin', 'active');
+values ('2a771e780a56426ca9dd1f8f1f7c0bed', 'h@gmail.com' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Sam', 'Twaiti', 'admin', 'active');
 
 # Departments
 insert into department (id, dept_name, dept_abbr)

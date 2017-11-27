@@ -1,4 +1,4 @@
-<!-- HTML Template by Joe Williams -->
+<!-- Joe Williams -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,43 +103,39 @@
 			<div style="padding-top:20px" class="form-container register">
 				<div class="row">
 					<div class="input-field col s6">
-						<input name="first_name" type="text" class="validate">
+						<input name="first_name" type="text" class="validate" required>
 						<label for="first_name">First Name</label>
 					</div>
 					<div class="input-field col s6">
-						<input name="last_name" type="text" class="validate">
+						<input name="last_name" type="text" class="validate" required>
 						<label for="last_name">Last Name</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="email" type="email" class="validate">
+						<input name="email" type="email" class="validate" required>
 						<label for="email">Email</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s6">
-						<input name="password" type="password" class="validate">
+						<input name="password" type="password" class="validate" required>
 						<label for="password">Password</label>
 					</div>
 					<div class="input-field col s6">
-						<input name="password-confirm" type="password" class="validate">
+						<input name="password_confirm" type="password" class="validate" required>
 						<label for="password-confirm">Confirm</label>
 					</div>
 				</div>
-				<div class="row">
+				<!--<div class="row">
 					<div class="input-field col s6">
 						<input id="male" name="gender" type="radio" value="male">
 						<label for="gender">Male</label>
 					</div>
-					<div class="input-field col s6">
-						<input id="female" name="gender" type="radio" value="female" class="validate">
-						<label for="gender">Female</label>
-					</div>
-				</div>
+				</div>-->
                 <div class="row">
 					<div class="input-field checkbox col s12">
-						<input id="tos" name="checkbox" type="checkbox" class="validate" checked>
+						<input id="tos" name="checkbox" type="checkbox" class="validate" checked required>
 						<label for="checkbox">I agree to the <a href="tos" target="_blank">Terms Of Services</a></label>
 					</div>
 				</div>
@@ -154,7 +150,10 @@
 	<div id="thankyou" class="col s12">
 		<center>
 			<p style="height:100px"><h5>Thank you for Registering!</h5></p>
-			<p>Please check you email to verify your account!</p>
+			<br>
+			<br>
+			<br>
+			<p>Please check your email to verify your account!</p>
 		</center>
 	</div>
 

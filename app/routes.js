@@ -14,8 +14,8 @@ let bcrypt	= require('bcrypt-nodejs')
 
 // referenceLink = [user.ip, (the last link they requested before session was lost) ]
 let referenceLink = []
-let verifyId = []
 
+// Number of active users on the website
 let numActiveUsers = 0
 
 // Express, Socket.IO, MySQL, and Passport
@@ -25,41 +25,37 @@ module.exports = (app, io, db, pp) => {
 
         numActiveUsers ++
 
-        socket.on("follow:department",(data) => {
-            console.log(data)
-            //socket.broadcast.emit('codeUpdate', data);
+        socket.on("follow:department", (data) => {
+            followDepartment(data.id,data.dept_id)
         })
 
-        socket.on("follow:course",(data) => {
-            console.log(data)
-            //socket.broadcast.emit('codeUpdate', data);
+        socket.on("follow:course", (data) => {
+            followCourse(data.id,data.course_id)
         })
 
-        socket.on("like",(data) => {
-            console.log(data)
-            //socket.broadcast.emit('codeUpdate', data);
+        socket.on("like", (data) => {
+            likePost(data.id,data.post_id)
+        })
+
+        socket.on("save", (data) => {
+            savePost(data.id,data.post_id)
+        })
+
+        socket.on("accept", (data) => {
+            acceptPost(data)
+            .then( () => console.log("post accepted") )
+        })
+
+        socket.on("decline", (data) => {
+            declinePost(data)
+            .then( () => console.log("post declined") )
         })
 
         socket.on('disconnect', (socket) => {
-            console.log(socket)
             numActiveUsers --
         })
 
     });
-
-    // Maybe turned into a web socket for faster communication
-    app.get('/follow_course/:cid', (req,res) => {
-        // follow course
-        if(req.isAuthenticated()) {
-        }
-    })
-
-    // Maybe turned into a web socket for faster communication
-    app.get('/follow_department/:did', (req,res) => {
-        // follow department
-        if(req.isAuthenticated()) {
-        }
-    })
 
     app.post('/forgot', (req,res) => {
         //only for forgotten passwords
@@ -75,15 +71,19 @@ module.exports = (app, io, db, pp) => {
 
     app.get('/verify/:uid', (req,res) => {
         // 3 cases!
-        // The user id is not found, "User not found"
-        // The user is already verified, "You are already verified"
-        // The user verifies their self, "You have verified yourself click here to log in"
+        if(!req.params.uid) res.redirect('/')
+        uid = req.params.uid
+        verifyUser(uid)
+        .then( () => {
+            res.redirect('/verified')
+        })
+        // Test error here
     })
 
     app.get('/account', (req, res) => {
         if(req.isAuthenticated()) {
             res.render('account',{
-                user: req.user.id
+                user: req.user
             })
         } else {
             referenceLink[req.ip] = req.url
@@ -91,31 +91,38 @@ module.exports = (app, io, db, pp) => {
         }
     })
 
+    app.get('/updateprofile',(req,res) => res.redirect('/account') )
     app.post('/updateprofile', (req, res) => {
         if(req.isAuthenticated()) {
             p = req.fields
             id = req.user.id
+            console.log(p)
+            
+            if(bcrypt.compareSync(p.password, req.user.password)) {
+                updateUserName(id,p.name.split(" ")[0],p.name.split(" ")[1])
+                updateUserGender(id,p.gender)
+                updateUserMajor(id,p.major)            
+                updateUserInterests(id,p.interests)
+                updateProfileDesc(id,p.description)
+                if(req.files.profile_image.size > 0)
+                    updateProfileImage(id,req.files.profile_image)
+                else fs.unlinkSync(req.files.profile_image.path)
 
-            if( bcrypt.hashSync(password, null, null) === req.user.password) {
-                
-                if(p.firstname || p.lastname)
-                    updateUserName(id,p.firstname,p.lastname)
-                if(p.gender)
-                    updateUserGender(id,p.gender)
-                if(p.major)
-                    updateUserMajor(id,p.major)            
-                if(p.interests)
-                    updateUserInterests(id,p.interests)
-                if(p.profile_desc)
-                    updateProfileDesc(id,p.profile_desc)
-                if(p.profile_image)
-                    updateProfileImage(id,req.files)
-                
-                res.redirect('/')
+                if(p.newPassword) {
+                    if(p.newPassword == p.newPasswordConfirm)
+                        updateUserPassword(id,p.newPassword)
+                    else {
+                        return res.render('account', {
+                            user: req.user,
+                            message: "Passwords don't match"
+                        })
+                    }
+                }
+                res.redirect('/account')
             } else {
                 res.render('account', {
                     user: req.user,
-                    
+                    message: "Wrong Password"
                 })
             }
         } else {
@@ -151,12 +158,14 @@ module.exports = (app, io, db, pp) => {
     app.get('/audit', (req,res) => {
         if(req.isAuthenticated()) {
             if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod') {
+                getAllPendingPosts()
+                .then( (posts) =>
                 res.render("audit",{
-                    user: req.user
-                })
+                    user: req.user,
+                    posts: posts
+                }))
                 req.login(req.user.id,()=>{})
             }
-            else res.send('Unauthorized')
         } else {
             referenceLink[req.ip] = req.url
             res.redirect('/')
@@ -307,13 +316,22 @@ module.exports = (app, io, db, pp) => {
 
     app.get('/profile_image/:uid', (req,res) => {
         uid = req.params.uid
-        if(req.isAuthenticated())
+        if(req.isAuthenticated()) {
+            if(uid === req.user.id) {
+                if(req.user.profile_image) {
+                    //fs.writeFileSync("profile_image"+req.user.id,req.user.profile_image)
+
+                }
+            } else
             getProfilePictureByID(uid,(result) => {
                 if(result.profile_image) {
-                    res.setHeader('Content-disposition', 'attachment filename=profile.svg')
+                    res.setHeader('Content-disposition', 'attachment filename=profile')
                     res.send(result.profile_image)
-                } else res.status(404).end()
+                } else {
+                    
+                }
             })
+        } else res.status(404).end()
     })
     
     app.get('/', (req,res) => {
@@ -332,9 +350,12 @@ module.exports = (app, io, db, pp) => {
             // .then(() => getUserNotifications( req.user.id )
             // .then( results => Notifications = results )
             .then(() => {
+                interests = req.user.interests.split(" ")
+                interests = (interests == '') ? interests = null : interests;
                 res.render('home', {
                     user: req.user,
                     courses: courses,
+                    interests: interests,
                     departments: departments,
                     myPosts: myPosts,
                     savedPosts: savedPosts,
@@ -360,28 +381,35 @@ module.exports = (app, io, db, pp) => {
             if(result) {
                 id = result.id
                 req.login(id, (err) => {
-                    if(err)console.log(err)
-                    console.log('...')
-                    res.redirect('/')
+                    if(err) console.log(err)
+                    else res.redirect('/')
                 })
             } else {
                 req.flash('alert alert-danger',
                     '<b>Sorry!</b> Incorrect login information.')
-                res.redirect('/',{ message: req.flash('Incorrect login information') })
+                res.redirect('/')
             }
         })
     })
 
-    app.get('/register', (req,res) => res.redirect('/') )
+    app.get('/thankyou', (req,res) => res.redirect('/#thankyou') )
+    app.get('/verified', (req,res) => res.redirect('/#verified') )
+    app.get('/forgotpass', (req,res) => res.redirect('/#forgotpass') )
+    app.get('/resetpass', (req,res) => res.redirect('/#newpass') )
+
+    app.get('/register', (req,res) => res.redirect('/#register') )
     app.post('/register', (req,res) => {
         let firstname = req.fields.first_name || '',
         lastname = req.fields.last_name || '',
         email = req.fields.email || '',
-        password = req.fields.password || ''
-        
-        if(!email || email.includes('@students.ecu.edu')) {
+        password = req.fields.password
+
+        console.log(password)
+        if(!password)
+
+        if(!email.includes('@students.ecu.edu')) {
             req.flash('You need to you use ECU student email to register')
-            res.redirect('/')
+            //res.redirect('/')
         } else console.log("email usable")
 
         // validate here
@@ -389,12 +417,17 @@ module.exports = (app, io, db, pp) => {
             register(firstname, lastname, email, password)
             .then((id) => {
                 if(id) {
-                    sendEmail(email,() => res.redirect('/') )
+                    sendVerificationEmail(email,() => res.redirect('/thankyou') )
                 } else {
-                    req.flash('alert alert-danger','Incorrect login information.')
-                    res.redirect('/')
+                    console.log("error occured")
                 }
-            }) 
+            })
+            .catch( err => {
+                if(err.errno === 1062) {
+                    console.log("email duplicate")
+
+                }
+            })
         } else {
             req.flash('alert alert-danger','Missing information')
             res.redirect('/')
