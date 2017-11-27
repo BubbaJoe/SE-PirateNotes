@@ -126,7 +126,10 @@ module.exports = (db) => {
                         db.query('insert into file(id,post_id,file_name,file_size,file_type,file_data) values(?,?,?,?,?,?)',
                         [createUuid(),post_id,file.name,file.size,file.type,data])
                         .then ( () => fs.unlinkSync(file.path) )
-                        .catch( err => console.log(err))
+                        .catch( err => {
+                            console.log(err.code)
+                            fs.unlinkSync(file.path)
+                        } )
                     )
                 ))
             ).catch( err => console.log(err))
