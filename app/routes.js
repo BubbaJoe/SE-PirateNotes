@@ -404,9 +404,6 @@ module.exports = (app, io, db, pp) => {
         email = req.fields.email || '',
         password = req.fields.password
 
-        console.log(password)
-        if(!password)
-
         if(!email.includes('@students.ecu.edu')) {
             req.flash('You need to you use ECU student email to register')
             //res.redirect('/')
