@@ -1,14 +1,14 @@
-# SE-PirateNotes
+# Software Engineering 'PirateNotes' Project
 created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffink
 
-### Software Engineering Group Project called "PiratesNotes", used to help college students share notes for specific courses as a community.
+### Software Engineering Group Project called 'TheCodeJunkiez' created an app called "PiratesNotes", which is an application used to help college students (at ECU) to share notes for specific courses as a community.
 
 ### This Web Application was created using Node.JS, Expressjs, Handlebarsjs, Passportjs, Websockets, MySQL and many other frameworks. Languages includeJavscript, MySQL, HTML and CSS. Features includes Making posts, Posts with attachments, Following Departments, Following Coursing, Searching Database, Logging in, Updating profile, and Registering.
 
 ## Running the server locally
 
 1. Make sure you have Node.JS and Git downloaded
-2. Go to the directory where you want to project
+2. ```cd``` into the directory where you want to project
 3. Run ```git clone https://github.com/BubbaJoe/SE-PirateNotes```
 4. Run ```cd se-piratenotes```
 5. Download and install Wampserver
@@ -17,10 +17,21 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 8. Run ```npm install``` or ```nodemon```
 9. ```http://localhost:8080```
 
-## TO DO:
+## Pictures
 
-create Profile for other user to view
-
-finish Flash Messages
-
-finish Audit Page (Ban, Decline Posts, Read Reports)
+### Login
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Register
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Homepage
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Account Editing
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Search
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Department View
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Course View
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+### Admin View
+![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
