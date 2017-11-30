@@ -1,9 +1,9 @@
 # SE-PirateNotes
 created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffink
 
-### Software Engineering Group Project called "PiratesNotes", it is used to help college students share notes for specific courses as a community.
+### Software Engineering Group Project called "PiratesNotes", used to help college students share notes for specific courses as a community.
 
-### This Web Application was created using Node.JS, Expressjs, Handlebarsjs, Passportjs, Websockets, MySQL and many other frameworks. Languages includeJavscript, MySQL, HTML and CSS
+### This Web Application was created using Node.JS, Expressjs, Handlebarsjs, Passportjs, Websockets, MySQL and many other frameworks. Languages includeJavscript, MySQL, HTML and CSS. Features includes Making posts, Posts with attachments, Following Departments, Following Coursing, Searching Database, Logging in, Updating profile, and Registering.
 
 ## Running the server locally
 
@@ -16,7 +16,6 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 7. (For nodemon to work) Run ```npm install -g nodemon``` 
 8. Run ```npm install``` or ```nodemon```
 9. ```http://localhost:8080```
-
 
 ## TO DO:
 
