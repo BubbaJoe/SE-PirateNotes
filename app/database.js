@@ -20,7 +20,8 @@ module.exports = (db) => {
             id = id.replace('-','')
         return id
     }
-
+    
+    // Run custom query
     runQuery = (query,params) => {
         return new Promise( ( resolve, reject ) => {
             db.query(query, params)
@@ -60,7 +61,7 @@ module.exports = (db) => {
         } )
     }
 
-    // Update p
+    // Update the user's name
     updateUserName = (id,firstname,lastname) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set firstname = ?, lastname = ? where id = ?', 
@@ -70,6 +71,7 @@ module.exports = (db) => {
         } )
     }
 
+    // updates the user's gender
     updateUserGender = (id,gender) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set gender = ? where id = ?', 
@@ -79,6 +81,7 @@ module.exports = (db) => {
         } )
     }
 
+    // updates user's major
     updateUserMajor = (id,major) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set major = ? where id = ?', 
@@ -88,6 +91,7 @@ module.exports = (db) => {
         } )
     }
 
+    // updates user's interests
     updateUserInterests = (id,interests) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set interests = ? where id = ?', 
@@ -97,6 +101,7 @@ module.exports = (db) => {
         } )
     }
 
+    // updates user's password
     updateUserPassword = (id,password) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set password = ? where id = ?', 
@@ -106,6 +111,7 @@ module.exports = (db) => {
         } )
     }
 
+    // updates users profile description
     updateProfileDesc = (id,profile_desc) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set profile_desc = ? where id = ?', 
@@ -208,7 +214,7 @@ module.exports = (db) => {
         } )
     }
 
-    // Posts that the user has created that are accepted
+    // Posts that the user has created that are accepted(along with files)
     getUserPosts = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             let final_post
@@ -236,7 +242,7 @@ module.exports = (db) => {
         } )
     }
 
-    // Posts that the user has created that are accepted
+    // Posts that the user has created that are accepted (along with files)
     getCoursePosts = (course_id) => {
         return new Promise( ( resolve, reject ) => {
             let final_post
@@ -262,7 +268,7 @@ module.exports = (db) => {
         } )
     }
 
-    // Gets the course
+    // Gets the course with id
     getCourse = (course_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from course ' +
@@ -272,7 +278,7 @@ module.exports = (db) => {
         } )
     }
 
-    // Gets the department
+    // Gets the department with id
     getDepartment = (dept_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('select * from department ' +
@@ -282,8 +288,7 @@ module.exports = (db) => {
         } )
     }
 
-    // For admin/mod use only
-    // gets all posts pending approval
+    // For admin/mod use only: gets all posts pending approval
     getAllPendingPosts = () => {
         return new Promise( ( resolve, reject ) => {
             db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
@@ -311,8 +316,7 @@ module.exports = (db) => {
         } )
     }
 
-    // For admin/mod use only
-    // gets all posts
+    // For admin/mod use only: gets all posts
     getAllPosts = () => {
         return new Promise( ( resolve, reject ) => {
             db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname'+
@@ -340,8 +344,7 @@ module.exports = (db) => {
         } )
     }
 
-    // For admin/mod use only
-    // accept this post
+    // For admin/mod use only: accept this post
     acceptPost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update post set post_status = \'accepted\' where id = ?',[post_id])
@@ -361,7 +364,7 @@ module.exports = (db) => {
         } )
     }
 
-    // searches  for the department
+    // searches for the departments  based on a word
     searchDepartment = (word) => {
         return new Promise( ( resolve, reject ) => {
             word = '%' + word + '%';
@@ -372,8 +375,7 @@ module.exports = (db) => {
         } )
     }
 
-    // For admin/mod use only
-    // deny this post
+    // For admin/mod use only: deny this post
     declinePost = (post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update post set post_status = \'denied\' where id = ?',[post_id])
@@ -382,8 +384,7 @@ module.exports = (db) => {
         } )
     }
 
-    //For admin/mod use only
-    // suspends a user from posting
+    //For admin/mod use only: suspends a user from posting
     suspendUser = (user_id,suspend_length) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set acc_status = \'warning\' where id = ?',
@@ -393,8 +394,7 @@ module.exports = (db) => {
         } )
     }
 
-    // For admin/mod use only
-    // bans a user from posting
+    // For admin/mod use only: bans a user from posting
     banUser = (user_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('update user set acc_status = \'banned\' where id = ?',
@@ -414,7 +414,7 @@ module.exports = (db) => {
         } )
     }
 
-    // sets user to follow a course
+    // sets user to unlike a post
     likePost = (user_id, post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into liked (user_id,post_id) values (?, ?)',
@@ -423,7 +423,7 @@ module.exports = (db) => {
         } )
     }
 
-    // sets user to follow a course
+    // sets user to like a post
     unlikePost = (user_id,post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('delete from liked where user_id = ? and post_id = ?',
@@ -432,7 +432,7 @@ module.exports = (db) => {
         } )
     }
 
-    // sets user to follow a course
+    // sets user to save a post
     savePost = (user_id,post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into saved (user_id,post_id) values (?, ?)',
@@ -441,7 +441,7 @@ module.exports = (db) => {
         } )
     }
 
-    // sets user to follow a course
+    // sets user to unsave a post
     unsavePost = (user_id,post_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('delete from saved where user_id = ? and post_id = ?',
@@ -450,7 +450,7 @@ module.exports = (db) => {
         } )
     }
 
-    // sets user to follow a course
+    // sets user to follow a department
     followDepartment = (user_id,dept_id) => {
         return new Promise( ( resolve, reject ) => {
             db.query('insert into followed_department (user_id,dept_id) values (?, ?)',
