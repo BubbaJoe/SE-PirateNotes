@@ -92,7 +92,7 @@
 					<button class="btn waves-effect waves-light purple" type="submit">Login</button>
 					<br>
 					<br>
-					<a href="#forgotpass">Can't remember password?</a>
+					<a href="/forgotpass">Can't remember password?</a>
 					{{> flash }}
 				</center>
 			</div>
@@ -196,8 +196,14 @@
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="password-confirm" type="password" class="validate">
-						<label for="password-confirm">Confirm</label>
+						<input name="passwordConfirm" type="password" class="validate">
+						<label for="passwordConfirm">Confirm</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="input-field col s12">
+						<input name="verificationCode" type="password" class="validate">
+						<label for="verificationCode">Verification Code</label>
 					</div>
 				</div>
 					<center>

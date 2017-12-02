@@ -66,10 +66,10 @@ module.exports = (db) => {
             mailOptions.html = resetPasswordHTML
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
-                else return callback(info)
+                else return callback(user)
             })
         })
-        .catch(err => console.log("Couldn't send email"))
+        .catch(err => console.log("Couldn't send email",err))
     }
 
     sendVerificationEmail = (user_email,callback) => {
@@ -106,7 +106,7 @@ module.exports = (db) => {
             mailOptions.html = verifyHTML
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
-                else return callback(info)
+                else return callback(user)
             })
         }).catch(err => console.log("Couldn't send email"))
     }

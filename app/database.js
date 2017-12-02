@@ -21,6 +21,7 @@ module.exports = (db) => {
         return id
     }
 
+    // Runs a custom query
     runQuery = (query,params) => {
         return new Promise( ( resolve, reject ) => {
             db.query(query, params)
@@ -512,11 +513,8 @@ module.exports = (db) => {
 
     // Validate the Login information 
     login = (email,password) => {
-        console.log(password);
-        console.log(bcrypt.hashSync(password));
         return new Promise( ( resolve, reject ) => {
-            db.query('select id, password from user where email = ?',
-            [email])
+            db.query('select id, password from user where email = ?', [email])
             .then( (result) => {
                 if(bcrypt.compareSync(password, result[0].password))
                     resolve(result[0]) 

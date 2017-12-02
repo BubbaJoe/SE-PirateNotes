@@ -138,4 +138,4 @@ db.on('error')
     require('./app/email.js')(db);
 })
 
-require('./app/routes.js')(app, io, db, passport);
+require('./app/routes.js')(app, io, passport);

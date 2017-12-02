@@ -19,8 +19,9 @@ let referenceLink = []
 let numActiveUsers = 0
 
 // Express, Socket.IO, MySQL, and Passport
-module.exports = (app, io, db, pp) => {
+module.exports = (app, io, pp) => {
 
+    // Websocket handler
     io.sockets.on('connection',(socket) => {
 
         numActiveUsers ++
@@ -57,27 +58,32 @@ module.exports = (app, io, db, pp) => {
 
     });
 
-    app.post('/forgot', (req,res) => {
-        //only for forgotten passwords
-    })
-
-    app.post('/password', (req,res) => {
-        //only for forgotten passwords
-    })
+    //Routes for endpoints
 
     app.get('/tos', (req,res) => {
-        // send tos doc
+        res.download(__dirname+'/../TermsOfService.pdf')
+    })
+
+    app.post('/forgot', (req,res) => {
+        if(req.fields.email)
+        runQuery('select email from user where email = ? ',[req.fields.email])
+        .then( (email) => {
+            if(email[0])
+            sendPasswordEmail(email[0].email, (info) => {
+                res.register('/')
+            }) 
+            else res.redirect('/#forgotpass')
+        })
+        else res.redirect('/#forgotpass')
     })
 
     app.get('/verify/:uid', (req,res) => {
-        // 3 cases!
         if(!req.params.uid) res.redirect('/')
         uid = req.params.uid
         verifyUser(uid)
         .then( () => {
             res.redirect('/verified')
         })
-        // Test error here
     })
 
     app.get('/account', (req, res) => {
@@ -99,11 +105,13 @@ module.exports = (app, io, db, pp) => {
             console.log(p)
             
             if(bcrypt.compareSync(p.password, req.user.password)) {
+
                 updateUserName(id,p.name.split(" ")[0],p.name.split(" ")[1])
                 updateUserGender(id,p.gender)
                 updateUserMajor(id,p.major)            
                 updateUserInterests(id,p.interests)
                 updateProfileDesc(id,p.description)
+
                 if(req.files.profile_image.size > 0)
                     updateProfileImage(id,req.files.profile_image)
                 else fs.unlinkSync(req.files.profile_image.path)
@@ -118,7 +126,7 @@ module.exports = (app, io, db, pp) => {
                         })
                     }
                 }
-                res.redirect('/account')
+                res.redirect('/')
             } else {
                 res.render('account', {
                     user: req.user,
@@ -163,6 +171,23 @@ module.exports = (app, io, db, pp) => {
                 res.render("audit",{
                     user: req.user,
                     posts: posts
+                }))
+                req.login(req.user.id,()=>{})
+            }
+        } else {
+            referenceLink[req.ip] = req.url
+            res.redirect('/')
+        }
+    })
+
+    app.get('/admin', (req,res) => {
+        if(req.isAuthenticated()) {
+            if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod') {
+                getUserCourses()
+                .then( (courses) =>
+                res.render("admin",{
+                    user: req.user,
+                    _courses: courses
                 }))
                 req.login(req.user.id,()=>{})
             }
@@ -371,6 +396,8 @@ module.exports = (app, io, db, pp) => {
             })
         }
     })
+
+    //post
     
     app.get('/login',(req,res) => res.redirect('/') )
     app.post('/login', (req, res) => {
@@ -479,6 +506,8 @@ module.exports = (app, io, db, pp) => {
             req.logout()
         res.redirect('/')
     })
+
+    // Passport Session Serialization
 
     pp.serializeUser((user, done) => done(null, user) )
     
