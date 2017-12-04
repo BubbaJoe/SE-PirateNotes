@@ -37,27 +37,30 @@
            <div class="input-field">
              <p>Profile Image</p>
               <div  style="display:inline-block;vertical-align:top;">
-                <img id="pimage" src="/images/m_profile.svg" alt="/profileimage/{{user.id}}" class="w3-circle" style="height:106px;width:106px;margin-bottom:30px">
+                <img id="pimage" src="/profile_image" alt="/profileimage/{{user.id}}" class="w3-circle" style="height:106px;width:106px;margin-bottom:30px">
               </div>
               <div style="display:inline-block;">
-                <input name="profile_image" class="w3-button" id="imageChooser" type='file' onchange="readURL(this);" />
+                <input name="profile_image" class="w3-button" id="imageChooser" accept="image/x-png,image/gif,image/jpeg" type='file' onchange="readURL(this);" />
               </div><br>
               
-              <label for="name">Name</label>
-              <input class="w3-input w3-border" name="name" id="name" value="{{user.firstname}} {{user.lastname}}"><br>
+              <label for="first">First name</label>
+              <input class="w3-input w3-border" name="first" id="first" value="{{#if first}}{{first}}{{else}}{{user.firstname}}{{/if}}" required><br>
               
+              <label for="last">Last name</label>
+              <input class="w3-input w3-border" name="last" id="last" value="{{#if last}}{{last}}{{else}}{{user.lastname}}{{/if}}" required><br>
+
               <label for="email">Email (Can't change)</label>
-              <input class="w3-input w3-border" name="email" id="email" value="{{user.email}}" disabled><br>
+              <input class="w3-input w3-border" name="email" id="email" value="{{#if email}}{{email}}{{else}}{{user.email}}{{/if}}" disabled><br>
 
               <label for="decription">Description</label>
-              <textarea class="w3-input w3-border" style="resize:none;width:100%;margin-bottom:5px;" name="description" id="description">{{user.profile_desc}}</textarea><br>
+              <textarea class="w3-input w3-border" style="resize:none;width:100%;margin-bottom:5px;" name="description" id="description">{{#if desc}}{{desc}}{{else}}{{user.profile_desc}}{{/if}}</textarea><br>
               
-              <label for="interests">Interests</label>
+              <label for="interests">Interests '*, *, *'</label>
               <input class="w3-input w3-border" name="interests" id="interests" value="{{user.interests}}"><br>
               
               <label for="gender">Gender</label><br>
-              Male <input class="w3-button" type="radio" name="gender" value="male" {{#iff user.gender value="male"}} checked {{/iff}}>
-              Female <input class="w3-button" type="radio" name="gender" value="female"{{#iff user.gender value="female"}} checked {{/iff}}>
+              Male <input class="w3-button" type="radio" name="gender" value="male" {{#iff gender value="male"}} checked {{else}}{{#iff user.gender value="male"}} checked {{/iff}}{{/iff}}>
+              Female <input class="w3-button" type="radio" name="gender" value="female"{{#iff gender value="female"}} checked {{else}}{{#iff user.gender value="female"}} checked {{/iff}}{{/iff}}>
               <BR><BR>
 
               <label for="major">Major</label>
@@ -72,10 +75,13 @@
           <hr>
               <label for="password">Current Password</label>
               <input class="w3-input w3-border" type="password" name="password" id="password" value="" required><br>
-              {{> flash }}
+              {{#if accountError }}
+                <span style="color:red">{{accountError}}</span><br><br>
+              {{/if}}
           </div>
           <hr>
           <div>
+              <button onclick="gotoUrl('/account')" type="submit" class="w3-button w3-left w3-theme-d2" style="margin-bottom:10px">Reset</button>
               <button type="submit" class="w3-button w3-right w3-theme-d2" style="margin-bottom:10px">Update Profile</button>
           </div>
          </form>

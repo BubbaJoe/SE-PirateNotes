@@ -1,6 +1,6 @@
 <!-- POST -->
 <div id="post_div" class="w3-container w3-card-2 w3-white w3-round w3-margin"><br>
-    <img src="/images/m_profile.svg" class="w3-left w3-circle w3-margin-right" style="width:60px">
+    <img src="/profile_image/{{this.user_id}}" onerror="reloadPicture(this)" class="w3-left w3-circle w3-margin-right" style="width:60px;height:60px">
     <span class="w3-right w3-opacity">({{this.post_status}}) {{timeAgo time=this.post_date}}</span>
     <h4>{{this.firstname}} {{this.lastname}} to <a href="/course/{{this.course_id}}" 
         title="{{this.course_name}}">{{this.dept_abbr}} {{this.course_num}}</a></h4><br>

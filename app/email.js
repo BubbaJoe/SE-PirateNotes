@@ -28,12 +28,12 @@ module.exports = (db) => {
     // sets default mail params
     let mailOptions = {
         from: '"Pirate Notes" <no.reply.piratenotes@gmail.com>',
-        to: 'no.reply.piratenotes@gmail.com',
-        subject: 'PirateNotes - Verify Account',
+        to: 'no.reply.piratenotes@gmail.com'
     }
 
     // send the password email to the user
-    sendPasswordEmail = (user_email,callback) => {
+    sendPasswordEmail = (user_email,code,callback) => {
+        mailOptions.subject = 'PirateNotes - Forgot password'
         mailOptions.to = user_email
         db.query('select * from user where email = ?',[user_email])
         .then( (result) => {
@@ -47,15 +47,16 @@ module.exports = (db) => {
             <body style="margin:0;margin-top:20px;padding:0;">
                 <div style="margin:0 auto;max-width:600px;text-align:center;">
                     <h1 style="color:#592A8A;font-family:'Arial';margin:0;">
-                    Thank you for joining PirateNotes!</h1>
+                    Notification from PirateNotes!</h1>
                     <center><img src="https://github.com/BubbaJoe/SE-PirateNotes/blob/master/public/images/ECU_department.jpg?raw=true" 
                     style="display: block;max-width: 25%;padding: 12px 0;"alt="ECU Pirate" /></center>
                     <br><p style="color: #592A8A;font-family: 'Arial';margin: 0;">
                     Hello ${user.firstname} ${user.lastname}, Did you forget your password?
                     </p><br>
                     <p style="color: #592A8A;font-family: 'Arial';margin: 0;">
-                    Follow this link to reset your password:</p>
-                    <br><a href="http://localhost:8080/#forgotpass${user.id}">http://localhost:8080/#forgotpass?uid=${user.id}</a>
+                    Follow the link and enter the verification email to reset your password.</p>
+                    <p style="font-size:34px">${code}</p>
+                    <br><a href="http://localhost:8080/resetpass">Click me!!!</a>
                     <br>
                     <br>
                     <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did request a password reset, simply ignore this e-mail. </p>
@@ -65,7 +66,7 @@ module.exports = (db) => {
             
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
-                else return callback(user)
+                else if(callback) return callback(user)
             })
         })
         .catch(err => console.log("Couldn't send email",err))
@@ -73,6 +74,7 @@ module.exports = (db) => {
 
     // sends a verication email to user
     sendVerificationEmail = (user_email,callback) => {
+        mailOptions.subject = 'PirateNotes - Verify Account'
         mailOptions.to = user_email
         db.query('select * from user where email = ?',[user_email])
         .then( (result) => {
@@ -94,7 +96,7 @@ module.exports = (db) => {
                         </p><br>
                         <p style="color: #592A8A;font-family: 'Arial';margin: 0;">
                         Follow this link to verify your account:</p>
-                        <br><a href="http://localhost:8080/verify/${user.id}">http://localhost:8080/verify/${user.id}</a>
+                        <br><a href="http://localhost:8080/verify/${user.id}">Click me!!!</a>
                         <br>
                         <br>
                         <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did not request access to this service, simply ignore this e-mail. </p>
@@ -107,14 +109,5 @@ module.exports = (db) => {
                 else return callback(user)
             })
         }).catch(err => console.log("Couldn't send email"))
-    }
-
-    // sends out emails to all users
-    sendMassEmail = (email_arr,callback) => {
-        mailOptions.to = email_arr
-        transporter.sendMail(mailOptions, (err,info) => {
-            if(err) console.log(err)
-            else return callback(info)
-        })
     }
 }

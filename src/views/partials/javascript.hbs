@@ -3,7 +3,7 @@
 <script>
 
 var socket = io.connect();
-
+var count = 0
 function savePost(button,post_id) {
     button.innerHTML = button.innerHTML.replace('Save','Saved')
     button.onclick = "";
@@ -25,7 +25,77 @@ function followCourse(button,course_id) {
 function followDepartment(button,department_id) {
     button.innerHTML = button.innerHTML.replace('Follow','Followed')
     button.onclick = "";
-    socket.emit('follow:department', {department_id:department_id, id:'{{user.id}}'})
+    socket.emit('follow:department', {dept_id:department_id, id:'{{user.id}}'})
 }
 
+function reloadPicture(item) {
+    count ++
+    var src = item.src // The orignial picture
+    item.src='/images/loading.gif' // The loading picture
+    setTimeout(() => {
+        item.src = src + "?" + new Date().getTime() // the new request for the next picture
+    }, count * 600)
+}
+
+$( document ).ready(function() {
+    function remove(arr,i) {
+        newArray = []
+        for(j = 0; j < arr.length; j++)
+            if(i != j) newArray.push(arr[j])
+        return newArray
+    }
+    count = 0
+    function imageLoader(imgArray, original) {
+        if(original == undefined) {
+            original = imgArray
+            console.log("reset")
+        }
+        for(i = 0; i < imgArray.length; i++) {
+            if(imgArray[i].naturalWidth == 0) {
+                imgArray[i].src = '/images/loading.gif'
+                console.log("src changed to "+'/images/loading.gif')
+            } else if(imgArray[i].src === 'http://localhost:8080/images/loading.gif') {
+                a = '?'+ new Date().getTime()
+                console.log("src changed to o-"+original[i].src+a)
+                imgArray[i].src = original[i].src + a
+            } else {
+                original = remove(original,i)
+                imgArray = remove(imgArray,i)
+                console.log("deleted")          
+            }
+        }
+        setTimeout(() => {
+            imageLoader(imgArray,original)
+        }, 1000)
+    }
+    setTimeout(() => {
+    //imageLoader(document.getElementsByClassName('w3-circle'))
+    }, 100);
+});
+
+/*
+function unsavePost(button,post_id) {
+    button.innerHTML = button.innerHTML.replace('ed','e')
+    button.onclick = "savePost(this,''"+post_id+"'')";
+    socket.emit('unsave', {post_id:post_id, id:'{{user.id}}'})
+}
+
+function unlikePost(button,post_id) {
+    button.innerHTML = button.innerHTML.replace('ed','e')
+    button.onclick = "likePost(this,''"+post_id+"'')";
+    socket.emit('unlike', {post_id:post_id, id:'{{user.id}}'})
+}
+
+function unfollowCourse(button,course_id) {
+    button.innerHTML = button.innerHTML.replace('ed',' ')
+    button.onclick = "";
+    socket.emit('unfollow:course', {course_id:course_id, id:'{{user.id}}'})
+}
+
+function unfollowDepartment(button,department_id) {
+    button.innerHTML = button.innerHTML.replace('ed','')
+    button.onclick = "";
+    socket.emit('unfollow:department', {department_id:department_id, id:'{{user.id}}'})
+}
+*/
 </script>

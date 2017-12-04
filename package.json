@@ -10,6 +10,7 @@
   "dependencies": {
     "bcrypt-nodejs": "*",
     "body-parser": "*",
+    "compression": "*",
     "connect-flash": "*",
     "cookie-parser": "*",
     "express": "*",
@@ -22,8 +23,9 @@
     "morgan": "*",
     "mysql": "*",
     "nodemailer": "*",
-    "passport": "4.3.1",
+    "passport": "*",
     "passport-local": "*",
+    "pause": "*",
     "socket.io": "*",
     "uuid": "*"
   },

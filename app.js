@@ -18,12 +18,14 @@ let sqlsess     = require('express-mysql-session');
 let exphbs		= require('express-handlebars')
 let mysql		= require('mysql');
 let nodemailer  = require('nodemailer');
+var compression = require('compression')
 
 let port     	= process.env.PORT || 8080;
 let app			= express();
 let SqlSession  = sqlsess(session);
 
 // GENERAL
+app.use(compression())
 app.use(express.static('public'));
 app.use(express.static('src/views'));
 app.use(form({
@@ -42,8 +44,9 @@ app.engine('hbs',exphbs({
     partialsDir: './src/views/partials',
     extname: '.hbs',
     helpers: {
-        'iff': (conditional, options) => {
-            return (options.hash.value === conditional)?options.fn(this):options.inverse(this)
+        'iff': (cond, options) => {
+            if(cond == [] || cond == null || cond == undefined) return options.inverse(this)
+            return (options.hash.value === cond)?options.fn(this):options.inverse(this)
         },
         'timeAgo': (options) => {
             then = Date.parse(options.hash.time)

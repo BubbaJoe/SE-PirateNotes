@@ -11,15 +11,38 @@
 let fs      = require('fs')
 let path    = require('path')
 let bcrypt	= require('bcrypt-nodejs')
-
+let async   = require('async')
+let zlib    = require('zlib')
 // referenceLink = [user.ip, (the last link they requested before session was lost) ]
 let referenceLink = []
+let forgotCode = []
 
 // Number of active users on the website
 let numActiveUsers = 0
+let requestArray = []
 
 // Express, Socket.IO, MySQL, and Passport
 module.exports = (app, io, pp) => {
+    
+    // Trash cleaner
+    async function trash() {
+        await setTimeout( () => {
+            p = __dirname+"/../temp_uploads/"
+            fs.readdir(path.resolve(p),{},(err,files) => {
+                files.forEach((file) => {
+                    // If the file is older than a minute
+                    if(file != '.gitignore' && (new Date() - Date.parse(fs.statSync(p+file).birthtime) > 60000))
+                        fs.unlink(p+file, () => {
+                            console.log('removed '+file)
+                        } )
+                })
+            })
+            trash()
+        }
+        , 5000)
+    }
+
+    trash()
 
     // Websocket handler
     io.sockets.on('connection',(socket) => {
@@ -27,29 +50,58 @@ module.exports = (app, io, pp) => {
         numActiveUsers ++
 
         socket.on("follow:department", (data) => {
+            console.log("dept:")
             followDepartment(data.id,data.dept_id)
+            .then(() => console.log("Followed"))
+            .catch(() => console.log("Already following!"))
         })
 
         socket.on("follow:course", (data) => {
+            console.log("course:")
             followCourse(data.id,data.course_id)
+            .then(() => console.log("Followed"))
+            .catch(() => console.log("Already following!"))
         })
 
         socket.on("like", (data) => {
             likePost(data.id,data.post_id)
+            .then(() => console.log("saved"))
+            .catch(() => console.log("Already like!"))
         })
 
         socket.on("save", (data) => {
             savePost(data.id,data.post_id)
+            .catch(() => console.log("Already saved!"))
+        })
+
+        socket.on("unfollow:department", (data) => {
+            unfollowDepartment(data.id,data.dept_id)
+            .then(() => console.log("unFollowed"))
+        })
+
+        socket.on("unfollow:course", (data) => {
+            unfollowCourse(data.id,data.course_id)
+            .then(() => console.log("unFollowed"))
+        })
+
+        socket.on("unlike", (data) => {
+            unlikePost(data.id,data.post_id)
+            .then(() => console.log("unliked"))
+        })
+
+        socket.on("unsave", (data) => {
+            unsavePost(data.id,data.post_id)
+            .then(() => console.log("unsaved"))
         })
 
         socket.on("accept", (data) => {
             acceptPost(data)
-            .then( () => console.log("post accepted") )
+            .then(() => console.log("accepted"))
         })
 
         socket.on("decline", (data) => {
             declinePost(data)
-            .then( () => console.log("post declined") )
+            .then(() => console.log("declined"))
         })
 
         socket.on('disconnect', (socket) => {
@@ -65,23 +117,44 @@ module.exports = (app, io, pp) => {
     })
 
     app.post('/forgot', (req,res) => {
-        if(req.fields.email)
         runQuery('select email from user where email = ? ',[req.fields.email])
-        .then( (email) => {
-            if(email[0])
-            sendPasswordEmail(email[0].email, (info) => {
-                res.register('/')
-            }) 
-            else res.redirect('/#forgotpass')
+        .then( (user) => {
+            if(user[0]) {
+                code = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000
+                forgotCode[code] = user[0].id
+                res.redirect('/')
+                sendPasswordEmail(user[0].email, code) 
+            } else {
+                req.flash('forgotError','This email is not regsitered')
+                res.redirect('/#forgotpass')
+            }
         })
-        else res.redirect('/#forgotpass')
     })
 
-    app.get('/verify/:uid', (req,res) => {
-        if(!req.params.uid) res.redirect('/')
-        uid = req.params.uid
+    app.post('/changepass', (req,res) => {
+        let u = req.fields,
+        code = u.verificationCode
+        if(u.password == u.passwordConfirm) {
+            if(!forgotCode[code]) {
+                req.flash('verificationError','Verification Code')
+                return res.redirect('/#resetpass')    
+            } else {
+                updateUserPassword(id,p.newPassword)
+                delete forgotCode[code]
+                res.redirect('/')
+            }
+        } else {
+            req.flash('verificationError','Passwords do not match')
+            return res.redirect('/#resetpass')
+        }
+    })
+
+    app.get('/verify/:code', (req,res) => {
+        if(!req.params.code) res.redirect('/')
+        uid = req.params.code
         verifyUser(uid)
         .then( () => {
+            console.log()
             res.redirect('/verified')
         })
     })
@@ -89,7 +162,13 @@ module.exports = (app, io, pp) => {
     app.get('/account', (req, res) => {
         if(req.isAuthenticated()) {
             res.render('account',{
-                user: req.user
+                user: req.user,
+                first:req.flash('first'),
+                last:req.flash('last'),
+                desc:req.flash('desc'),
+                gender:req.flash('gender'),
+                major:req.flash('major'),
+                accountError: req.flash('accountError')
             })
         } else {
             referenceLink[req.ip] = req.url
@@ -103,35 +182,53 @@ module.exports = (app, io, pp) => {
             p = req.fields
             id = req.user.id
             console.log(p)
-            
+            refill = function(a) {
+                if(!a) a = ''
+                req.flash('first',p.first)
+                req.flash('last',p.last)
+                req.flash('desc',p.description)
+                req.flash('gender',p.gender)
+                req.flash('major',p.major)
+                res.redirect('/account'+ a)
+            }
+
             if(bcrypt.compareSync(p.password, req.user.password)) {
 
-                updateUserName(id,p.name.split(" ")[0],p.name.split(" ")[1])
+                if(p.first.trim() == '' || p.last.trim() == '') {
+                    req.flash('accountError','First or Last name may not be empty')
+                    if(p.first.trim() == '')
+                    return refill('#first')
+                    else return refill('#last')
+                }
+
+                updateUserName(id,p.first.trim(),p.last.trim())
                 updateUserGender(id,p.gender)
-                updateUserMajor(id,p.major)            
+                updateUserMajor(id,p.major)
                 updateUserInterests(id,p.interests)
                 updateProfileDesc(id,p.description)
 
-                if(req.files.profile_image.size > 0)
-                    updateProfileImage(id,req.files.profile_image)
-                else fs.unlinkSync(req.files.profile_image.path)
+                if(req.files.profile_image.size > 0) {
+                    if('image/x-png,image/gif,image/jpeg'.includes(req.files.profile_image.type))
+                        updateProfileImage(id,req.files.profile_image)
+                    else {
+                        req.flash('accountError','Incorrect file type for the picture')
+                        return refill('#profile_image')
+                    }
+                }
+                else setTimeout(() => fs.unlinkSync(req.files.profile_image.path), 3000)
 
                 if(p.newPassword) {
                     if(p.newPassword == p.newPasswordConfirm)
                         updateUserPassword(id,p.newPassword)
                     else {
-                        return res.render('account', {
-                            user: req.user,
-                            message: "Passwords don't match"
-                        })
+                        req.flash('accountError','Passwords don\'t match')
+                        return refill('#newPassword')
                     }
                 }
                 res.redirect('/')
             } else {
-                res.render('account', {
-                    user: req.user,
-                    message: "Wrong Password"
-                })
+                accountError: req.flash('accountError',"Wrong Password")
+                return refill('#password')
             }
         } else {
             referenceLink[req.ip] = req.url
@@ -149,15 +246,16 @@ module.exports = (app, io, pp) => {
             .then( (courses) =>
             getDepartment( req.params.did )
             .then( (department) => 
-            getDepartmentCourses(req.params.did)
+            getDepartmentCourses(req.params.did, req.user.id)
             .then( (_courses) => {
-                    res.render('department',{
-                        user: req.user,
-                        department: department,
-                        courses: courses,
-                        _courses: _courses
-                    })
-                    req.login(req.user.id,()=>{})
+                res.render('department',{
+                    user: req.user,
+                    department: department,
+                    courses: courses,
+                    _courses: _courses
+                })
+                console.log(_courses)
+                req.login(req.user.id,()=>{})
                 }
             )))
         }
@@ -166,12 +264,17 @@ module.exports = (app, io, pp) => {
     app.get('/audit', (req,res) => {
         if(req.isAuthenticated()) {
             if (req.user.acc_type == 'admin' || req.user.acc_type == 'mod') {
+                delete req.user.acc_type
+                getUserCourses(req.user.id)
+                .then( courses =>
                 getAllPendingPosts()
                 .then( (posts) =>
                 res.render("audit",{
                     user: req.user,
-                    posts: posts
-                }))
+                    enabled: true,
+                    posts: posts,
+                    courses: courses
+                })))
                 req.login(req.user.id,()=>{})
             }
         } else {
@@ -256,9 +359,9 @@ module.exports = (app, io, pp) => {
             let fileData, path
             getFile(file_id)
             .then( f => {
-                path = './temp_uploads/' + (f.file_name || '')
-                if(f) fs.writeFile(path, f.file_data, (err) => res.download(path) )
-                setTimeout(() => fs.unlinkSync(path), 3000)
+                path = './temp_uploads/'+Math.round(Math.random()*999999999)
+
+                if(f) fs.writeFile(path, f.file_data, (err) => res.download(path,f.file_name) )
             })
         } else {
             referenceLink[req.ip] = req.url
@@ -267,7 +370,7 @@ module.exports = (app, io, pp) => {
         }
     })
 
-    app.get('/search', function (req,res) {
+    app.get('/search', (req,res) => {
         if(req.isAuthenticated()) {
             getUserCourses( req.user.id )
             .then( (user_courses) => 
@@ -283,7 +386,7 @@ module.exports = (app, io, pp) => {
         }
     })
 
-    app.post('/search', function (req,res) {
+    app.post('/search', (req,res) => {
         if(req.isAuthenticated()) {
             if(req.fields.q != undefined) {
                 let wordArr = req.fields.q.split(" "),
@@ -339,30 +442,70 @@ module.exports = (app, io, pp) => {
         }
     })
 
-    app.get('/profile_image/:uid', (req,res) => {
+    app.get('/profile_image', (req, res) => {
+        if(res.headerSent) return res.status(404).end()
+            if(req.isAuthenticated()) {
+                if(req.user.profile_image) {
+                    p = __dirname+"/../temp_uploads/upload_"+Math.round(Math.random()*999999999)
+                    return fs.writeFile(path.resolve(p),req.user.profile_image, () => {
+                        res.sendFile(path.resolve(p))
+                    })
+                } else {
+                    res.sendFile(path.resolve(__dirname+'/../public/images/'+ ((req.user.gender == 'male')?'m':'w')+'_profile.svg'),{}, () => {
+                    })
+                }
+            } else {
+                return res.send('unauthorized')
+            }
+    })
+    
+    app.get('/test', (req, res) => {
+        async function test(val) {
+            setTimeout(() => res.end(val), 2000)
+        }
+        test("TEST")
+    })
+
+    app.get('/profile_image/:uid', (req, res) => {
+        if(res.headerSent) return res.status(404).end()
         uid = req.params.uid
         if(req.isAuthenticated()) {
             if(uid === req.user.id) {
+                return res.redirect('/profile_image')
                 if(req.user.profile_image) {
-                    path = "profile_image"+req.user.id;
-                    fs.writeFile(path,req.user.profile_image, () => {
-                        req.sendFile(path)
-                        fs.unlinkSync(path)
-                    })
-                }
-            } else
-            getProfilePictureByID(uid,(result) => {
-                if(result.profile_image) {
-                    res.setHeader('Content-disposition', 'attachment filename=profile')
-                    fs.writeFile(path,result.profile_image, () => {
-                        req.sendFile(path)
-                        fs.unlinkSync(path)
+                    p = __dirname+"/../temp_uploads/upload_"+Math.round(Math.random()*999999999)
+                    return fs.writeFile(path.resolve(p),req.user.profile_image, () => {
+                        res.sendFile(path.resolve(p))
                     })
                 } else {
-                    
+                    var options = {
+                        dotfiles: 'deny',
+                        headers: {
+                            'x-timestamp': Date.now(),
+                            'x-sent': true
+                        }
+                    };
+                    res.set('Content-Type','image/svg+xml')
+                    return res.sendFile(path.resolve(__dirname+'/../public/images/'+ ((req.user.gender == 'male')?'m':'w')+'_profile.svg'), options, (err) => {
+                        console.log("File sent")
+                    })
                 }
-            })
-        } else res.status(404).end()
+            } else {
+                getProfilePictureByID(uid)
+                .then( (result) => {
+                    if(result.profile_image) {
+                        p = __dirname+"/../temp_uploads/"+Math.round(Math.random()*999999999)
+                        return fs.writeFile(path.resolve(p),result.profile_image, () => {
+                            res.sendFile(path.resolve(p))
+                        })
+                    } else {
+                    return res.sendFile(path.resolve(__dirname+'/../public/images/'+ ((result.gender == 'male')?'m':'w')+'_profile.svg'))
+                    }
+                })
+            }
+        } else {
+            return
+        }
     })
     
     app.get('/', (req,res) => {
@@ -372,18 +515,18 @@ module.exports = (app, io, pp) => {
         } else if(req.isAuthenticated()) {
             let courses = [], departments, myPosts = [], interests = [], notifications = [], savedPosts = []
             getUserCourses( req.user.id ).then( results => courses = results )
-            .then(() => getUserPosts( req.user.id )
-            .then( results => myPosts = results )
+            .then( () => getUserViewPosts( req.user.id )
+            .then( results => myPosts = results ))
             .then( () => getUserDepartments( req.user.id )
             .then( (depts) => departments = depts ))
-            // .then(() => getUserSavedPosts( req.user.id )
-            // .then( results => savedPosts = results )
-            // .then(() => getUserNotifications( req.user.id )
-            // .then( results => Notifications = results )
+            .then( () => getUserSavedPosts( req.user.id )
+            .then( results => savedPosts = results ))
+            .then(() => getUserNotifications( req.user.id )
+            .then( results => notifications = results ))
             .then(() => {
-                interests = req.user.interests.split(" ")
-                interests = (interests == '') ? interests = null : interests;
+                interests = (interests == '') ? interests = null : req.user.interests.split(", ");
                 res.render('home', {
+                    alert: req.flash('alert'),
                     user: req.user,
                     courses: courses,
                     interests: interests,
@@ -394,17 +537,20 @@ module.exports = (app, io, pp) => {
                 })
                 req.login(req.user.id,()=>{})
             })
-            )
         } else {
-            req.flash('danger','incorrect information')
             res.render('auth', {
-                messages: req.flash('INCORRECT INFO') 
+                firstname: req.flash('firstname'),
+                lastname: req.flash('lastname'),
+                email: req.flash('email'),
+                loginError: req.flash('loginError'),
+                registerError: req.flash('registerError'),
+                forgotError: req.flash('forgotError'),
+                verificationError: req.flash('verificationError')
             })
         }
     })
 
     //post
-    
     app.get('/login',(req,res) => res.redirect('/') )
     app.post('/login', (req, res) => {
         let email = req.fields.email,
@@ -412,14 +558,20 @@ module.exports = (app, io, pp) => {
         login(email,password)
         .then( result => {
             if(result) {
-                id = result.id
-                req.login(id, (err) => {
-                    if(err) console.log(err)
-                    else res.redirect('/')
-                })
+                switch(result.acc_status) {
+                    case 'banned':
+                    req.flash('loginError','Your account is banned. You have disobeyed the terms of service.')
+                    res.redirect('/')
+                    break
+                    case 'unverified':
+                    req.flash('loginError','Your account is unverified. Please check your email!')
+                    res.redirect('/')
+                    break
+                    default:
+                    req.login(result.id, () => res.redirect('/'))    
+                }
             } else {
-                req.flash('alert alert-danger',
-                    '<b>Sorry!</b> Incorrect login information.')
+                req.flash('loginError','Incorrect login information')
                 res.redirect('/')
             }
         })
@@ -427,7 +579,7 @@ module.exports = (app, io, pp) => {
 
     app.get('/thankyou', (req,res) => res.redirect('/#thankyou') )
     app.get('/verified', (req,res) => res.redirect('/#verified') )
-    app.get('/forgotpass', (req,res) => res.redirect('/#forgotpass') )
+    app.get('/forgot', (req,res) => res.redirect('/#forgotpass') )
     app.get('/resetpass', (req,res) => res.redirect('/#newpass') )
 
     app.get('/register', (req,res) => res.redirect('/#register') )
@@ -437,30 +589,50 @@ module.exports = (app, io, pp) => {
         email = req.fields.email || '',
         password = req.fields.password
 
-        if(!email.includes('@students.ecu.edu')) {
-            //You need to you use ECU student email to register
-            res.redirect('/')
-        } else console.log("email usable")
+        refill = function() {
+            req.flash('firstname',firstname)
+            req.flash('lastname',lastname)
+            req.flash('email',email)
+            res.redirect('/#register')
+        }
 
-        // validate here
+        if(!req.fields.checkbox) {
+            req.flash('registerError','Please agree to the terms of service')
+            return refill()
+        }
+
+        if(!email.includes('@students.ecu.edu')) {
+            req.flash('registerError','Please use your ECU student email!')
+            return refill()
+        }
+
+        if(password != req.fields.password_confirm) {
+            req.flash('registerError','Your passwords do not match')
+            return refill()
+        }
+        
         if(firstname != "" || lastname != "" || email != "" || password != "") {
             register(firstname, lastname, email, password)
             .then((id) => {
                 if(id) {
-                    sendVerificationEmail(email,() => res.redirect('/thankyou') )
+                    sendVerificationEmail(email)
+                    res.redirect('/thankyou')
                 } else {
-                    console.log("error occured")
+                    req.flash('registerError',"Your account could not be created!")
+                    return refill()
                 }
             })
             .catch( err => {
                 if(err.errno === 1062) {
-                    console.log("email duplicate")
-
+                    req.flash('registerError',"Someone is already regsitered with this email")
+                    return refill()
                 }
+                req.flash('registerError',JSON.stringify(err))
+                return refill()
             })
         } else {
-            req.flash('alert alert-danger','Missing information')
-            res.redirect('/')
+            req.flash('registerError','Missing information')
+            return refill()
         }
     })
 
@@ -476,16 +648,16 @@ module.exports = (app, io, pp) => {
             let FileTooBig = false
             fileArr.forEach( (file,i) => {
                 if(file.size == 0 || file.name == '')
-                    fs.unlinkSync(fileArr.splice(i,1)[0].path)
+                setTimeout(() => fs.unlinkSync(fileArr.splice(i,1)[0].path), 3000)
                 if(file.size > 10000000)
                     stop = true
             } )
 
             if(FileTooBig) {
-                req.flash('The file was too big (10M max)')
+                req.flash('error','The file was too big (10M max)')
                 res.redirect('/')
             } else if(fileArr.length > 5) {
-                req.flash('Too many files (5 files max)')
+                req.flash('error','Too many files (5 files max)')
                 res.redirect('/')
             } else
                 createPost(req.user.id,req.fields.course,req.fields.post_text,fileArr)

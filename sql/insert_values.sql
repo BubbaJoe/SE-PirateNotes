@@ -2,26 +2,25 @@
 #use the link above to generate uuid/guid
 #HASH $2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy = 123
 
-#insert into user (id,email,password,firstname,lastname,acc_type,acc_status)
-#values('id','email','password','firstname','lastname','acc_type','acc_status');
+# Users
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('2d29c09cb9be4293ac690b75531e1489', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Naruto', 'Uzimaki', 'general', 'active');
+values ('2d29c09cb9be4293ac690b75531e1489', 'a@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Naruto', 'Uzimaki', 'general', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('f3e0023dea584c07ac7e78e9dc6a4729', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Itachi', 'Uchiha', 'general', 'active');
+values ('f3e0023dea584c07ac7e78e9dc6a4729', 'b@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Itachi', 'Uchiha', 'general', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('5eca01a62b8f4753a579dbbbbfb79c12', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Ozair', 'Shareef', 'admin', 'active');
+values ('5eca01a62b8f4753a579dbbbbfb79c12', 'c@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Ozair', 'Shareef', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('40bcee06412f47908691e7fe52102199', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Joe', 'Williams', 'admin', 'active');
+values ('40bcee06412f47908691e7fe52102199', 'd@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Joe', 'Williams', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('60e2da55449f4d8fa513614c72b48d80', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Will', 'Brimson', 'admin', 'active');
+values ('60e2da55449f4d8fa513614c72b48d80', 'e@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Will', 'Brimson', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('1346ad8844b94a4a8ae76f01beabea10', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Dakota', 'Long', 'admin', 'active');
+values ('1346ad8844b94a4a8ae76f01beabea10', 'f@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Dakota', 'Long', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('e3c4b01ab9054d5bb2a601c3f4b5bf6c', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Evan', 'Loffink', 'admin', 'active');
+values ('e3c4b01ab9054d5bb2a601c3f4b5bf6c', 'g@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Evan', 'Loffink', 'admin', 'active');
 insert into user (id, email, password, firstname, lastname, acc_type, acc_status)
-values ('2a771e780a56426ca9dd1f8f1f7c0bed', 'name@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Sam', 'Twaiti', 'moderator', 'active');
-#insert into department (id,dept_name,dept_abbr) 
-#   values('id','dept_name','dept_abbr');
+values ('2a771e780a56426ca9dd1f8f1f7c0bed', 'h@students.ecu.edu' , '$2a$10$dIi1zkuiLcfqJnaKh9JMOu0xg2uiiYqp2QZi9xi3zDcUYno19zezy' , 'Sam', 'Twaiti', 'moderator', 'active');
+
+# Departments
 insert into department (id, dept_name, dept_abbr)
 values ('6dae5f4c4bbe49f4ba4fd5312d61020a', 'Computer Science', 'CSCI');
 insert into department (id, dept_name, dept_abbr)
@@ -66,6 +65,25 @@ insert into course (id, dept_abbr, course_name, course_num)
 values ('0af00077634541d9a325a5d753252724', 'ITEC', 'Electromechanical Systems', '2090');
 insert into course (id, dept_abbr, course_name, course_num)
 values ('c980c0d7d0824b7a8ca8b1a57eb52dfd', 'BIME', 'Biomechanics and Materials', '4030');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('1dc17e66bf6e429f9233b08d10bb11db', 'BIME', 'Cardiovascular Electrophysiol', '6300');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('ab0f42424ae240dfae150fc8c970f0de', 'ACCT', 'Managerial Accounting', '2521');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('16dcac113a47443d935ab1cae561cfc6', 'ACCT', 'Intermediate Accounting I', '3551');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('ee04d206d72e45da8c2c9306af9d5030', 'ART', 'Digital Design', '1025');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('7ba7d9504a6f474fb8994c16e400cad6', 'ART', 'Figure Drawing', '1030');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('76adefec7fda4ed893a40bbe9b57f653', 'EDUC', 'Foundations of American Educ', '3200');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('cf8d861c25bc48e989e79df3b75464b5', 'EDUC', 'Introduction to Diversity', '3002');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('37fc6954df424f018fdd6bd92eac4cef', 'JUST', 'Crime and Criminality', '2004');
+insert into course (id, dept_abbr, course_name, course_num)
+values ('4feadbfcfa774120959d1628b6418565', 'JUST', 'Correctional Systems', '2009');
+
 
 # Followed Courses
 insert into followed_course (user_id, course_id)
@@ -104,23 +122,3 @@ insert into followed_department (user_id, dept_id)
 values ('2d29c09cb9be4293ac690b75531e1489', '7d4dd624d51647beb5b9023573f0d0fe');
 insert into followed_department (user_id, dept_id)
 values ('2d29c09cb9be4293ac690b75531e1489', '45457b5021de4c878019514e70ef21bc');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('1dc17e66bf6e429f9233b08d10bb11db', 'BIME', 'Cardiovascular Electrophysiol', '6300');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('ab0f42424ae240dfae150fc8c970f0de', 'ACCT', 'Managerial Accounting', '2521');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('16dcac113a47443d935ab1cae561cfc6', 'ACCT', 'Intermediate Accounting I', '3551');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('ee04d206d72e45da8c2c9306af9d5030', 'ART', 'Digital Design', '1025');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('7ba7d9504a6f474fb8994c16e400cad6', 'ART', 'Figure Drawing', '1030');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('76adefec7fda4ed893a40bbe9b57f653', 'EDUC', 'Foundations of American Educ', '3200');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('cf8d861c25bc48e989e79df3b75464b5', 'EDUC', 'Introduction to Diversity', '3002');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('37fc6954df424f018fdd6bd92eac4cef', 'JUST', 'Crime and Criminality', '2004');
-insert into course (id, dept_abbr, course_name, course_num)
-values ('4feadbfcfa774120959d1628b6418565', 'JUST', 'Correctional Systems', '2009');
-#insert into post (id,user_id,course_id,post_text,posdt_status) 
-#values('id','user_id','course_id','post_text','post_status');

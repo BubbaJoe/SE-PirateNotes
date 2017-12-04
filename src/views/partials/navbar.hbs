@@ -7,9 +7,19 @@
   <a href="/search" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-search"></i></a>
   <div class="w3-dropdown-hover w3-hide-small">
     <button style="" class="w3-button w3-padding-large" title="Notifications"><i class="fa fa-bell"></i>
+    {{#if notifications}}<span class="w3-badge w3-right w3-small w3-yellow">{{courses.length}}</span>{{/if}}</button>     
+    <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
+      {{#each notifications}}
+      <a href="/course/{{this.id}}" class="w3-bar-item w3-button">{{this.dept_abbr}} {{this.course_num}}</a>
+      {{else}}
+      <a href="/check" class="w3-bar-item w3-button">You have new notifications</a>
+      {{/each}}
+    </div>
+  </div>
+  <div class="w3-dropdown-hover w3-hide-small">
+    <button style="" class="w3-button w3-padding-large" title="Courses"><i class="fa fa-book"></i>
     {{#if courses}}<span class="w3-badge w3-right w3-small w3-yellow">{{courses.length}}</span>{{/if}}</button>     
     <div class="w3-dropdown-content w3-card-4 w3-bar-block" style="width:300px;">
-      <!-- NOTIFICATIONS -->
       {{#each courses}}
       <a href="/course/{{this.id}}" class="w3-bar-item w3-button">{{this.dept_abbr}} {{this.course_num}}</a>
       {{else}}
@@ -20,10 +30,15 @@
   {{#iff user.acc_type value="admin"}}
   <a href="/audit" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Admin/Mod"><i class="fa fa-lock"></i></a>
   {{/iff}}
-  
+  {{#iff user.acc_type value="mod"}}
+  <a href="/audit" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Admin/Mod"><i class="fa fa-lock"></i></a>
+  {{/iff}}
+  {{#if enabled}}
+  <a href="/audit" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Admin/Mod"><i class="fa fa-lock"></i></a>
+  {{/if}}
   <div class="w3-dropdown-hover w3-hide-small w3-right">
     <button class="w3-button w3-padding-large" title="Notifications">
-    <img src="/images/m_profile.svg" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
+    <img src="/profile_image" onerror="reloadPicture(this)" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
     <!-- <span class="w3-badge w3-right w3-small w3-yellow">3</span> -->
     </button>
 

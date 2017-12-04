@@ -19,6 +19,9 @@
             background-position-x:center; 
             background-position-y:center;
         }
+		.loginError {
+			height: 540px;
+		}
         h1, h2, h3, h4, h5 {
 			color: #592A8A;
 		}
@@ -69,31 +72,29 @@
 	</ul>
 	<div id="login" class="col s12">
 		<form class="col s12" method="post" action="/login">
-			<div class="form-container login">
+			<div class="form-container login loginError">
 				<h3 align="center" style="margin:0 0 0 0" class="center">Pirate Notes</h3>
 				<img src="/images/ECU_department.jpg" class="center"
-					style="height:100px;left:50;margin-bottom:10px;    display: block;
-    margin-left: auto;
-    margin-right: auto;">
+					style="height:100px;left:50;margin-bottom:10px;display: block;margin-left: auto;margin-right: auto;">
 				<div class="row">
 					<div style="margin-top:25px" class="input-field col s12">
-						<input name="email" type="email" class="validate">
-						<label for="email">Email</label>
+						<input name="email" type="email" class="validate" required>
+						<label style="pointer-events: none" for="email">Email</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="password" type="password" class="validate">
-						<label for="password">Password</label>
+						<input name="password" type="password" class="validate" required>
+						<label style="pointer-events: none" for="password">Password</label>
 					</div>
 				</div>
-				<br>
 				<center>
+						{{#if loginError}}
+							<span style="color:red">{{loginError}}</span><br><br>
+						{{/if}}
 					<button class="btn waves-effect waves-light purple" type="submit">Login</button>
-					<br>
-					<br>
-					<a href="/forgotpass">Can't remember password?</a>
-					{{> flash }}
+					<br><br>
+					<a href="/forgot">Can't remember password?</a>
 				</center>
 			</div>
 		</form>
@@ -103,45 +104,41 @@
 			<div style="padding-top:20px" class="form-container register">
 				<div class="row">
 					<div class="input-field col s6">
-						<input name="first_name" type="text" class="validate" required>
-						<label for="first_name">First Name</label>
+						<input name="first_name" value="{{firstname}}" type="text" class="validate" required>
+						<label style="pointer-events: none" for="first_name">First Name</label>
 					</div>
 					<div class="input-field col s6">
-						<input name="last_name" type="text" class="validate" required>
-						<label for="last_name">Last Name</label>
+						<input name="last_name" value="{{lastname}}" type="text" class="validate" required>
+						<label style="pointer-events: none" for="last_name">Last Name</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="email" type="email" class="validate" required>
-						<label for="email">Email</label>
+						<input name="email" value="{{email}}" type="email" class="validate" required>
+						<label style="pointer-events: none" for="email">Email</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s6">
 						<input name="password" type="password" class="validate" required>
-						<label for="password">Password</label>
+						<label style="pointer-events: none" for="password">Password</label>
 					</div>
 					<div class="input-field col s6">
 						<input name="password_confirm" type="password" class="validate" required>
-						<label for="password-confirm">Confirm</label>
+						<label style="pointer-events: none" for="password-confirm">Confirm</label>
 					</div>
 				</div>
-				<!--<div class="row">
-					<div class="input-field col s6">
-						<input id="male" name="gender" type="radio" value="male">
-						<label for="gender">Male</label>
-					</div>
-				</div>-->
-                <div class="row">
+                <div style="margin-bottom:0" class="row">
 					<div class="input-field checkbox col s12">
-						<input id="tos" name="checkbox" type="checkbox" class="validate" checked required>
-						<label for="checkbox">I agree to the <a href="tos" target="_blank">Terms Of Services</a></label>
+						<input id="tos" name="checkbox" type="checkbox" class="validate">
+						<label style="margin-left:30px" onclick="$('#tos').click()" for="checkbox">I agree to the <a href="tos" target="_blank">Terms Of Services</a></label>
 					</div>
 				</div>
 				<center>
+					{{#if registerError}}
+						<span style="color:red">{{registerError}}</span><br><br>
+					{{/if}}
 					<button class="btn waves-effect waves-light purple" name="Register" type="submit">Register</button>
-					{{> flash }}
 				</center>
 			</div>
 		</form>
@@ -170,13 +167,15 @@
 				<div class="row">
 					<p><h5>Please enter your email</h5></p>
 					<div class="input-field col s12">
-						<input name="email" type="email" class="validate">
-						<label for="email">Email</label>
+						<input name="email" type="email" class="validate" required>
+						<label  style="pointer-events: none" for="email">Email</label>
 					</div>
 					<br>
 					<center>
+						{{#if forgotError}}
+							<br><span style="color:red">{{forgotError}}</span><br>
+						{{/if}}
 						<button style="margin-top:15px" class="btn waves-effect waves-light purple" name="Register" type="submit">Find Password</button>
-						{{> flash }}
 					</center>
 				</div>
 			</form>
@@ -185,30 +184,32 @@
 
 	<div id="newpass" class="col s12">
 		<div class="form-container register">
-			<form class="col s12" method="post" action="/forgot">
+			<form class="col s12" method="post" action="/changepass">
 				<div class="row">
 					<p><h5>Please enter your new password</h5></p>
 					<div class="input-field col s12">
 						<center>
-						<input name="password" type="password" class="validate">
-						<label for="password">Password</label></center>
+						<input name="password" type="password" class="validate" required>
+						<label style="pointer-events: none" for="password">Password</label></center>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="passwordConfirm" type="password" class="validate">
-						<label for="passwordConfirm">Confirm</label>
+						<input name="passwordConfirm" type="password" class="validate" required>
+						<label style="pointer-events: none" for="passwordConfirm">Confirm</label>
 					</div>
 				</div>
 				<div class="row">
 					<div class="input-field col s12">
-						<input name="verificationCode" type="password" class="validate">
-						<label for="verificationCode">Verification Code</label>
+						<input name="verificationCode" type="password" class="validate" required>
+						<label style="pointer-events: none" for="verificationCode">Verification Code</label>
 					</div>
 				</div>
 					<center>
 						<button style="margin-top:15px" class="btn waves-effect waves-light purple" name="Register" type="submit">Change Password</button>
-						{{> flash }}
+						{{#if verificationError}}
+							<span style="color:red">{{verificationError}}</span><br><br>
+						{{/if}}
 					</center>
 			</form>
 		</div>

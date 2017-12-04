@@ -38,7 +38,7 @@
       <div class="w3-card-2 w3-round w3-white">
         <div class="w3-container">
          <h4 class="w3-center">{{user.firstname}} {{user.lastname}}</h4>
-         <p class="w3-center"><img src="/images/m_profile.svg" class="w3-circle" style="height:106px;width:106px"></p>
+         <p class="w3-center"><img src="/profile_image" onerror="reloadPicture(this)" class="w3-circle" style="height:106px;width:106px"></p>
          <p class="w3-center">Major: {{user.major}}</p>
          <p class="w3-center">Description: {{user.profile_desc}}</p>
          <hr>
@@ -58,7 +58,7 @@
               <p align="center"><i class="fa fa-exclamation-circle"></i> You aren't following any courses!</p>
             {{/each}}
           </div>
-          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-pencil-square-o fa-fw w3-margin-right"></i> Followed Departments</button>
+          <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-building-o fa-fw w3-margin-right"></i> Followed Departments</button>
           <div id="Demo2" class="w3-hide w3-container">
             {{#each departments}}
               <button onclick="gotoUrl('/department/{{this.id}}')" class="w3-button w3-block w3-theme w3-left-align department-list"><i class="fa fa-book fa-fw w3-margin-right"></i>{{this.dept_name}}</button>
@@ -124,6 +124,9 @@
 {{> footer }}
 {{> javascript }}
 <script>
+  {{#if alert}}
+  alert('{{alert}}')
+  {{/if}}
   function gotoUrl(url) {
       if(typeof url != "string") return false;
       window.location.href = url;
