@@ -344,14 +344,20 @@ module.exports = (app, io, pp) => {
         if(req.isAuthenticated()) {
             if(uid === req.user.id) {
                 if(req.user.profile_image) {
-                    //fs.writeFileSync("profile_image"+req.user.id,req.user.profile_image)
-
+                    path = "profile_image"+req.user.id;
+                    fs.writeFile(path,req.user.profile_image, () => {
+                        req.sendFile(path)
+                        fs.unlinkSync(path)
+                    })
                 }
             } else
             getProfilePictureByID(uid,(result) => {
                 if(result.profile_image) {
                     res.setHeader('Content-disposition', 'attachment filename=profile')
-                    res.send(result.profile_image)
+                    fs.writeFile(path,result.profile_image, () => {
+                        req.sendFile(path)
+                        fs.unlinkSync(path)
+                    })
                 } else {
                     
                 }
@@ -431,12 +437,9 @@ module.exports = (app, io, pp) => {
         email = req.fields.email || '',
         password = req.fields.password
 
-        console.log(password)
-        if(!password)
-
         if(!email.includes('@students.ecu.edu')) {
-            req.flash('You need to you use ECU student email to register')
-            //res.redirect('/')
+            //You need to you use ECU student email to register
+            res.redirect('/')
         } else console.log("email usable")
 
         // validate here

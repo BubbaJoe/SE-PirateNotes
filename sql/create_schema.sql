@@ -21,7 +21,7 @@ create table user (
     major varchar(256) default '',
     interests text default '',
     profile_image mediumblob,
-    profile_desc text default '',
+    profile_desc varchar(256) default '',
     acc_type enum('general','mod','admin') not null,
     acc_status enum('active','warning','banned','unverified') not null,
     primary key(id)

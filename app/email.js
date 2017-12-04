@@ -10,6 +10,7 @@ let nodemailer = require('nodemailer')
 
 module.exports = (db) => {
 
+    // sets default mail settings
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         secure: false,
@@ -24,21 +25,20 @@ module.exports = (db) => {
         }
     })
 
-    let user = undefined
-
+    // sets default mail params
     let mailOptions = {
         from: '"Pirate Notes" <no.reply.piratenotes@gmail.com>',
         to: 'no.reply.piratenotes@gmail.com',
         subject: 'PirateNotes - Verify Account',
     }
 
+    // send the password email to the user
     sendPasswordEmail = (user_email,callback) => {
-        //mailOptions.to = user_email
-        console.log(user_email)
+        mailOptions.to = user_email
         db.query('select * from user where email = ?',[user_email])
         .then( (result) => {
             user = result[0]
-            let resetPasswordHTML = 
+            mailOptions.html = 
             `<html>
             <head>
                 <meta charset="utf-8">
@@ -61,9 +61,8 @@ module.exports = (db) => {
                     <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did request a password reset, simply ignore this e-mail. </p>
                 </div>
             </body>
-            <html>`;
-
-            mailOptions.html = resetPasswordHTML
+            <html>`
+            
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
                 else return callback(user)
@@ -72,13 +71,13 @@ module.exports = (db) => {
         .catch(err => console.log("Couldn't send email",err))
     }
 
+    // sends a verication email to user
     sendVerificationEmail = (user_email,callback) => {
-        //mailOptions.to = user_email
-        console.log(user_email)
+        mailOptions.to = user_email
         db.query('select * from user where email = ?',[user_email])
         .then( (result) => {
             user = result[0]
-            let verifyHTML =
+            mailOptions.html =
             `<html>
                 <head>
                     <meta charset="utf-8">
@@ -101,9 +100,8 @@ module.exports = (db) => {
                         <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did not request access to this service, simply ignore this e-mail. </p>
                     </div>
                 </body>
-            <html>`;
-
-            mailOptions.html = verifyHTML
+            <html>`
+            
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
                 else return callback(user)
@@ -113,7 +111,7 @@ module.exports = (db) => {
 
     // sends out emails to all users
     sendMassEmail = (email_arr,callback) => {
-        //mailOptions.to = email_arr
+        mailOptions.to = email_arr
         transporter.sendMail(mailOptions, (err,info) => {
             if(err) console.log(err)
             else return callback(info)
