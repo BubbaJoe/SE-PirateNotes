@@ -34,7 +34,7 @@ function reloadPicture(item) {
     item.src='/images/loading.gif' // The loading picture
     setTimeout(() => {
         item.src = src + "?" + new Date().getTime() // the new request for the next picture
-    }, count * 600)
+    }, count * 1500)
 }
 
 $( document ).ready(function() {
