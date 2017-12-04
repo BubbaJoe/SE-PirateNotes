@@ -204,17 +204,6 @@ module.exports = (db) => {
         } )
     }
 
-    // Posts for the courses that the user is following
-    getUserViewPosts = (user_id) => {
-        return new Promise( ( resolve, reject ) => {
-            db.query('select post.*, course_name, course_num, dept_abbr, firstname, lastname from post inner join'
-            +' course on course.id = post.course_id inner join followed_course on course.id = followed_course.course_id inner join user on'
-            +' followed_course.user_id = user.id where post.user_id = ?',[user_id])
-            .then(result => resolve(result))
-            .catch( err => console.log(err) )
-        } )
-    }
-
     // Posts that the user has created that are accepted(along with files)
     getUserViewPosts = (user_id) => {
         return new Promise( ( resolve, reject ) => {
