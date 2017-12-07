@@ -10,7 +10,6 @@
 let fs 			= require('fs')
 let uuid		= require('uuid/v4')
 let bcrypt		= require('bcrypt-nodejs')
-let zlib        = require('zlib')
 
 module.exports = (db) => {
 

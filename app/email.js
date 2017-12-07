@@ -66,7 +66,9 @@ module.exports = (db) => {
             
             transporter.sendMail(mailOptions, (err,info) => {
                 if(err) console.log(err)
-                else if(callback) return callback(user)
+                else if(callback)
+                return callback(user)
+                else return callback()
             })
         })
         .catch(err => console.log("Couldn't send email",err))

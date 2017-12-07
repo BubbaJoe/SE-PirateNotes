@@ -12,8 +12,8 @@ let fs      = require('fs')
 let path    = require('path')
 let bcrypt	= require('bcrypt-nodejs')
 let async   = require('async')
-let zlib    = require('zlib')
-// referenceLink = [user.ip, (the last link they requested before session was lost) ]
+
+// referenceLink = (the last link they requested before session ended)
 let referenceLink = []
 let forgotCode = []
 
@@ -24,7 +24,7 @@ let requestArray = []
 // Express, Socket.IO, MySQL, and Passport
 module.exports = (app, io, pp) => {
     
-    // Trash cleaner
+    // Temp file cleaner
     async function trash() {
         await setTimeout( () => {
             p = __dirname+"/../temp_uploads/"
@@ -44,7 +44,7 @@ module.exports = (app, io, pp) => {
 
     trash()
 
-    // Websocket handler
+    // Socket.io handler
     io.sockets.on('connection',(socket) => {
 
         numActiveUsers ++
@@ -136,7 +136,7 @@ module.exports = (app, io, pp) => {
         code = u.verificationCode
         if(u.password == u.passwordConfirm) {
             if(!forgotCode[code]) {
-                req.flash('verificationError','Verification Code')
+                req.flash('verificationError','Verification Code Invalid')
                 return res.redirect('/#resetpass')    
             } else {
                 updateUserPassword(id,p.newPassword)
@@ -457,13 +457,6 @@ module.exports = (app, io, pp) => {
             } else {
                 return res.send('unauthorized')
             }
-    })
-    
-    app.get('/test', (req, res) => {
-        async function test(val) {
-            setTimeout(() => res.end(val), 2000)
-        }
-        test("TEST")
     })
 
     app.get('/profile_image/:uid', (req, res) => {
