@@ -17,28 +17,57 @@ created by Joe Williams, Dakota Long, Ozayr Shareef, Will Brimson and Evan Loffi
 8. Run ```npm install``` or ```nodemon```
 9. ```http://localhost:8080```
 
-## Pictures
+# Pictures
+## Login
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/login1.PNG)
+### Validation for incorrect information
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/login2.PNG)
 
-### Login
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Register
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/register.PNG)
+### Validation for unaccepted email addresses
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/register3.PNG)
+### Email recieved after registration
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/verify_email.PNG)
 
-### Register
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Forgot password
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/forgot1.PNG)
+### Validation for unregistered emails
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/forgot2.PNG)
+### Email for the forgot password
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/forgot_email.PNG)
+### Reseting password
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/password.PNG)
 
-### Homepage
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Homepage
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/home1.PNG)
 
-### Account Editing
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Profile
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/profile.PNG)
 
-### Search
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Profile Editing
+### Editing basic profile information
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/account1.PNG)
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/account2.PNG)
+### validation for incorrect updating
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/account3.PNG)
 
-### Department View
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Search
+### Basic search interface
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/search1.PNG)
+### Shows the Search results and extra information and options
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/search2.PNG)
 
-### Course View
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Department View
+### Shows the courses that exist for this department
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/department.PNG)
 
-### Admin View
-![?](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/preview/img.png)
+## Course View
+### Shows posts that have been accepted
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/course2.PNG)
+
+## Admin View
+### Allows admins or mods to decline or accept post from being seen
+![](https://raw.githubusercontent.com/bubbajoe/se-piratenotes/master/github_view/admin.PNG)
+
+### Look in the ```/github_view``` for all pictures and more.

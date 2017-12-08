@@ -508,7 +508,7 @@ module.exports = (app, io, pp) => {
         } else if(req.isAuthenticated()) {
             let courses = [], departments, myPosts = [], interests = [], notifications = [], savedPosts = []
             getUserCourses( req.user.id ).then( results => courses = results )
-            .then( () => getUserViewPosts( req.user.id )
+            .then( () => getUserPosts( req.user.id )
             .then( results => myPosts = results ))
             .then( () => getUserDepartments( req.user.id )
             .then( (depts) => departments = depts ))
@@ -517,7 +517,8 @@ module.exports = (app, io, pp) => {
             .then(() => getUserNotifications( req.user.id )
             .then( results => notifications = results ))
             .then(() => {
-                interests = (interests == '') ? interests = null : req.user.interests.split(", ");
+                console.log()
+                interests = (req.user.interests == '') ? interests = null : req.user.interests.split(", ");
                 res.render('home', {
                     alert: req.flash('alert'),
                     user: req.user,
