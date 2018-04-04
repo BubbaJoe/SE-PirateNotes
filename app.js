@@ -123,6 +123,8 @@ let options = {
 let db = new Database(options);
 let sessionStore = new SqlSession(options);
 
+console.log(options)
+
 app.use(session({
     name: 'piratenotes',
     key: '7586de50ba8111e786b61d6eec7d1af9',
