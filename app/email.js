@@ -9,16 +9,16 @@
 let nodemailer = require('nodemailer')
 
 module.exports = (db) => {
-
+    let email = process.env.EMAIL,
+        domain = process.env.DOMAIN
     // sets default mail settings
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         secure: false,
         port: 25,
         auth: {
-            user: 'no.reply.piratenotes@gmail.com',
-            pass: 'AsDf1234'
-            // Disposable Test Account
+            user: email,
+            pass: process.env.EMAIL_PASSWORD
         },
         tls: {
             rejectUnauthorized: false
@@ -27,8 +27,8 @@ module.exports = (db) => {
 
     // sets default mail params
     let mailOptions = {
-        from: '"Pirate Notes" <no.reply.piratenotes@gmail.com>',
-        to: 'no.reply.piratenotes@gmail.com'
+        from: '"Pirate Notes" <'+email+'>',
+        to: email
     }
 
     // send the password email to the user
@@ -56,7 +56,7 @@ module.exports = (db) => {
                     <p style="color: #592A8A;font-family: 'Arial';margin: 0;">
                     Follow the link and enter the verification email to reset your password.</p>
                     <p style="font-size:34px">${code}</p>
-                    <br><a href="http://localhost:8080/resetpass">Click me!!!</a>
+                    <br><a href="http://${domain}/resetpass">Click me!!!</a>
                     <br>
                     <br>
                     <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did request a password reset, simply ignore this e-mail. </p>
@@ -98,7 +98,7 @@ module.exports = (db) => {
                         </p><br>
                         <p style="color: #592A8A;font-family: 'Arial';margin: 0;">
                         Follow this link to verify your account:</p>
-                        <br><a href="http://localhost:8080/verify/${user.id}">Click me!!!</a>
+                        <br><a href="http://${domain}/verify/${user.id}">Click me!!!</a>
                         <br>
                         <br>
                         <p style="color: #592A8A;font-family: 'Arial';margin: 0;">If you did not request access to this service, simply ignore this e-mail. </p>
