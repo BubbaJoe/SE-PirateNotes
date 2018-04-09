@@ -59,8 +59,8 @@
               <input class="w3-input w3-border" name="interests" id="interests" value="{{user.interests}}"><br>
               
               <label for="gender">Gender</label><br>
-              Male <input class="w3-button" type="radio" name="gender" value="male" {{#iff gender value="male"}} checked {{else}}{{#iff user.gender value="male"}} checked {{/iff}}{{/iff}}>
-              Female <input class="w3-button" type="radio" name="gender" value="female"{{#iff gender value="female"}} checked {{else}}{{#iff user.gender value="female"}} checked {{/iff}}{{/iff}}>
+              Male <input class="w3-button" type="radio" name="gender" value="male" {{#iff user.gender value="male"}}checked{{/iff}}>
+              Female <input class="w3-button" type="radio" name="gender" value="female" {{#iff user.gender value="female"}}checked{{/iff}}>
               <BR><BR>
 
               <label for="major">Major</label>
