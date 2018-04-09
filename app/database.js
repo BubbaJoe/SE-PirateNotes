@@ -53,6 +53,7 @@ module.exports = (db) => {
         return new Promise( ( resolve, reject ) => {
             fs.readFile(filedata.path, (err, data) =>
                 db.query('update user set profile_image = ? where id = ?', [data, id] )
+                .then( () => console.log(filedata) )
                 .then( () => fs.unlink(filedata.path, () => resolve() ))
                 .catch( err => console.log(err) )
             )
