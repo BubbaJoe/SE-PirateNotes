@@ -33,9 +33,6 @@
   {{#iff user.acc_type value="mod"}}
   <a href="/audit" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Admin/Mod"><i class="fa fa-lock"></i></a>
   {{/iff}}
-  {{#if enabled}}
-  <a href="/audit" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Admin/Mod"><i class="fa fa-lock"></i></a>
-  {{/if}}
   <div class="w3-dropdown-hover w3-hide-small w3-right">
     <button class="w3-button w3-padding-large" title="Notifications">
     <img src="/profile_image" onerror="reloadPicture(this)" class="w3-circle" style="height:25px;width:25px" alt="Avatar"></img>
@@ -53,8 +50,12 @@
 
 <!-- Navbar on small screens -->
 <div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="/" class="w3-bar-item w3-button w3-padding-large">Profile</a>
-  <a href="/courses" class="w3-bar-item w3-button w3-padding-large">Courses</a>
-  <a href="/mynotes" class="w3-bar-item w3-button w3-padding-large">Notes</a>
+  <a href="/account" class="w3-bar-item w3-button w3-padding-large">Account</a>
+  {{#iff user.acc_type value="admin"}}
+   <a href="/audit" class="w3-bar-item w3-button w3-padding-large">Admin/Mod</a>
+  {{/iff}}
+  {{#iff user.acc_type value="mod"}}
+   <a href="/audit" class="w3-bar-item w3-button w3-padding-large">Admin/Mod</a>
+  {{/iff}}
   <a href="/logout" class="w3-bar-item w3-button w3-padding-large">Log out</a>
 </div>
