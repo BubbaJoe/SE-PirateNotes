@@ -116,14 +116,11 @@ let options = {
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB,
-    waitForConnection : true
+    database: process.env.DB
 }
 
 let db = new Database(options);
 let sessionStore = new SqlSession(options);
-
-console.log(options)
 
 app.use(session({
     name: 'piratenotes',
